@@ -226,6 +226,7 @@ class ActivityEvent(models.Model):
         ("file_deleted", _("deleted a file from")),
         ("member_added", _("shared the project with")),
         ("app_user_added", _("added app user")),
+        ("app_user_signed_up", _("signed up")),
     ]
 
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name="activity")

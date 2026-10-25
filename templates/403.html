@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% load i18n falcon %}
+{% block title %}{% translate "Not allowed" %} · falcondatabase{% endblock %}
+{% block content %}
+<div class="container-sm" style="text-align:center;padding-top:64px">
+  {% icon 'lock' 40 %}
+  <h1 style="margin-top:12px">{% translate "You can't do that here" %}</h1>
+  <p class="muted">{% translate "Your role in this project doesn't allow this action. Ask the owner if you need more access." %}</p>
+  <p><a class="btn" href="javascript:history.back()">← {% translate "Go back" %}</a> <a class="btn" href="{% url 'dashboard' %}">{% translate "Dashboard" %}</a></p>
+</div>
+{% endblock %}

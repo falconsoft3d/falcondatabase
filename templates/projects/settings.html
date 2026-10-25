@@ -20,6 +20,33 @@
     </div>
   </form>
 
+  <div class="box" id="members">
+    <div class="box-header">{% icon 'users' %} <strong>{% translate "Members" %}</strong></div>
+    <div class="box-body">
+      <p class="muted" style="margin-top:0">{% translate "Share this project with other accounts. Editors can change tables, data, users, storage and the portal; viewers can only look. Only you can change these settings." %}</p>
+      <form method="post" class="row" style="flex-wrap:wrap">
+        {% csrf_token %}<input type="hidden" name="action" value="add_member">
+        <input type="email" name="email" required placeholder="{% translate 'Email of their account' %}" style="max-width:300px">
+        <select name="role" style="max-width:160px">{% for value, label in role_choices %}<option value="{{ value }}">{{ label }}</option>{% endfor %}</select>
+        <button class="btn btn-primary" type="submit">{% icon 'plus' 14 %} {% translate "Share" %}</button>
+      </form>
+    </div>
+    {% for member in members %}
+      <div class="box-row" style="flex-wrap:wrap">
+        {% avatar member.user 24 %}
+        <span class="grow"><strong>{{ member.user.username }}</strong> <span class="muted small">{{ member.user.email }}</span></span>
+        <form method="post" class="row" data-auto-submit>{% csrf_token %}<input type="hidden" name="action" value="member_role"><input type="hidden" name="member" value="{{ member.pk }}">
+          <select name="role" aria-label="{% translate 'Role' %}">{% for value, label in role_choices %}<option value="{{ value }}" {% if member.role == value %}selected{% endif %}>{{ label }}</option>{% endfor %}</select>
+        </form>
+        <form method="post" data-confirm="{% blocktranslate with username=member.user.username %}Remove {{ username }} from the project?{% endblocktranslate %}">{% csrf_token %}
+          <input type="hidden" name="action" value="remove_member"><input type="hidden" name="member" value="{{ member.pk }}">
+          <button class="btn btn-xs btn-invisible" type="submit" title="{% translate 'Remove' %}">{% icon 'trash' 14 %}</button></form>
+      </div>
+    {% empty %}
+      <div class="box-row muted small">{% translate "Nobody else has access yet." %}</div>
+    {% endfor %}
+  </div>
+
   <div class="box">
     <div class="box-header">{% icon 'key' %} <strong>API keys</strong></div>
     <div class="box-body">{% include "projects/_keys.html" %}</div>

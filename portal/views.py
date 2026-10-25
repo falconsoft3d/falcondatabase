@@ -151,6 +151,7 @@ def signup(request, project, user):
             new_user = ProjectUser(project=project, email=email)
             new_user.set_password(password)
             new_user.save()
+            activity.record(project, "app_user_signed_up", actor=email)
             sign_in(request, project, new_user)
             return redirect("portal:home", *portal_args(project))
     return render(request, "portal/login.html", context(project, user, error=error, mode="signup"))

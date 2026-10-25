@@ -10,6 +10,7 @@
       <span class="sep">/</span>
       <strong><a href="{{ project.get_absolute_url }}">{{ project.slug }}</a></strong>
       <span class="label">{% if project.auth_enabled %}{% translate "login enabled" %}{% else %}{% translate "no login" %}{% endif %}</span>
+      {% if project.role == "editor" %}<span class="label label-success">{% translate "Editor" %}</span>{% elif project.role == "viewer" %}<span class="label">{% translate "Viewer" %}</span>{% endif %}
     </div>
     <nav class="tabs">
       <a class="tab {% if tab == 'overview' %}selected{% endif %}" href="{{ project.get_absolute_url }}">{% icon 'home' %} {% translate "Overview" %}</a>
@@ -19,8 +20,11 @@
       <a class="tab {% if tab == 'storage' %}selected{% endif %}" href="{% url 'projects:storage' project.owner.username project.slug %}">{% icon 'folder' %} {% translate "Storage" %}{% if project.storage_enabled %} <span class="dot-live" title="{% translate 'enabled' %}"></span>{% endif %}</a>
       <a class="tab {% if tab == 'portal' %}selected{% endif %}" href="{% url 'projects:portal' project.owner.username project.slug %}">{% icon 'globe' %} {% translate "Portal" %}{% if project.portal_enabled %} <span class="dot-live" title="{% translate 'enabled' %}"></span>{% endif %}</a>
       <a class="tab {% if tab == 'api' %}selected{% endif %}" href="{% url 'projects:api' project.owner.username project.slug %}">{% icon 'code' %} API</a>
-      <a class="tab {% if tab == 'settings' %}selected{% endif %}" href="{% url 'projects:settings' project.owner.username project.slug %}">{% icon 'gear' %} {% translate "Settings" %}</a>
+      {% if project.role == "owner" %}<a class="tab {% if tab == 'settings' %}selected{% endif %}" href="{% url 'projects:settings' project.owner.username project.slug %}">{% icon 'gear' %} {% translate "Settings" %}</a>{% endif %}
     </nav>
   </div>
 </div>
+{% if project.role == "viewer" %}
+  <div class="messages"><div class="flash flash-info">{% icon 'lock' %} {% blocktranslate with owner=project.owner.username %}You have read-only access to this project, shared by {{ owner }}.{% endblocktranslate %}</div></div>
+{% endif %}
 {% endblock %}

@@ -35,7 +35,7 @@ def contributions(events, today=None):
     }
     busiest = max(counts.values(), default=0)
 
-    weeks, months, day = [], [], start
+    weeks, day = [], start
     while day <= today:
         week = []
         for _weekday in range(7):
@@ -43,13 +43,11 @@ def contributions(events, today=None):
             level = 0 if not count else min(LEVELS, 1 + (count - 1) * LEVELS // max(busiest, 1))
             week.append({"date": day, "count": count, "level": level})
             day += datetime.timedelta(days=1)
+        # The column holding the 1st of a month carries that month's label.
         month_start = next((d["date"] for d in week if d["date"].day == 1 and d["count"] is not None), None)
-        if month_start:
-            months.append({"index": len(weeks), "date": month_start})
-        weeks.append(week)
+        weeks.append({"label": month_start, "days": week})
     return {
         "weeks": weeks,
-        "months": months,
         "total": sum(counts.get(first_day + datetime.timedelta(days=i), 0) for i in range(365)),
         "busiest": busiest,
     }

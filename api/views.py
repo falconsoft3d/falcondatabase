@@ -257,6 +257,7 @@ def auth_signup(request, project, client):
     user = ProjectUser(project=project, email=email, data=data, last_login=timezone.now())
     user.set_password(password)
     user.save()
+    activity.record(project, "app_user_signed_up", actor=email)
     return respond(session(user), 201)
 
 

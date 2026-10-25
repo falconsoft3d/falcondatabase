@@ -39,6 +39,25 @@
       {% endfor %}
     </div>
 
+    {% include "projects/_contributions.html" %}
+
+    <div class="box">
+      <div class="box-header">{% icon 'refresh' %} <strong>{% translate "Recent activity" %}</strong></div>
+      {% if recent %}
+        <ul class="activity-list">
+          {% for event in recent %}
+            <li>
+              {% if event.user %}{% avatar event.user 20 %}{% else %}<span class="avatar sm">{{ event.actor_name|first|upper }}</span>{% endif %}
+              <span class="grow"><strong>{{ event.actor_name }}</strong> {{ event.get_kind_display }}{% if event.target %} <code class="inline">{{ event.target }}</code>{% endif %}{% if event.count > 1 %} <span class="muted">(×{{ event.count }})</span>{% endif %}</span>
+              <time class="muted small nowrap" datetime="{{ event.created_at|date:'c' }}" title="{{ event.created_at|date:'d M Y H:i' }}">{% blocktranslate with since=event.created_at|timesince %}{{ since }} ago{% endblocktranslate %}</time>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p class="box-body muted" style="margin:0">{% translate "No activity yet." %}</p>
+      {% endif %}
+    </div>
+
     <div class="box">
       <div class="box-header">{% icon 'book' %} <strong>{% translate "Quick start" %}</strong></div>
       <div class="box-body markdown">
@@ -66,6 +85,21 @@
         <span>{% blocktranslate with date=project.created_at|date:"d M Y" %}Created on {{ date }}{% endblocktranslate %}</span>
       </div>
     </div>
+    <div class="box">
+      <div class="box-header">{% icon 'users' %} <strong class="grow">{% translate "People with access" %}</strong>
+        {% if project.role == "owner" %}<a class="small" href="{% url 'projects:settings' project.owner.username project.slug %}#members">{% translate "Share" %}</a>{% endif %}</div>
+      <div class="box-row">{% avatar project.owner 20 %} <span class="grow">{{ project.owner.username }}</span> <span class="label label-done">{% translate "Owner" %}</span></div>
+      {% for member in members %}
+        <div class="box-row">{% avatar member.user 20 %} <span class="grow">{{ member.user.username }}</span>
+          <span class="label {% if member.role == 'editor' %}label-success{% endif %}">{{ member.get_role_display }}</span></div>
+      {% endfor %}
+      {% if project.role != "owner" %}
+        <form method="post" action="{% url 'projects:leave' project.owner.username project.slug %}" class="box-row" data-confirm="{% translate 'Leave this project? You will lose access to it.' %}">
+          {% csrf_token %}<button class="btn btn-sm btn-danger" type="submit">{% translate "Leave project" %}</button>
+        </form>
+      {% endif %}
+    </div>
+
     <div class="box">
       <div class="box-header">{% icon 'key' %} <strong>{% translate "Connection" %}</strong></div>
       <div class="box-body">{% include "projects/_keys.html" %}</div>

@@ -273,3 +273,136 @@ class KpiTests(TestCase):
         self.client.force_login(user)
         response = self.client.get(reverse("dashboard"))
         self.assertEqual(len(response.context["kpis"]), 10)
+
+
+class SharingTests(TestCase):
+    def setUp(self):
+        User = get_user_model()
+        self.owner = User.objects.create_user("ana", "ana@example.com", "pass12345")
+        self.bob = User.objects.create_user("bob", "bob@example.com", "pass12345")
+        self.eve = User.objects.create_user("eve", "eve@example.com", "pass12345")
+        self.project = services.create_project(self.owner, "Shop")
+
+    def share(self, email, role):
+        self.client.force_login(self.owner)
+        return self.client.post(self.project.url("settings"), {"action": "add_member", "email": email, "role": role})
+
+    def test_share_by_email(self):
+        from .models import ProjectMember
+
+        self.share("nobody@example.com", "editor")
+        self.share("ana@example.com", "editor")
+        self.assertFalse(ProjectMember.objects.exists())
+        self.share("BOB@example.com", "editor")
+        self.share("bob@example.com", "viewer")  # already a member: ignored
+        member = ProjectMember.objects.get()
+        self.assertEqual((member.user, member.role), (self.bob, "editor"))
+
+        self.client.force_login(self.bob)
+        dashboard = self.client.get(reverse("dashboard"))
+        self.assertEqual([m.project for m in dashboard.context["shared"]], [self.project])
+        self.assertEqual(self.client.get(self.project.get_absolute_url()).status_code, 200)
+
+    def test_editor_and_viewer_permissions(self):
+        self.share("bob@example.com", "editor")
+        self.share("eve@example.com", "viewer")
+        create = {"name": "items", "access": "public", "columns-0-name": "n", "columns-0-type": "text"}
+
+        self.client.force_login(self.bob)
+        self.assertRedirects(self.client.post(self.project.url("table_new"), create), self.project.url("table", "items"))
+        self.assertEqual(self.client.get(self.project.url("settings")).status_code, 403)
+
+        self.client.force_login(self.eve)
+        self.assertEqual(self.client.get(self.project.url("table", "items")).status_code, 200)
+        self.assertEqual(self.client.post(self.project.url("table", "items"), {"n": "x"}).status_code, 403)
+        self.assertEqual(self.client.post(self.project.url("table_new"), {**create, "name": "other"}).status_code, 403)
+        self.assertEqual(self.client.get(self.project.url("settings")).status_code, 403)
+        self.assertEqual(self.client.post(self.project.url("storage"), {"action": "settings", "storage_enabled": "on"}).status_code, 403)
+
+        outsider = get_user_model().objects.create_user("zed", "zed@example.com", "pass12345")
+        self.client.force_login(outsider)
+        self.assertEqual(self.client.get(self.project.get_absolute_url()).status_code, 404)
+
+    def test_remove_and_leave(self):
+        from .models import ProjectMember
+
+        self.share("bob@example.com", "viewer")
+        self.share("eve@example.com", "editor")
+        member = ProjectMember.objects.get(user=self.bob)
+        self.client.post(self.project.url("settings"), {"action": "member_role", "member": member.pk, "role": "editor"})
+        member.refresh_from_db()
+        self.assertEqual(member.role, "editor")
+        self.client.post(self.project.url("settings"), {"action": "remove_member", "member": member.pk})
+        self.client.force_login(self.bob)
+        self.assertEqual(self.client.get(self.project.get_absolute_url()).status_code, 404)
+
+        ProjectMember.objects.filter(user=self.eve).update(role="viewer")
+        self.client.force_login(self.eve)
+        self.assertRedirects(self.client.post(self.project.url("leave")), reverse("dashboard"))
+        self.assertFalse(ProjectMember.objects.filter(user=self.eve).exists())
+
+    def test_shared_projects_in_analytics(self):
+        self.share("bob@example.com", "viewer")
+        self.client.force_login(self.bob)
+        projects = self.client.get(reverse("analytics")).context["projects"]
+        self.assertEqual(projects, [self.project])
+
+
+class ActivityTests(TestCase):
+    def setUp(self):
+        self.owner = get_user_model().objects.create_user("ana", "ana@example.com", "pass12345")
+        self.client.force_login(self.owner)
+        self.client.post(reverse("project_new"), {"name": "Shop"})
+        self.project = self.owner.projects.get()
+
+    def kinds(self):
+        return list(self.project.activity.order_by("created_at", "id").values_list("kind", flat=True))
+
+    def test_dashboard_api_and_portal_actions_are_recorded(self):
+        self.client.post(self.project.url("table_new"), {"name": "items", "access": "public",
+                                                         "columns-0-name": "n", "columns-0-type": "text"})
+        self.client.post(self.project.url("table", "items"), {"n": "a"})
+        self.client.post(f"/api/v1/{self.project.ref}/tables/items", [{"n": "b"}, {"n": "c"}],
+                         content_type="application/json", headers={"apikey": self.project.anon_key})
+        self.assertEqual(self.kinds(), ["project_created", "table_created", "rows_inserted", "rows_inserted"])
+        api_event = self.project.activity.first()
+        self.assertEqual((api_event.actor_name, api_event.count, api_event.target), ("API", 2, "items"))
+        self.assertEqual(self.project.activity.get(kind="table_created").user, self.owner)
+
+        overview = self.client.get(self.project.get_absolute_url())
+        self.assertEqual(overview.context["contrib"]["total"], 4)
+        self.assertEqual(len(overview.context["recent"]), 4)
+
+    def test_contribution_calendar(self):
+        import datetime
+
+        from . import activity
+        from .models import ActivityEvent
+
+        today = datetime.date(2026, 10, 25)  # a Sunday
+        for days_ago, n in [(0, 3), (1, 1), (40, 6), (400, 9)]:
+            for _ in range(n):
+                ActivityEvent.objects.create(project=self.project, kind="rows_inserted",
+                                             created_at=datetime.datetime.combine(today - datetime.timedelta(days=days_ago),
+                                                                                  datetime.time(12), tzinfo=datetime.UTC))
+        ActivityEvent.objects.filter(kind="project_created").delete()
+        data = activity.contributions(self.project.activity.all(), today=today)
+        days = [d for week in data["weeks"] for d in week["days"] if d["count"] is not None]
+        self.assertEqual(len(days), 365)
+        self.assertTrue(all(len(week["days"]) == 7 for week in data["weeks"]))
+        self.assertEqual(data["weeks"][0]["days"][0]["date"].weekday(), 6)  # columns start on Sunday
+        self.assertEqual((data["total"], data["busiest"]), (10, 6))       # the 400-day-old events are out
+        by_date = {d["date"]: d for d in days}
+        self.assertEqual(by_date[today]["count"], 3)
+        self.assertEqual(by_date[today - datetime.timedelta(days=40)]["level"], 4)
+        self.assertEqual(by_date[today - datetime.timedelta(days=1)]["level"], 1)
+        self.assertEqual(by_date[today - datetime.timedelta(days=2)]["level"], 0)
+        labelled = [w["label"] for w in data["weeks"] if w["label"]]
+        self.assertEqual(len(labelled), 12)
+
+    def test_dashboard_project_picker(self):
+        other = services.create_project(self.owner, "Blog")
+        response = self.client.get(reverse("dashboard") + f"?contrib={other.ref}")
+        self.assertEqual(response.context["contrib_picked"], other)
+        self.assertEqual(response.context["contrib"]["total"], 0)
+        self.assertEqual(self.client.get(reverse("dashboard")).context["contrib"]["total"], 1)

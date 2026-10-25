@@ -127,3 +127,8 @@ document.addEventListener("change", (event) => {
   else if (files.length === 1) label.textContent = files[0].name;
   else label.textContent = picker.dataset.many.replace("{count}", files.length);
 });
+
+// Filter forms that apply as soon as a control changes (project pickers, checkboxes).
+document.querySelectorAll("form[data-auto-submit]").forEach((form) => {
+  form.addEventListener("change", () => form.requestSubmit());
+});

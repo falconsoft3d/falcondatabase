@@ -10,7 +10,7 @@ A simple, self-hosted alternative to Firebase and Supabase with a GitHub-style i
 Create projects, add real PostgreSQL tables and user login to them, and query everything from any frontend through a REST API or a tiny JavaScript SDK.
 
 - **Install on a server:** `./install.sh` (Docker, step by step). See **[DEPLOY.md](DEPLOY.md)**.
-- **Tutorials:** the built-in blog at `/blog/` has 15 articles in English and Spanish.
+- **Tutorials:** the built-in blog at `/blog/` has 17 articles in English and Spanish.
 
 ## Features
 
@@ -39,6 +39,9 @@ Create projects, add real PostgreSQL tables and user login to them, and query ev
 - **Dashboard KPIs**: ten headline numbers (projects, tables, rows, storage, app users, new and active users, visitors, pageviews, bounce rate).
 - **Profile picture**, resized and stored in the database.
 - **Versions page** (`/changelog/`) with the release history. The current version is shown in the footer and returned by `/healthz`.
+- **Teams**: share a project with other accounts by email, as **editor** or **viewer**.
+- **Contribution graph** of the last year, GitHub style, for all your projects or one, plus a recent activity list per project.
+- **Chrome extension** with your analytics and today's visits on its icon, downloadable from `/extension/`.
 
 ## Screenshots
 
@@ -46,7 +49,7 @@ Create projects, add real PostgreSQL tables and user login to them, and query ev
 |---|---|
 | **Dashboard** with the ten key indicators<br><img alt="Dashboard" src="docs/screenshots/dashboard.png"> | **Data editor** of a table<br><img alt="Table data editor" src="docs/screenshots/table.png"> |
 | **Web analytics** of a project<br><img alt="Web analytics" src="docs/screenshots/analytics.png"> | **Portal**: the project as a standalone app<br><img alt="Project portal" src="docs/screenshots/portal.png"> |
-| **Storage**: buckets and files<br><img alt="File storage" src="docs/screenshots/storage.png"> | **Home** in dark mode<br><img alt="Home page in dark mode" src="docs/screenshots/home-dark.png"> |
+| **Storage**: buckets and files<br><img alt="File storage" src="docs/screenshots/storage.png"> | **Chrome extension**<br><img alt="Chrome extension popup" src="docs/screenshots/extension.png" width="300"> |
 
 Screenshots are stored in `docs/screenshots/`.
 
@@ -192,6 +195,40 @@ await bucket.remove("users/ana.png")
 
 Files are stored on disk under random names (the paths you choose are only metadata). They are served with `Content-Security-Policy: sandbox` and `nosniff`, and HTML/SVG/JS are always downloaded, never rendered. Limits: `FALCONDB_STORAGE_MAX_FILE_MB` per file and `FALCONDB_STORAGE_QUOTA_MB` per project.
 
+## Sharing projects
+
+In a project, go to **Settings** → **Members**, type the email of an existing account and choose a role:
+
+| Role | Can do |
+|---|---|
+| **Editor** | Everything inside the project: tables, data, structure, app users, analytics, storage and portal settings |
+| **Viewer** | Open every page and read the data, but change nothing (any change returns *403*) |
+| **Owner** | Everything, plus Settings: rename, keys, export, members and deleting the project |
+
+Shared projects appear under **Shared with you** on the dashboard and in `/analytics/`. Members can leave a project from its overview, and the owner can change their role or remove them at any time.
+
+## Contributions and activity
+
+Every change to a project is recorded: tables and columns, rows inserted, updated or deleted (from the dashboard, the API or the portal), files, buckets, members and app users. From that:
+
+- the **dashboard** shows a GitHub-style graph of the last year for all your projects, with a picker to see just one;
+- each project's **Overview** shows its own graph and a **Recent activity** list (who did what, and when).
+
+Existing projects get their history rebuilt from the dates already stored when you run the migrations.
+
+## Chrome extension
+
+Open **`/extension/`** (also linked from the home page) and download the zip. It comes pre-configured for your server. Then:
+
+1. Unzip it (you get a `falcondatabase-extension` folder).
+2. Go to `chrome://extensions` and turn on **Developer mode**.
+3. Click **Load unpacked** and pick the folder.
+4. Click the icon and sign in with your username and password (and your 2FA code if enabled).
+
+The popup shows visitors, sessions, pageviews and bounce rate with their change, a daily chart, and the top pages, sources and countries, for all your projects or one. The icon badge shows today's pageviews and refreshes every 30 minutes. The source is in `extension/` (Manifest V3, English and Spanish).
+
+It uses the account API: `POST /api/account/token` (username, password, optional `code`) returns a 30-day token, revoked when the password changes; `GET /api/account/analytics?days=&p=<project ref>` returns the report.
+
 ## Export and import
 
 - **Export:** project → **Settings** → **Export structure** or **Export structure and data**. The JSON contains the project settings, every table with its columns, defaults, constraints, access rule and portal mode, the bucket definitions, and the rows if requested. App users and stored files are never exported.
@@ -266,9 +303,11 @@ projects/      models (Project, ProjectTable, ProjectUser) and the dashboard
   services.py    operations that change models + DDL in one transaction
   transfer.py    JSON export / import
   kpis.py        dashboard indicators
+  activity.py    activity log and the contribution graph
 api/           REST API, keys/tokens, access rules and CORS
 analytics/     web analytics: tracking (tracking.py), aggregations (stats.py), dashboards, seed_analytics
 portal/        standalone per-project apps at /app/<username>/<address>/
+extension/     Chrome extension (Manifest V3) for the account API
 storage/       buckets and files (files.py), API, public/signed downloads, file browser
 blog/          Markdown blog (posts/<slug>.<lang>.md)
 locale/        Spanish translation (django.po)

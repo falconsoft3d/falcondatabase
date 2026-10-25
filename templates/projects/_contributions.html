@@ -1,0 +1,36 @@
+{% load i18n %}{# Expects: contrib (projects.activity.contributions); optional contrib_projects + contrib_picked for a project picker #}
+<section class="box contributions">
+  <div class="box-header" style="flex-wrap:wrap">
+    <strong class="grow">{% blocktranslate count counter=contrib.total %}{{ counter }} contribution in the last year{% plural %}{{ counter }} contributions in the last year{% endblocktranslate %}</strong>
+    {% if contrib_projects %}
+      <form method="get" data-auto-submit>
+        <select name="contrib" aria-label="{% translate 'Project' %}" style="min-width:200px">
+          <option value="">{% translate "All projects" %}</option>
+          {% for p in contrib_projects %}<option value="{{ p.ref }}" {% if contrib_picked and contrib_picked.pk == p.pk %}selected{% endif %}>{{ p.name }}{% if p.owner != user %} · {{ p.owner.username }}{% endif %}</option>{% endfor %}
+        </select>
+      </form>
+    {% endif %}
+  </div>
+  <div class="box-body">
+    <div class="contrib-scroll">
+      <div class="contrib" role="img" aria-label="{% blocktranslate count counter=contrib.total %}{{ counter }} contribution in the last year{% plural %}{{ counter }} contributions in the last year{% endblocktranslate %}">
+        <div class="contrib-days" aria-hidden="true">
+          <span class="contrib-spacer"></span><span></span><span>{% translate "Mon" %}</span><span></span><span>{% translate "Wed" %}</span><span></span><span>{% translate "Fri" %}</span><span></span>
+        </div>
+        {% for week in contrib.weeks %}
+          <div class="contrib-week">
+            <span class="contrib-month" aria-hidden="true">{% if week.label %}{{ week.label|date:"M" }}{% endif %}</span>
+            {% for day in week.days %}
+              {% if day.count is None %}<span class="cell out"></span>
+              {% else %}<span class="cell l{{ day.level }}" title="{% blocktranslate count counter=day.count with date=day.date|date:'d M Y' %}{{ counter }} contribution on {{ date }}{% plural %}{{ counter }} contributions on {{ date }}{% endblocktranslate %}"></span>{% endif %}
+            {% endfor %}
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="contrib-legend small muted">
+      <span class="grow">{% translate "Tables, columns, rows, files and members created, changed or deleted — from the dashboard, the API or the portal." %}</span>
+      {% translate "Less" %} <span class="cell l0"></span><span class="cell l1"></span><span class="cell l2"></span><span class="cell l3"></span><span class="cell l4"></span> {% translate "More" %}
+    </div>
+  </div>
+</section>

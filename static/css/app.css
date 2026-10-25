@@ -649,3 +649,29 @@ img.avatar { object-fit: cover; background: var(--bg-subtle); }
 /* --- extension ---------------------------------------------------------------- */
 .extension-shot { width: 100%; max-width: 380px; justify-self: center; border-radius: 12px; border: 1px solid var(--border); box-shadow: var(--shadow); }
 .extension-banner { background: linear-gradient(120deg, var(--tint-success), transparent 60%), var(--bg); }
+
+/* --- contribution graph (ordinal ramps validated for both themes) --------------- */
+:root { --contrib-0: #161b22; --contrib-1: #155c58; --contrib-2: #1a8a84; --contrib-3: #2fb5ad; --contrib-4: #7ee0da; }
+:root[data-theme="light"] { --contrib-0: #e2e9da; --contrib-1: #5bc0b9; --contrib-2: #2ea39c; --contrib-3: #19827c; --contrib-4: #0c5a56; }
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) { --contrib-0: #e2e9da; --contrib-1: #5bc0b9; --contrib-2: #2ea39c; --contrib-3: #19827c; --contrib-4: #0c5a56; }
+}
+.contrib-scroll { overflow-x: auto; padding-bottom: 4px; }
+.contrib { display: flex; gap: 3px; width: max-content; }
+.contrib-week, .contrib-days { display: flex; flex-direction: column; gap: 3px; }
+.contrib-days { margin-right: 4px; font-size: 10px; color: var(--fg-muted); }
+.contrib-days span { height: 11px; line-height: 11px; }
+.contrib-days .contrib-spacer, .contrib-month { height: 15px; }
+.contrib-month { font-size: 10px; color: var(--fg-muted); white-space: nowrap; width: 11px; overflow: visible; }
+.cell { display: inline-block; width: 11px; height: 11px; border-radius: 2px; background: var(--contrib-0); }
+.cell.out { background: transparent; }
+.cell.l1 { background: var(--contrib-1); }
+.cell.l2 { background: var(--contrib-2); }
+.cell.l3 { background: var(--contrib-3); }
+.cell.l4 { background: var(--contrib-4); }
+.contrib-week .cell:not(.out):hover { outline: 1px solid var(--fg-muted); outline-offset: 1px; }
+.contrib-legend { display: flex; align-items: center; gap: 3px; margin-top: 10px; flex-wrap: wrap; }
+.contrib-legend .grow { margin-right: 12px; }
+.activity-list { list-style: none; margin: 0; padding: 0; }
+.activity-list li { display: flex; gap: 10px; align-items: baseline; padding: 8px 16px; border-top: 1px solid var(--border-muted); }
+.activity-list li:first-child { border-top: 0; }

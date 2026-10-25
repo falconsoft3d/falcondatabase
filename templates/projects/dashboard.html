@@ -21,6 +21,15 @@
         <li class="muted small">{% translate "You don't have any projects yet." %}</li>
       {% endfor %}
     </ul>
+    {% if shared %}
+      <h3 style="font-size:14px;margin:16px 0 0">{% translate "Shared with you" %}</h3>
+      <ul class="sidebar-list">
+        {% for member in shared %}
+          <li><span class="avatar sm">{{ member.project.name|first|upper }}</span>
+            <a href="{{ member.project.get_absolute_url }}">{{ member.project.owner.username }}/{{ member.project.slug }}</a></li>
+        {% endfor %}
+      </ul>
+    {% endif %}
   </aside>
 
   <section>
@@ -41,6 +50,12 @@
             </div>
           </div>
         {% endfor %}
+      </div>
+    {% endif %}
+
+    {% if not query %}
+      <div style="margin-top:24px">
+        {% include "projects/_contributions.html" %}
       </div>
     {% endif %}
 
@@ -78,6 +93,26 @@
         <h3>{% translate "Create your first project" %}</h3>
         <p class="muted">{% translate "A project groups your tables, users and API keys." %}</p>
         <a class="btn btn-primary" href="{% url 'project_new' %}">{% icon 'plus' %} {% translate "New project" %}</a>
+      </div>
+    {% endif %}
+
+    {% if shared %}
+      <h2 style="margin:24px 0 16px">{% translate "Shared with you" %}</h2>
+      <div class="box">
+        {% for member in shared %}
+          <div class="project-card">
+            <div class="grow">
+              <h3><a href="{{ member.project.get_absolute_url }}">{{ member.project.name }}</a>
+                <span class="label {% if member.role == 'editor' %}label-success{% endif %}">{{ member.get_role_display }}</span></h3>
+              <p class="muted" style="margin:0">{{ member.project.description|default:_("No description") }}</p>
+              <div class="meta">
+                <span class="row" style="gap:6px">{% avatar member.project.owner 16 %} {{ member.project.owner.username }}</span>
+                <span>{% icon 'table' 14 %} {% blocktranslate count counter=member.table_count %}{{ counter }} table{% plural %}{{ counter }} tables{% endblocktranslate %}</span>
+              </div>
+            </div>
+            <div><a class="btn btn-sm" href="{{ member.project.get_absolute_url }}">{% translate "Open" %}</a></div>
+          </div>
+        {% endfor %}
       </div>
     {% endif %}
   </section>

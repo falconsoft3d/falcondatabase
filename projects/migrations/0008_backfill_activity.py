@@ -46,8 +46,8 @@ def backfill(apps, schema_editor):
             events.append(ActivityEvent(project=project, kind="file_uploaded", user_id=owner_id,
                                         target=bucket_name, count=count, created_at=first))
         for app_user in project.users.all():
-            events.append(ActivityEvent(project=project, kind="app_user_added", actor=app_user.email,
-                                        target=app_user.email, created_at=app_user.created_at))
+            events.append(ActivityEvent(project=project, kind="app_user_signed_up", actor=app_user.email,
+                                        created_at=app_user.created_at))
     ActivityEvent.objects.bulk_create(events, batch_size=1000)
 
 

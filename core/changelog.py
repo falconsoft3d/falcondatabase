@@ -6,6 +6,23 @@ Change kinds: "added", "improved", "fixed".
 
 RELEASES = [
     {
+        "version": "0.7.0",
+        "date": "2026-10-25",
+        "title": {"en": "Teams, contributions and the Chrome extension", "es": "Equipos, contribuciones y la extensión de Chrome"},
+        "changes": [
+            ("added", "Share a project with other accounts by email, as editor or viewer. Shared projects appear in the dashboard and in analytics.",
+                      "Comparte un proyecto con otras cuentas por email, como editor o lector. Los proyectos compartidos aparecen en el dashboard y en la analítica."),
+            ("added", "Contribution graph of the last year, like GitHub's: for all your projects on the dashboard and for each project in its overview.",
+                      "Gráfico de contribuciones del último año, como el de GitHub: de todos tus proyectos en el dashboard y de cada proyecto en su resumen."),
+            ("added", "Recent activity of each project: who created, changed or deleted tables, rows, files and members.",
+                      "Actividad reciente de cada proyecto: quién creó, cambió o eliminó tablas, filas, archivos y miembros."),
+            ("added", "Chrome extension with the statistics of your projects and today's visits on its icon, downloadable from the home page.",
+                      "Extensión de Chrome con las estadísticas de tus proyectos y las visitas de hoy en su icono, descargable desde el inicio."),
+            ("added", "Account API (/api/account/) used by the extension, with two-step authentication support.",
+                      "API de cuenta (/api/account/) que usa la extensión, compatible con la autenticación en dos pasos."),
+        ],
+    },
+    {
         "version": "0.6.1",
         "date": "2026-10-25",
         "title": {"en": "Site analytics and documentation", "es": "Analítica del sitio y documentación"},
