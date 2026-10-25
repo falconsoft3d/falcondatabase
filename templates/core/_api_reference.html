@@ -1,0 +1,74 @@
+{% load i18n %}{# Expects: base_url, ref, anon_key #}
+<div class="markdown">
+  <h2 style="margin-top:0">{% translate "Authenticating requests" %}</h2>
+  <p>{% blocktranslate %}Every request carries the <code class="inline">apikey</code> header. Each project has two keys:{% endblocktranslate %}</p>
+  <table>
+    <tr><th>{% translate "Key" %}</th><th>{% translate "Where to use it" %}</th><th>{% translate "What it allows" %}</th></tr>
+    <tr><td><code>anon</code></td><td>{% translate "Browser / mobile app" %}</td><td>{% translate "Whatever each table's access rules allow" %}</td></tr>
+    <tr><td><code>service</code></td><td>{% translate "Only on your server" %}</td><td>{% translate "Everything, it ignores the rules" %}</td></tr>
+  </table>
+  <p>{% blocktranslate %}When a user signs in they receive a <code class="inline">token</code>; also send it in <code class="inline">Authorization: Bearer &lt;token&gt;</code>.{% endblocktranslate %}</p>
+
+  <h2>{% translate "Tables" %}</h2>
+  <table>
+    <tr><th>{% translate "Method" %}</th><th>{% translate "Path" %}</th><th>{% translate "Action" %}</th></tr>
+    <tr><td><code>GET</code></td><td><code>/api/v1/{{ ref }}</code></td><td>{% translate "List tables and columns" %}</td></tr>
+    <tr><td><code>GET</code></td><td><code>/api/v1/{{ ref }}/tables/&lt;table&gt;</code></td><td>{% translate "List rows" %}</td></tr>
+    <tr><td><code>POST</code></td><td><code>/api/v1/{{ ref }}/tables/&lt;table&gt;</code></td><td>{% translate "Insert one row (object) or several (list)" %}</td></tr>
+    <tr><td><code>GET</code></td><td><code>/api/v1/{{ ref }}/tables/&lt;table&gt;/&lt;id&gt;</code></td><td>{% translate "Get one row" %}</td></tr>
+    <tr><td><code>PATCH</code></td><td><code>/api/v1/{{ ref }}/tables/&lt;table&gt;/&lt;id&gt;</code></td><td>{% translate "Update columns of a row" %}</td></tr>
+    <tr><td><code>DELETE</code></td><td><code>/api/v1/{{ ref }}/tables/&lt;table&gt;/&lt;id&gt;</code></td><td>{% translate "Delete a row" %}</td></tr>
+  </table>
+  <p>{% blocktranslate %}Listings respond with <code class="inline">{"data": [...], "count": 42}</code>, where <code class="inline">count</code> is the total without pagination.{% endblocktranslate %}</p>
+
+  <h3>{% translate "Filters, ordering and pagination" %}</h3>
+  <p>{% blocktranslate %}Filter with <code class="inline">column=operator.value</code>. Operators: <code>eq</code>, <code>neq</code>, <code>gt</code>, <code>gte</code>, <code>lt</code>, <code>lte</code>, <code>like</code>, <code>ilike</code>, <code>is</code> (null/true/false) and <code>in</code>.{% endblocktranslate %}</p>
+<pre class="code">GET /api/v1/{{ ref }}/tables/products?price=gte.10&amp;name=ilike.%25coffee%25&amp;order=price.desc&amp;limit=20&amp;offset=40&amp;select=id,name,price
+GET /api/v1/{{ ref }}/tables/products?category=in.(drinks,desserts)&amp;stock=is.null</pre>
+
+  <h2>{% translate "User login" %}</h2>
+  <table>
+    <tr><th>{% translate "Method" %}</th><th>{% translate "Path" %}</th><th>{% translate "Body / result" %}</th></tr>
+    <tr><td><code>POST</code></td><td><code>/api/v1/{{ ref }}/auth/signup</code></td><td><code>{"email", "password", "data"?}</code> → <code>{user, token}</code></td></tr>
+    <tr><td><code>POST</code></td><td><code>/api/v1/{{ ref }}/auth/login</code></td><td><code>{"email", "password"}</code> → <code>{user, token}</code></td></tr>
+    <tr><td><code>GET</code></td><td><code>/api/v1/{{ ref }}/auth/user</code></td><td>{% translate "Current user (requires token)" %}</td></tr>
+    <tr><td><code>PATCH</code></td><td><code>/api/v1/{{ ref }}/auth/user</code></td><td>{% blocktranslate %}<code>{"data": {...}}</code> saves profile data{% endblocktranslate %}</td></tr>
+  </table>
+
+  <h2>{% translate "Access rules per table" %}</h2>
+  <table>
+    <tr><th>{% translate "Rule" %}</th><th>{% translate "Read" %}</th><th>{% translate "Write" %}</th></tr>
+    <tr><td>{% translate "Public" %}</td><td>{% translate "anyone" %}</td><td>{% translate "anyone" %}</td></tr>
+    <tr><td>{% translate "Public read" %}</td><td>{% translate "anyone" %}</td><td>{% translate "signed-in users" %}</td></tr>
+    <tr><td>{% translate "Signed-in users" %}</td><td>{% translate "signed-in users" %}</td><td>{% translate "signed-in users" %}</td></tr>
+    <tr><td>{% translate "Owner" %}</td><td>{% translate "only their rows" %}</td><td>{% blocktranslate %}only their rows (automatic <code>owner_id</code>){% endblocktranslate %}</td></tr>
+    <tr><td>{% translate "Private" %}</td><td>service key</td><td>service key</td></tr>
+  </table>
+
+  <h2>{% translate "JavaScript SDK" %}</h2>
+  <p>{% translate "A single file, no dependencies or build step. Import it straight from your server:" %}</p>
+<pre class="code"><span class="k">import</span> { createClient } <span class="k">from</span> <span class="s">"{{ base_url }}/sdk/falcondb.js"</span>
+
+<span class="k">const</span> db = <span class="f">createClient</span>(<span class="s">"{{ base_url }}"</span>, <span class="s">"{{ ref }}"</span>, <span class="s">"{{ anon_key }}"</span>)
+
+<span class="c">// {% translate "Chainable queries" %}</span>
+<span class="k">const</span> { data, count, error } = <span class="k">await</span> db.<span class="f">from</span>(<span class="s">"products"</span>)
+  .<span class="f">select</span>(<span class="s">"id,name,price"</span>)
+  .<span class="f">gte</span>(<span class="s">"price"</span>, <span class="s">10</span>)
+  .<span class="f">ilike</span>(<span class="s">"name"</span>, <span class="s">"%coffee%"</span>)
+  .<span class="f">order</span>(<span class="s">"price"</span>, { desc: <span class="k">true</span> })
+  .<span class="f">range</span>(<span class="s">0</span>, <span class="s">19</span>)
+
+<span class="c">// {% translate "Write" %}</span>
+<span class="k">await</span> db.<span class="f">from</span>(<span class="s">"products"</span>).<span class="f">insert</span>({ name: <span class="s">"Coffee"</span>, price: <span class="s">2.5</span> })
+<span class="k">await</span> db.<span class="f">from</span>(<span class="s">"products"</span>).<span class="f">update</span>(<span class="s">7</span>, { price: <span class="s">3</span> })
+<span class="k">await</span> db.<span class="f">from</span>(<span class="s">"products"</span>).<span class="f">delete</span>(<span class="s">7</span>)
+
+<span class="c">// {% translate "Login (the token is stored in localStorage and sent automatically)" %}</span>
+<span class="k">await</span> db.auth.<span class="f">signUp</span>({ email, password })
+<span class="k">await</span> db.auth.<span class="f">signIn</span>({ email, password })
+<span class="k">const</span> { user } = <span class="k">await</span> db.auth.<span class="f">getUser</span>()
+db.auth.<span class="f">signOut</span>()</pre>
+  <p>{% blocktranslate %}Every call returns <code class="inline">{ data, error }</code>: it never throws on API errors.{% endblocktranslate %}</p>
+  <p>{% blocktranslate %}API error messages follow the browser language (<code class="inline">Accept-Language</code> header).{% endblocktranslate %}</p>
+</div>

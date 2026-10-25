@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% load i18n falcon %}
+{% block title %}{% translate "Documentation" %} · falcondatabase{% endblock %}
+{% block content %}
+<div class="container-md">
+  <h1>{% translate "Documentation" %}</h1>
+  <p class="muted">{% blocktranslate %}How to query a project's data from any frontend. Inside each project, the <strong>API</strong> tab shows these same examples with your real keys.{% endblocktranslate %}</p>
+  {% include "core/_api_reference.html" %}
+</div>
+{% endblock %}

@@ -1,0 +1,24 @@
+# falcondatabase — automatic HTTPS with Caddy (Let's Encrypt).
+# install.sh copies this file to docker-compose.override.yml when HTTPS is enabled.
+# Requirements: a domain whose DNS points to this server, and ports 80/443 open.
+
+services:
+  caddy:
+    image: caddy:2
+    restart: unless-stopped
+    depends_on:
+      - web
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    environment:
+      FALCONDB_DOMAIN: ${FALCONDB_DOMAIN:?Set FALCONDB_DOMAIN in .env}
+    volumes:
+      - ./docker/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+
+volumes:
+  caddy_data:
+  caddy_config:

@@ -1,0 +1,17 @@
+{% load i18n falcon %}
+<details class="menu">
+  <summary class="icon-button" title="{% translate 'Language' %}">{% icon 'globe' %} {{ LANGUAGE_CODE|upper }}</summary>
+  <div class="menu-items">
+    <div class="menu-title">{% translate "Language" %}</div>
+    <form action="{% url 'set_language' %}" method="post">
+      {% csrf_token %}
+      <input type="hidden" name="next" value="{{ request.get_full_path }}">
+      {% for code, name in LANGUAGES %}
+        <button type="submit" name="language" value="{{ code }}" lang="{{ code }}">
+          {% if code == LANGUAGE_CODE %}{% icon 'check' %}{% else %}<span style="width:16px"></span>{% endif %}
+          {{ name }}
+        </button>
+      {% endfor %}
+    </form>
+  </div>
+</details>

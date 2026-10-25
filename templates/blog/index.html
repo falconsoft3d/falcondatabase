@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load i18n falcon %}
+{% block title %}{% translate "Blog" %} · falcondatabase{% endblock %}
+{% block content %}
+<section class="blog-hero">
+  <div class="container-md">
+    <h1>{% translate "Blog" %}</h1>
+    <p class="muted">{% translate "Tutorials, guides and news to get the most out of falcondatabase." %}</p>
+    <nav class="subnav" style="display:inline-flex;margin-top:8px">
+      <a href="{% url 'blog:index' %}" class="{% if not category %}selected{% endif %}">{% translate "All" %}</a>
+      <a href="?category=tutorial" class="{% if category == 'tutorial' %}selected{% endif %}">{% translate "Tutorials" %}</a>
+      <a href="?category=guide" class="{% if category == 'guide' %}selected{% endif %}">{% translate "Guides" %}</a>
+      <a href="?category=news" class="{% if category == 'news' %}selected{% endif %}">{% translate "News" %}</a>
+    </nav>
+  </div>
+</section>
+<div class="container-md">
+  <div class="post-grid">
+    {% for post in posts %}
+      {% include "blog/_card.html" %}
+    {% empty %}
+      <div class="box blankslate">{% icon 'book' 28 %}<h3>{% translate "No articles in this category yet" %}</h3></div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

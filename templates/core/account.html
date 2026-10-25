@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% load i18n falcon %}
+{% block title %}{% translate "Settings" %} · falcondatabase{% endblock %}
+{% block content %}
+<div class="container-sm stack">
+  <div class="row">
+    <span class="avatar">{{ user|initial }}</span>
+    <div class="grow">
+      <strong>{{ user.username }}</strong>
+      {% if user.is_superuser %}<span class="label label-done">admin</span>{% endif %}
+      <div class="muted small">{{ user.email }}</div>
+    </div>
+  </div>
+  <h1>{% translate "Settings" %}</h1>
+
+  <div class="layout-two">
+    <form action="{% url 'set_language' %}" method="post" class="box">
+      {% csrf_token %}
+      <input type="hidden" name="next" value="{% url 'account' %}">
+      <div class="box-header">{% icon 'globe' %} <strong>{% translate "Language" %}</strong></div>
+      <div class="box-body">
+        {% for code, name in LANGUAGES %}
+          <label class="checkbox" style="margin-bottom:10px" lang="{{ code }}">
+            <input type="radio" name="language" value="{{ code }}" {% if code == LANGUAGE_CODE %}checked{% endif %}>
+            <span>{{ name }}</span>
+          </label>
+        {% endfor %}
+        <button class="btn" type="submit">{% translate "Save language" %}</button>
+      </div>
+    </form>
+
+    <div class="box">
+      <div class="box-header">{% icon 'sun' %} <strong>{% translate "Appearance" %}</strong></div>
+      <div class="box-body" data-theme-options>
+        <label class="checkbox" style="margin-bottom:10px"><input type="radio" name="theme" value="system"> <span>{% translate "System" %}</span></label>
+        <label class="checkbox" style="margin-bottom:10px"><input type="radio" name="theme" value="light"> <span>{% translate "Light" %}</span></label>
+        <label class="checkbox" style="margin-bottom:10px"><input type="radio" name="theme" value="dark"> <span>{% translate "Dark" %}</span></label>
+        <p class="help" style="margin:0">{% translate "Saved in this browser." %}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="box">
+    <div class="box-header">{% icon 'shield' %} <strong class="grow">{% translate "Two-step authentication" %}</strong>
+      {% if two_factor %}<span class="label label-success">{% translate "enabled" %}</span>{% else %}<span class="label">{% translate "disabled" %}</span>{% endif %}
+    </div>
+    <div class="box-body">
+      {% if two_factor %}
+        <p class="muted">{% blocktranslate count counter=two_factor.recovery_codes|length %}When you sign in we ask for a code from your authenticator app. You have {{ counter }} recovery code left.{% plural %}When you sign in we ask for a code from your authenticator app. You have {{ counter }} recovery codes left.{% endblocktranslate %}</p>
+        <form method="post" action="{% url 'two_factor_manage' %}">
+          {% csrf_token %}
+          <div class="field">
+            <label for="id_2fa_password">{% translate "Confirm with your password" %}</label>
+            <input type="password" name="password" id="id_2fa_password" required autocomplete="current-password">
+          </div>
+          <div class="row">
+            <button class="btn" type="submit" name="action" value="recovery">{% icon 'refresh' %} {% translate "New recovery codes" %}</button>
+            <button class="btn btn-danger" type="submit" name="action" value="disable">{% translate "Disable" %}</button>
+          </div>
+        </form>
+      {% else %}
+        <p class="muted">{% translate "Protect your account: besides your password, ask for a code from an authenticator app on your phone." %}</p>
+        <a class="btn btn-primary" href="{% url 'two_factor_setup' %}">{% icon 'shield' %} {% translate "Enable two-step authentication" %}</a>
+      {% endif %}
+    </div>
+  </div>
+
+  <form method="post" class="box">
+    {% csrf_token %}
+    <div class="box-header">{% icon 'key' %} <strong>{% translate "Change password" %}</strong></div>
+    <div class="box-body">
+      <p class="muted">{% translate "You will stay signed in on this browser after the change." %}</p>
+      {% for field in form %}
+        <div class="field">
+          <label class="required" for="{{ field.id_for_label }}">{{ field.label }}</label>
+          {{ field }}
+          {% for error in field.errors %}<p class="error">{{ error }}</p>{% endfor %}
+          {% if field.help_text %}<div class="help">{{ field.help_text }}</div>{% endif %}
+        </div>
+      {% endfor %}
+      <button class="btn btn-primary" type="submit">{% translate "Update password" %}</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

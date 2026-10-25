@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load i18n falcon %}
+{% block title %}{% translate "Enable two-step authentication" %} · falcondatabase{% endblock %}
+{% block content %}
+<div class="container-sm">
+  <h1>{% translate "Enable two-step authentication" %}</h1>
+  <p class="muted">{% translate "After your password, you will be asked for a code from an authenticator app (Google Authenticator, Authy, 1Password, Microsoft Authenticator…)." %}</p>
+
+  <div class="box" style="margin-top:24px">
+    <div class="box-header"><strong>1.</strong> {% translate "Scan this QR code with your app" %}</div>
+    <div class="box-body row" style="gap:24px;flex-wrap:wrap;align-items:flex-start">
+      <div class="qr">{{ qr }}</div>
+      <div class="grow">
+        <p class="muted small">{% translate "Can't scan it? Enter this key manually:" %}</p>
+        <div class="key-field">
+          <input type="text" id="totp-secret" readonly value="{{ secret }}" class="mono">
+          <button type="button" class="btn" data-copy="#totp-secret">{% icon 'copy' %}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <form method="post" class="box" style="margin-top:16px">
+    {% csrf_token %}
+    <div class="box-header"><strong>2.</strong> {% translate "Enter the code the app shows" %}</div>
+    <div class="box-body">
+      {% if error %}<p class="error" style="margin:0 0 12px">{{ error }}</p>{% endif %}
+      <div class="row">
+        <input type="text" name="code" inputmode="numeric" autocomplete="one-time-code" required autofocus
+               class="code-input" placeholder="123456" style="max-width:200px">
+        <button class="btn btn-primary" type="submit">{% translate "Verify and enable" %}</button>
+      </div>
+    </div>
+  </form>
+  <p style="margin-top:16px"><a href="{% url 'account' %}">← {% translate "Back to settings" %}</a></p>
+</div>
+{% endblock %}

@@ -1,0 +1,79 @@
+{% extends "projects/base_project.html" %}
+{% load i18n falcon %}
+{% block content %}
+<div class="container-md">
+  <h1>{% translate "New table" %}</h1>
+  <p class="muted">{% blocktranslate %}Each table automatically includes <code class="inline">id</code> (auto-increment) and <code class="inline">created_at</code>.{% endblocktranslate %}</p>
+
+  {% for error in form.non_field_errors %}<div class="flash flash-error">{% icon 'x' %} {{ error }}</div>{% endfor %}
+
+  <form method="post">
+    {% csrf_token %}
+    <div class="box" style="margin-bottom:16px">
+      <div class="box-body">
+        <div class="field">
+          <label class="required" for="id_name">{% translate "Name" %}</label>
+          <input type="text" name="name" id="id_name" required autofocus data-identifier placeholder="{% translate 'e.g. products' %}" value="{{ form.name.value|default:'' }}">
+          {% for error in form.name.errors %}<p class="error">{{ error }}</p>{% endfor %}
+          <span class="help">{% translate "Lowercase letters, numbers and underscores. It's the name you will use in the API." %}</span>
+        </div>
+        <div class="field">
+          <label for="id_description">{% translate "Description" %} <span class="muted">({% translate "optional" %})</span></label>
+          <input type="text" name="description" id="id_description" value="{{ form.description.value|default:'' }}">
+        </div>
+        <div class="field" style="margin-bottom:0">
+          <label for="id_access">{% translate "API access" %}</label>
+          <select name="access" id="id_access">
+            {% for value, label in form.fields.access.choices %}
+              <option value="{{ value }}" {% if form.access.value == value %}selected{% endif %}>{{ label }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="box">
+      <div class="box-header"><strong class="grow">{% translate "Columns" %}</strong>
+        <button type="button" class="btn btn-sm" data-add-column>{% icon 'plus' 14 %} {% translate "Add column" %}</button></div>
+      <div class="box-body">
+        <div class="col-editor head"><span>{% translate "Name" %}</span><span>{% translate "Type" %}</span><span>{% translate "Default" %}</span><span>{% translate "Req." %}</span><span>{% translate "Unique" %}</span><span></span></div>
+        <div class="col-editor col-fixed"><input type="text" value="id" disabled><input type="text" value="bigint — identity" disabled><input type="text" value="auto" disabled><span></span><span></span><span></span></div>
+        <div class="col-editor col-fixed"><input type="text" value="created_at" disabled><input type="text" value="datetime" disabled><input type="text" value="now()" disabled><span></span><span></span><span></span></div>
+        <div data-columns data-next="{{ columns|length }}">
+          {% for column in columns %}
+            <div class="col-editor" style="margin-top:8px">
+              <input type="text" name="columns-{{ forloop.counter0 }}-name" value="{{ column.name }}" data-identifier placeholder="{% translate 'column_name' %}">
+              <select name="columns-{{ forloop.counter0 }}-type">
+                {% for value, label in type_choices %}<option value="{{ value }}" {% if column.type_ == value %}selected{% endif %}>{{ label }}</option>{% endfor %}
+              </select>
+              <input type="text" name="columns-{{ forloop.counter0 }}-default" value="{{ column.default|default:'' }}" placeholder="NULL">
+              <label class="checkbox"><input type="checkbox" name="columns-{{ forloop.counter0 }}-required" {% if column.required %}checked{% endif %}></label>
+              <label class="checkbox"><input type="checkbox" name="columns-{{ forloop.counter0 }}-unique" {% if column.unique %}checked{% endif %}></label>
+              <button type="button" class="btn btn-invisible btn-sm" data-remove-column title="{% translate 'Remove' %}">{% icon 'x' 14 %}</button>
+            </div>
+          {% endfor %}
+        </div>
+        <p class="help" style="margin-top:12px">{% blocktranslate %}Special defaults: <code class="inline">now()</code> for dates and <code class="inline">uuid()</code> for uuid.{% endblocktranslate %}</p>
+      </div>
+    </div>
+
+    <div class="form-actions" style="border:0">
+      <a class="btn" href="{% url 'projects:tables' project.owner.username project.slug %}">{% translate "Cancel" %}</a>
+      <button class="btn btn-primary" type="submit">{% translate "Create table" %}</button>
+    </div>
+  </form>
+</div>
+
+<template id="column-template">
+  <div class="col-editor" style="margin-top:8px">
+    <input type="text" name="columns-__i__-name" data-identifier placeholder="{% translate 'column_name' %}">
+    <select name="columns-__i__-type">
+      {% for value, label in type_choices %}<option value="{{ value }}">{{ label }}</option>{% endfor %}
+    </select>
+    <input type="text" name="columns-__i__-default" placeholder="NULL">
+    <label class="checkbox"><input type="checkbox" name="columns-__i__-required"></label>
+    <label class="checkbox"><input type="checkbox" name="columns-__i__-unique"></label>
+    <button type="button" class="btn btn-invisible btn-sm" data-remove-column title="{% translate 'Remove' %}">{% icon 'x' 14 %}</button>
+  </div>
+</template>
+{% endblock %}

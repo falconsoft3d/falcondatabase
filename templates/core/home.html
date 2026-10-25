@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% load i18n falcon %}
+{% block title %}falcondatabase — {% translate "your backend in minutes" %}{% endblock %}
+{% block content %}
+<section class="hero">
+  <span class="label label-accent" style="margin-bottom:24px">{% icon 'zap' 12 %} Django + PostgreSQL</span>
+  <h1>{% translate "Your database," %} <span class="grad">{% translate "ready for any frontend" %}</span></h1>
+  <p class="lead">{% translate "Create projects, define real PostgreSQL tables and add login to your apps. Query everything from React, Vue or plain JavaScript with a simple REST API." %}</p>
+  <div class="row" style="justify-content:center">
+    {% if user.is_authenticated %}
+      <a class="btn btn-primary" href="{% url 'dashboard' %}">{% translate "Go to dashboard" %}</a>
+    {% else %}
+      {% if signup_enabled %}<a class="btn btn-primary" href="{% url 'signup' %}">{% translate "Start for free" %}</a>{% endif %}
+      <a class="btn {% if not signup_enabled %}btn-primary{% endif %}" href="{% url 'login' %}">{% translate "Sign in" %}</a>
+    {% endif %}
+  </div>
+  <div class="hero-code">
+<pre class="code"><span class="k">import</span> { createClient } <span class="k">from</span> <span class="s">"https://{% translate 'your-server' %}/sdk/falcondb.js"</span>
+
+<span class="k">const</span> db = <span class="f">createClient</span>(<span class="s">"https://{% translate 'your-server' %}"</span>, <span class="s">"PROJECT_REF"</span>, <span class="s">"ANON_KEY"</span>)
+
+<span class="c">// {% translate "Sign in the users of your app" %}</span>
+<span class="k">await</span> db.auth.<span class="f">signIn</span>({ email, password })
+
+<span class="c">// {% translate "Query a table" %}</span>
+<span class="k">const</span> { data } = <span class="k">await</span> db.<span class="f">from</span>(<span class="s">"todos"</span>).<span class="f">select</span>().<span class="f">eq</span>(<span class="s">"done"</span>, <span class="k">false</span>)</pre>
+  </div>
+</section>
+
+<section class="container" style="padding-top:64px">
+  <div class="features">
+    <div class="feature">
+      <div class="stat-icon">{% icon 'database' 20 %}</div>
+      <h3>{% translate "Isolated projects" %}</h3>
+      <p class="muted">{% translate "Each project has its own PostgreSQL schema, its API URL and its own keys." %}</p>
+    </div>
+    <div class="feature">
+      <div class="stat-icon">{% icon 'table' 20 %}</div>
+      <h3>{% translate "Real tables" %}</h3>
+      <p class="muted">{% translate "Create tables with typed columns (text, numbers, dates, JSON, UUID…) and edit the data from the dashboard." %}</p>
+    </div>
+    <div class="feature">
+      <div class="stat-icon">{% icon 'lock' 20 %}</div>
+      <h3>{% translate "Login included" %}</h3>
+      <p class="muted">{% translate "Enable email and password authentication for the users of your app in one click." %}</p>
+    </div>
+    <div class="feature">
+      <div class="stat-icon">{% icon 'shield' 20 %}</div>
+      <h3>{% translate "Access rules" %}</h3>
+      <p class="muted">{% translate "Decide per table who reads and who writes: public, signed-in users only, by owner or private." %}</p>
+    </div>
+    <div class="feature">
+      <div class="stat-icon">{% icon 'code' 20 %}</div>
+      <h3>{% translate "REST API + SDK" %}</h3>
+      <p class="muted">{% translate "Filter, sort and paginate with simple parameters, or use the JavaScript client without installing anything." %}</p>
+    </div>
+    <div class="feature">
+      <div class="stat-icon">{% icon 'globe' 20 %}</div>
+      <h3>{% translate "From any frontend" %}</h3>
+      <p class="muted">{% translate "CORS ready so your apps on other domains can consume the data directly." %}</p>
+    </div>
+  </div>
+</section>
+
+{% if latest_posts %}
+<section class="container" style="padding-top:48px">
+  <div class="row" style="margin-bottom:16px">
+    <h2 class="grow" style="margin:0">{% translate "Latest from the blog" %}</h2>
+    <a href="{% url 'blog:index' %}">{% translate "All articles →" %}</a>
+  </div>
+  <div class="post-grid">{% for post in latest_posts %}{% include "blog/_card.html" %}{% endfor %}</div>
+</section>
+{% endif %}
+
+<section class="container-md" style="padding-bottom:64px">
+  <h2 style="text-align:center;margin:32px 0">{% translate "That simple" %}</h2>
+  <ol class="steps">
+    <li><h3>{% translate "Create your account and a project" %}</h3><p class="muted">{% blocktranslate %}You get an API URL and two keys: <code class="inline">anon</code> for the browser and <code class="inline">service</code> for your server.{% endblocktranslate %}</p></li>
+    <li><h3>{% translate "Add tables" %}</h3><p class="muted">{% translate "Define columns from the dashboard. They are created as real PostgreSQL tables." %}</p></li>
+    <li><h3>{% translate "Enable login (optional)" %}</h3><p class="muted">{% translate "Your users sign up and sign in from your frontend." %}</p></li>
+    <li><h3>{% translate "Query from your app" %}</h3><p class="muted">{% blocktranslate %}Use <code class="inline">fetch</code> or the <code class="inline">falcondb.js</code> SDK.{% endblocktranslate %} <a href="{% url 'docs' %}">{% translate "See the documentation →" %}</a></p></li>
+  </ol>
+</section>
+{% endblock %}

@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% load i18n falcon %}
+{% block title %}{% translate "Users" %} · falcondatabase{% endblock %}
+{% block content %}
+<div class="container layout-split">
+  <div class="stack">
+    {% if password_reset %}
+      <div class="flash flash-attention" role="status">{% icon 'key' %}
+        <span>{% blocktranslate with username=password_reset.username %}New temporary password for <strong>{{ username }}</strong>:{% endblocktranslate %}
+          <code class="inline" id="temp-password">{{ password_reset.password }}</code>
+          <button type="button" class="btn btn-xs" data-copy="#temp-password">{% icon 'copy' 12 %}</button><br>
+          <span class="small">{% translate "It is shown only once. Send it to the user and ask them to change it in Settings. Their open sessions were closed." %}</span></span>
+      </div>
+    {% endif %}
+    <div class="row">
+      <h2 class="grow" style="margin:0">{% translate "Users" %}</h2>
+      <span class="muted">{% blocktranslate count counter=users|length %}{{ counter }} user{% plural %}{{ counter }} users{% endblocktranslate %}</span>
+    </div>
+    <div class="box">
+      <table class="list">
+        <thead><tr><th>{% translate "User" %}</th><th>{% translate "Email" %}</th><th>{% translate "Projects" %}</th><th>2FA</th><th>{% translate "Joined" %}</th><th>{% translate "Last login" %}</th><th></th></tr></thead>
+        <tbody>
+          {% for u in users %}
+            <tr>
+              <td><span class="row"><span class="avatar sm">{{ u|initial }}</span> <strong>{{ u.username }}</strong>
+                {% if u.is_superuser %}<span class="label label-done">admin</span>{% endif %}
+                {% if not u.is_active %}<span class="label">{% translate "deactivated" %}</span>{% endif %}</span></td>
+              <td class="muted">{{ u.email }}</td>
+              <td class="muted">{{ u.project_count }}</td>
+              <td class="nowrap">
+                {% if u.two_factor %}
+                  <span class="label label-success">{% translate "enabled" %}</span>
+                  <form method="post" style="display:inline" data-confirm="{% blocktranslate with username=u.username %}Remove two-step authentication for {{ username }}? Use it only if they lost their phone and their codes.{% endblocktranslate %}">
+                    {% csrf_token %}<input type="hidden" name="action" value="reset_2fa"><input type="hidden" name="user" value="{{ u.pk }}">
+                    <button class="btn btn-xs btn-invisible" type="submit" title="{% translate 'Reset' %}">{% icon 'refresh' 14 %}</button>
+                  </form>
+                {% else %}<span class="muted small">—</span>{% endif %}
+              </td>
+              <td class="muted small">{{ u.date_joined|date:"d M Y" }}</td>
+              <td class="muted small">{{ u.last_login|date:"d M Y H:i"|default:"—" }}</td>
+              <td class="nowrap" style="text-align:right">
+                <form method="post" style="display:inline" data-confirm="{% blocktranslate with username=u.username %}Reset the password of {{ username }}? Their current password stops working.{% endblocktranslate %}">
+                  {% csrf_token %}<input type="hidden" name="action" value="reset_password"><input type="hidden" name="user" value="{{ u.pk }}">
+                  <button class="btn btn-xs" type="submit">{% icon 'key' 12 %} {% translate "Reset password" %}</button>
+                </form>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <aside class="stack">
+    <form method="post" class="box">
+      {% csrf_token %}<input type="hidden" name="action" value="signup">
+      <div class="box-header">{% icon 'lock' %} <strong>{% translate "Registration" %}</strong></div>
+      <div class="box-body">
+        <label class="checkbox" style="margin-bottom:16px">
+          <input type="checkbox" name="allow_signup" {% if site.allow_signup %}checked{% endif %}>
+          <span><strong>{% translate "Allow new users to sign up" %}</strong>
+            <span class="muted small">{% translate "If you disable it, only you can create accounts from this page." %}</span></span>
+        </label>
+        <button class="btn btn-block" type="submit">{% translate "Save" %}</button>
+      </div>
+    </form>
+
+    <form method="post" class="box">
+      {% csrf_token %}<input type="hidden" name="action" value="create">
+      <div class="box-header">{% icon 'plus' %} <strong>{% translate "Create user" %}</strong></div>
+      <div class="box-body">
+        {% for field in form %}
+          <div class="field">
+            <label class="required" for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {% for error in field.errors %}<p class="error">{{ error }}</p>{% endfor %}
+          </div>
+        {% endfor %}
+        <p class="help" style="margin:-4px 0 16px">{% translate "The user will be able to sign in to the dashboard and create their own projects. They won't have admin permissions." %}</p>
+        <button class="btn btn-primary btn-block" type="submit">{% translate "Create user" %}</button>
+      </div>
+    </form>
+  </aside>
+</div>
+{% endblock %}

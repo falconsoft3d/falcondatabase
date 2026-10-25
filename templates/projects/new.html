@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load i18n falcon %}
+{% block title %}{% translate "New project" %} · falcondatabase{% endblock %}
+{% block content %}
+<div class="container-sm">
+  <h1>{% translate "Create a new project" %}</h1>
+  <p class="muted">{% translate "A project has its own database (PostgreSQL schema), its tables, its users and its API keys." %}</p>
+  <hr style="border:0;border-top:1px solid var(--border-muted);margin:16px 0 24px">
+  <form method="post">
+    {% csrf_token %}
+    <div class="field">
+      <label class="required" for="id_name">{% translate "Project name" %}</label>
+      <div class="row">
+        <span class="label">{{ user.username }} /</span>
+        <input type="text" name="name" id="id_name" maxlength="100" required autofocus value="{{ form.name.value|default:'' }}" placeholder="my-app">
+      </div>
+      {% for error in form.name.errors %}<p class="error">{{ error }}</p>{% endfor %}
+      <span class="help">{% translate "Short, memorable names are best." %}</span>
+    </div>
+    <div class="field">
+      <label for="id_description">{% translate "Description" %} <span class="muted">({% translate "optional" %})</span></label>
+      <input type="text" name="description" id="id_description" maxlength="300" value="{{ form.description.value|default:'' }}">
+    </div>
+    <div class="form-actions">
+      <a class="btn" href="{% url 'dashboard' %}">{% translate "Cancel" %}</a>
+      <button class="btn btn-primary" type="submit">{% translate "Create project" %}</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

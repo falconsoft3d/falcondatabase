@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load i18n falcon %}
+{% block title %}{% translate "Two-step verification" %} · falcondatabase{% endblock %}
+{% block content %}
+<div class="auth-page">
+  <div class="brand-mark">{% icon 'shield' 26 %}</div>
+  <h1>{% translate "Two-step verification" %}</h1>
+  {% if error %}<div class="flash flash-error">{% icon 'x' %} {{ error }}</div>{% endif %}
+  <form method="post" class="box box-body surface">
+    {% csrf_token %}
+    <div class="field">
+      <label for="id_code">{% translate "Authentication code" %}</label>
+      <input type="text" name="code" id="id_code" inputmode="numeric" autocomplete="one-time-code" autofocus required
+             class="code-input" placeholder="123456">
+      <span class="help">{% translate "Open your authenticator app and enter the 6-digit code. You can also use a recovery code." %}</span>
+    </div>
+    <button class="btn btn-primary btn-block" type="submit">{% translate "Verify" %}</button>
+  </form>
+  <div class="auth-callout"><a href="{% url 'login' %}">{% translate "Back to sign in" %}</a></div>
+</div>
+{% endblock %}

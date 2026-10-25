@@ -1,0 +1,37 @@
+{% extends "projects/base_project.html" %}
+{% load i18n falcon %}
+{% block content %}
+<div class="container-sm">
+  <div class="breadcrumb" style="margin-bottom:16px">
+    <a href="{% url 'projects:tables' project.owner.username project.slug %}">{% translate "tables" %}</a>
+    <span class="muted">/</span>
+    <a href="{% url 'projects:table' project.owner.username project.slug table.name %}">{{ table.name }}</a>
+    <span class="muted">/</span>
+    <strong>{% blocktranslate with id=row.id %}row {{ id }}{% endblocktranslate %}</strong>
+  </div>
+
+  <div class="box" style="margin-bottom:16px">
+    {% for column in system %}
+      <div class="box-row"><span class="mono muted grow">{{ column.name }}</span><span class="mono">{{ row|get_item:column.name|cell }}</span></div>
+    {% endfor %}
+  </div>
+
+  <form method="post">
+    {% csrf_token %}
+    {% for column, value in fields %}
+      <div class="field">
+        <label for="f-{{ column.name }}" class="{% if not column.nullable %}required{% endif %}">
+          {{ column.name }} <span class="muted mono" style="font-weight:400">{{ column.type }}</span>
+        </label>
+        {% include "projects/_row_input.html" %}
+      </div>
+    {% empty %}
+      <p class="muted">{% translate "This table has no editable columns." %}</p>
+    {% endfor %}
+    <div class="form-actions">
+      <a class="btn" href="{% url 'projects:table' project.owner.username project.slug table.name %}">{% translate "Cancel" %}</a>
+      <button class="btn btn-primary" type="submit">{% translate "Save changes" %}</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

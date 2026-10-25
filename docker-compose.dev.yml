@@ -1,0 +1,18 @@
+# Development only: a PostgreSQL server for running the app with `manage.py runserver`.
+#   docker compose -f docker-compose.dev.yml up -d
+# Then use the database settings from .env.example (falcon / falcon on localhost:5432).
+
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: falcondatabase
+      POSTGRES_USER: falcon
+      POSTGRES_PASSWORD: falcon
+    ports:
+      - "127.0.0.1:${POSTGRES_DEV_PORT:-5432}:5432"
+    volumes:
+      - pgdata_dev:/var/lib/postgresql/data
+
+volumes:
+  pgdata_dev:

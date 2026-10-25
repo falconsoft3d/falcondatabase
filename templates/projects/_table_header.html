@@ -1,0 +1,15 @@
+{% load i18n falcon %}
+<div class="row" style="margin-bottom:16px;flex-wrap:wrap">
+  <div class="breadcrumb grow">
+    <a href="{% url 'projects:tables' project.owner.username project.slug %}">{% translate "tables" %}</a>
+    <span class="muted">/</span>
+    <strong>{{ table.name }}</strong>
+    <span class="label" style="font-size:12px">{{ table.access_label }}</span>
+  </div>
+  <nav class="subnav">
+    <a href="{% url 'projects:table' project.owner.username project.slug table.name %}" class="{% if table_tab == 'data' %}selected{% endif %}">{% icon 'rows' 14 %} {% translate "Data" %}</a>
+    <a href="{% url 'projects:table_structure' project.owner.username project.slug table.name %}" class="{% if table_tab == 'structure' %}selected{% endif %}">{% icon 'columns' 14 %} {% translate "Structure" %}</a>
+    <a href="{% url 'projects:table_api' project.owner.username project.slug table.name %}" class="{% if table_tab == 'api' %}selected{% endif %}">{% icon 'code' 14 %} API</a>
+  </nav>
+</div>
+{% if table.description %}<p class="muted">{{ table.description }}</p>{% endif %}

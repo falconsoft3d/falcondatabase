@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load i18n falcon %}
+{% block title %}{% translate "Recovery codes" %} · falcondatabase{% endblock %}
+{% block content %}
+<div class="container-sm">
+  <h1>{% translate "Save your recovery codes" %}</h1>
+  <div class="flash flash-attention">{% icon 'key' %}
+    <span>{% translate "If you lose your phone, each of these codes lets you sign in once. This is the only time they are shown: store them somewhere safe." %}</span>
+  </div>
+  <div class="box">
+    <div class="box-body">
+      <ol class="recovery-codes mono" id="recovery-codes">{% for code in codes %}<li>{{ code }}</li>{% endfor %}</ol>
+      <button type="button" class="btn" data-copy-text="{{ codes|join:' ' }}">{% icon 'copy' %} {% translate "Copy codes" %}</button>
+    </div>
+  </div>
+  <p style="margin-top:16px"><a class="btn btn-primary" href="{% url 'account' %}">{% translate "I have saved them" %}</a></p>
+</div>
+{% endblock %}

@@ -1,0 +1,98 @@
+{% extends "projects/base_project.html" %}
+{% load i18n falcon %}
+{% block content %}
+<div class="container layout-split">
+  <div class="stack">
+    <div class="row">
+      <h2 class="grow" style="margin:0">{% translate "Users of your app" %}</h2>
+      <span class="muted">{% blocktranslate count counter=users|length %}{{ counter }} user{% plural %}{{ counter }} users{% endblocktranslate %}</span>
+    </div>
+    {% if not project.auth_enabled %}
+      <div class="flash flash-info" style="margin:16px 0 0">{% icon 'lock' %} {% translate "Login is disabled. Enable it on the right so your users can sign up and sign in." %}</div>
+    {% endif %}
+    <div class="box">
+      {% if users %}
+        <table class="list">
+          <thead><tr><th>{% translate "Email" %}</th><th>{% translate "Status" %}</th><th>{% translate "Created" %}</th><th>{% translate "Last login" %}</th><th></th></tr></thead>
+          <tbody>
+            {% for u in users %}
+              <tr>
+                <td><span class="row"><span class="avatar sm">{{ u.email|first|upper }}</span> {{ u.email }}</span></td>
+                <td>{% if u.is_active %}<span class="label label-success">{% translate "active" %}</span>{% else %}<span class="label">{% translate "deactivated" %}</span>{% endif %}</td>
+                <td class="muted small">{{ u.created_at|date:"d M Y H:i" }}</td>
+                <td class="muted small">{{ u.last_login|date:"d M Y H:i"|default:"—" }}</td>
+                <td class="nowrap" style="text-align:right">
+                  <form method="post" style="display:inline">{% csrf_token %}
+                    <input type="hidden" name="action" value="toggle_user"><input type="hidden" name="user" value="{{ u.pk }}">
+                    <button class="btn btn-xs" type="submit">{% if u.is_active %}{% translate "Deactivate" %}{% else %}{% translate "Activate" %}{% endif %}</button>
+                  </form>
+                  <form method="post" style="display:inline" data-confirm="{% blocktranslate with email=u.email %}Delete {{ email }}?{% endblocktranslate %}">{% csrf_token %}
+                    <input type="hidden" name="action" value="delete_user"><input type="hidden" name="user" value="{{ u.pk }}">
+                    <button class="btn btn-xs btn-invisible" type="submit" title="{% translate 'Delete' %}">{% icon 'trash' 14 %}</button>
+                  </form>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% else %}
+        <div class="blankslate">{% icon 'users' 28 %}<h3>{% translate "No users yet" %}</h3>
+          <p class="muted">{% translate "They will sign up from your frontend, or you can create them here." %}</p></div>
+      {% endif %}
+    </div>
+
+    <form method="post" class="box">
+      {% csrf_token %}<input type="hidden" name="action" value="add_user">
+      <div class="box-header">{% icon 'plus' %} <strong>{% translate "Add user" %}</strong></div>
+      <div class="box-body">
+        <div class="stats">
+          <div class="field" style="margin:0">
+            <label for="id_email">{% translate "Email" %}</label>
+            <input type="email" name="email" id="id_email" required value="{{ user_form.email.value|default:'' }}">
+            {% for error in user_form.email.errors %}<p class="error">{{ error }}</p>{% endfor %}
+          </div>
+          <div class="field" style="margin:0">
+            <label for="id_password">{% translate "Password" %}</label>
+            <input type="password" name="password" id="id_password" required minlength="6">
+            {% for error in user_form.password.errors %}<p class="error">{{ error }}</p>{% endfor %}
+          </div>
+        </div>
+        <div class="form-actions" style="border:0"><button class="btn btn-primary" type="submit">{% translate "Create user" %}</button></div>
+      </div>
+    </form>
+
+    <div class="markdown">
+      <h3>{% translate "Login from your frontend" %}</h3>
+<pre class="code"><span class="k">const</span> db = <span class="f">createClient</span>(<span class="s">"{{ base_url }}"</span>, <span class="s">"{{ project.ref }}"</span>, <span class="s">"{{ project.anon_key }}"</span>)
+
+<span class="k">await</span> db.auth.<span class="f">signUp</span>({ email: <span class="s">"ana@example.com"</span>, password: <span class="s">"secret123"</span> })
+<span class="k">const</span> { user, error } = <span class="k">await</span> db.auth.<span class="f">signIn</span>({ email: <span class="s">"ana@example.com"</span>, password: <span class="s">"secret123"</span> })
+<span class="k">const</span> me = <span class="k">await</span> db.auth.<span class="f">getUser</span>()   <span class="c">// {% translate "current user" %}</span>
+db.auth.<span class="f">signOut</span>()                    <span class="c">// {% translate "forgets the stored token" %}</span></pre>
+<pre class="code"><span class="c"># {% translate "Without the SDK" %}</span>
+curl -X POST <span class="s">"{{ base_url }}/api/v1/{{ project.ref }}/auth/login"</span> \
+  -H <span class="s">"apikey: {{ project.anon_key }}"</span> -H <span class="s">"Content-Type: application/json"</span> \
+  -d <span class="s">'{"email": "ana@example.com", "password": "secret123"}'</span>
+<span class="c"># → { "user": {...}, "token": "...", "expires_in": 604800 }</span></pre>
+    </div>
+  </div>
+
+  <aside>
+    <form method="post" class="box">
+      {% csrf_token %}<input type="hidden" name="action" value="settings">
+      <div class="box-header">{% icon 'gear' %} <strong>{% translate "Settings" %}</strong></div>
+      <div class="box-body">
+        <label class="checkbox" style="margin-bottom:16px">
+          <input type="checkbox" name="auth_enabled" {% if project.auth_enabled %}checked{% endif %}>
+          <span><strong>{% translate "Enable login" %}</strong><span class="muted small">{% translate "Email and password for the users of your app." %}</span></span>
+        </label>
+        <label class="checkbox" style="margin-bottom:16px">
+          <input type="checkbox" name="allow_signup" {% if project.allow_signup %}checked{% endif %}>
+          <span><strong>{% translate "Allow public sign up" %}</strong><span class="muted small">{% translate "If you disable it, only you create users (here or with the service key)." %}</span></span>
+        </label>
+        <button class="btn btn-block" type="submit">{% translate "Save" %}</button>
+      </div>
+    </form>
+  </aside>
+</div>
+{% endblock %}

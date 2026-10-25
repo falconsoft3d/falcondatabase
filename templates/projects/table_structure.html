@@ -1,0 +1,99 @@
+{% extends "projects/base_project.html" %}
+{% load i18n falcon %}
+{% block content %}
+<div class="container">
+  {% include "projects/_table_header.html" %}
+  <div class="layout-split">
+    <div class="stack">
+      <div class="box">
+        <table class="list">
+          <thead><tr><th>{% translate "Column" %}</th><th>{% translate "Type" %}</th><th>{% translate "Null" %}</th><th>{% translate "Default" %}</th><th>{% translate "Constraints" %}</th><th></th></tr></thead>
+          <tbody>
+            {% for column in columns %}
+              <tr>
+                <td><strong class="mono">{{ column.name }}</strong></td>
+                <td><code class="inline">{{ column.type }}</code></td>
+                <td>{% if column.nullable %}<span class="muted">{% translate "yes" %}</span>{% else %}{% translate "no" %}{% endif %}</td>
+                <td class="mono small muted">{{ column.default|default:"" }}</td>
+                <td>
+                  {% if column.primary_key %}<span class="label label-attention">primary key</span>{% endif %}
+                  {% if column.unique and not column.primary_key %}<span class="label label-accent">{% translate "unique" %}</span>{% endif %}
+                  {% if column.is_system %}<span class="label">{% translate "system" %}</span>{% endif %}
+                </td>
+                <td class="nowrap" style="text-align:right">
+                  {% if not column.is_system %}
+                    <form method="post" data-confirm="{% blocktranslate with name=column.name %}Delete column “{{ name }}” and all its data?{% endblocktranslate %}">
+                      {% csrf_token %}<input type="hidden" name="action" value="drop_column"><input type="hidden" name="column" value="{{ column.name }}">
+                      <button class="btn btn-xs btn-invisible" type="submit" title="{% translate 'Delete column' %}">{% icon 'trash' 14 %}</button>
+                    </form>
+                  {% endif %}
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <form method="post" class="box">
+        {% csrf_token %}<input type="hidden" name="action" value="add_column">
+        <div class="box-header">{% icon 'plus' %} <strong>{% translate "Add column" %}</strong></div>
+        <div class="box-body">
+          {% for error in column_form.non_field_errors %}<p class="error">{{ error }}</p>{% endfor %}
+          <div class="stats">
+            <div class="field" style="margin:0">
+              <label for="id_name" class="required">{% translate "Name" %}</label>
+              <input type="text" name="name" id="id_name" data-identifier required value="{{ column_form.name.value|default:'' }}">
+              {% for error in column_form.name.errors %}<p class="error">{{ error }}</p>{% endfor %}
+            </div>
+            <div class="field" style="margin:0">
+              <label for="id_type">{% translate "Type" %}</label>
+              {{ column_form.type }}
+            </div>
+            <div class="field" style="margin:0">
+              <label for="id_default">{% translate "Default" %}</label>
+              <input type="text" name="default" id="id_default" placeholder="NULL" value="{{ column_form.default.value|default:'' }}">
+            </div>
+          </div>
+          <div class="row" style="margin-top:12px;gap:24px">
+            <label class="checkbox"><input type="checkbox" name="required"> {% translate "Required (NOT NULL)" %}</label>
+            <label class="checkbox"><input type="checkbox" name="unique"> {% translate "Unique" %}</label>
+          </div>
+          <p class="help">{% translate "If the table already has rows, a required column needs a default value." %}</p>
+          <div class="form-actions" style="border:0;padding-top:8px"><button class="btn btn-primary" type="submit">{% translate "Add column" %}</button></div>
+        </div>
+      </form>
+    </div>
+
+    <aside class="stack">
+      <form method="post" class="box">
+        {% csrf_token %}<input type="hidden" name="action" value="settings">
+        <div class="box-header">{% icon 'shield' %} <strong>{% translate "API access" %}</strong></div>
+        <div class="box-body">
+          {% for value, label in access_choices %}
+            <label class="checkbox" style="margin-bottom:10px">
+              <input type="radio" name="access" value="{{ value }}" {% if table.access == value %}checked{% endif %}>
+              <span>{{ label }}</span>
+            </label>
+          {% endfor %}
+          <div class="field" style="margin-top:16px">
+            <label for="id_description_t">{% translate "Description" %}</label>
+            <input type="text" name="description" id="id_description_t" value="{{ table.description }}">
+          </div>
+          <button class="btn btn-block" type="submit">{% translate "Save" %}</button>
+          <p class="help" style="margin-top:8px">{% blocktranslate %}The “Owner” policy adds the <code class="inline">owner_id</code> column and fills it automatically with the user who inserts.{% endblocktranslate %}</p>
+        </div>
+      </form>
+
+      <form method="post" class="box box-danger" data-confirm="{% translate 'This deletes the table and all its data. Continue?' %}">
+        {% csrf_token %}<input type="hidden" name="action" value="delete_table">
+        <div class="box-header box-header-danger"><strong>{% translate "Danger zone" %}</strong></div>
+        <div class="box-body">
+          <label for="confirm-table" style="font-weight:400">{% blocktranslate with name=table.name %}Type <strong>{{ name }}</strong> to confirm:{% endblocktranslate %}</label>
+          <input type="text" id="confirm-table" name="confirm" autocomplete="off" style="margin-bottom:12px">
+          <button class="btn btn-danger btn-block" type="submit">{% icon 'trash' %} {% translate "Delete table" %}</button>
+        </div>
+      </form>
+    </aside>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,2081 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-25 16:43+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: api/auth.py:61
+msgid "Missing API key. Send it in the “apikey” header."
+msgstr "Falta la API key. Envíala en la cabecera «apikey»."
+
+#: api/auth.py:65
+msgid "Invalid API key."
+msgstr "API key inválida."
+
+#: api/auth.py:70 api/views.py:211
+msgid "Login is not enabled for this project."
+msgstr "El login no está activado en este proyecto."
+
+#: api/auth.py:73
+msgid "Invalid or expired token."
+msgstr "Token inválido o expirado."
+
+#: api/auth.py:79
+msgid "You need to sign in for this operation."
+msgstr "Necesitas iniciar sesión para esta operación."
+
+#: api/auth.py:91
+msgid "This table is private: it can only be accessed with the service key."
+msgstr "Esta tabla es privada: solo se accede con la service key."
+
+#: api/views.py:61
+#, python-format
+msgid "Method %(method)s not allowed."
+msgstr "Método %(method)s no permitido."
+
+#: api/views.py:64
+msgid "Project not found."
+msgstr "Proyecto no encontrado."
+
+#: api/views.py:84
+msgid "The request body is not valid JSON."
+msgstr "El cuerpo de la petición no es JSON válido."
+
+#: api/views.py:90
+#, python-format
+msgid "Table “%(name)s” does not exist."
+msgstr "La tabla «%(name)s» no existe."
+
+#: api/views.py:118
+#, python-format
+msgid "“%(name)s” must be an integer."
+msgstr "«%(name)s» debe ser un número entero."
+
+#: api/views.py:120
+#, python-format
+msgid "“%(name)s” cannot be negative."
+msgstr "«%(name)s» no puede ser negativo."
+
+#: api/views.py:126
+msgid "Each row must be a JSON object."
+msgstr "Cada fila debe ser un objeto JSON."
+
+#: api/views.py:197 api/views.py:205 projects/views.py:214
+msgid "Row not found."
+msgstr "Fila no encontrada."
+
+#: api/views.py:217
+msgid "Send an object with “email” and “password”."
+msgstr "Envía un objeto con «email» y «password»."
+
+#: api/views.py:221
+msgid "“email” and “password” are required."
+msgstr "«email» y «password» son obligatorios."
+
+#: api/views.py:233
+msgid "Public sign up is disabled for this project."
+msgstr "El registro público está desactivado en este proyecto."
+
+#: api/views.py:238
+msgid "The email is not valid."
+msgstr "El email no es válido."
+
+#: api/views.py:240
+#, python-format
+msgid "The password must have at least %(n)s characters."
+msgstr "La contraseña debe tener al menos %(n)s caracteres."
+
+#: api/views.py:242 projects/views.py:261
+msgid "A user with that email already exists."
+msgstr "Ya existe un usuario con ese email."
+
+#: api/views.py:245
+msgid "“data” must be an object."
+msgstr "«data» debe ser un objeto."
+
+#: api/views.py:258
+msgid "Incorrect email or password."
+msgstr "Email o contraseña incorrectos."
+
+#: api/views.py:268
+msgid "Send the user token in “Authorization: Bearer <token>”."
+msgstr "Envía el token del usuario en «Authorization: Bearer <token>»."
+
+#: api/views.py:274
+msgid "Send a “data” object with the fields to save."
+msgstr "Envía un objeto «data» con los campos a guardar."
+
+#: core/forms.py:18 projects/forms.py:89 templates/core/users.html:21
+#: templates/projects/auth.html:16 templates/projects/auth.html:50
+msgid "Email"
+msgstr "Email"
+
+#: core/forms.py:23
+msgid "Username"
+msgstr "Usuario"
+
+#: core/forms.py:24
+msgid "Letters, numbers and hyphens. It will be part of your project URLs."
+msgstr "Letras, números y guiones. Será parte de la URL de tus proyectos."
+
+#: core/forms.py:29
+msgid "Use only letters, numbers and hyphens (not at the start or end)."
+msgstr ""
+"Usa solo letras, números y guiones (sin empezar ni terminar en guion)."
+
+#: core/forms.py:31
+msgid "That username is reserved."
+msgstr "Ese nombre de usuario está reservado."
+
+#: core/forms.py:33
+msgid "That username is already taken."
+msgstr "Ese nombre de usuario ya está en uso."
+
+#: core/forms.py:39
+msgid "An account with that email already exists."
+msgstr "Ya existe una cuenta con ese email."
+
+#: core/models.py:14
+msgid "allow sign up"
+msgstr "permitir registro"
+
+#: core/views.py:53
+msgid "Sign up is disabled. Ask the administrator for an account."
+msgstr "El registro está desactivado. Pide una cuenta al administrador."
+
+#: core/views.py:86
+msgid "The verification expired. Sign in again."
+msgstr "La verificación caducó. Inicia sesión de nuevo."
+
+#: core/views.py:99
+msgid "You have few recovery codes left. Generate new ones in Settings."
+msgstr ""
+"Te quedan pocos códigos de recuperación. Genera nuevos en Configuración."
+
+#: core/views.py:104
+msgid "Too many failed attempts. Sign in again."
+msgstr "Demasiados intentos fallidos. Inicia sesión de nuevo."
+
+#: core/views.py:107
+msgid "Invalid code. Try again."
+msgstr "Código incorrecto. Inténtalo de nuevo."
+
+#: core/views.py:119
+msgid "Your password was changed."
+msgstr "Tu contraseña se cambió correctamente."
+
+#: core/views.py:140
+msgid "Invalid code. Check the time on your phone and try again."
+msgstr ""
+"Código incorrecto. Revisa la hora de tu teléfono e inténtalo de nuevo."
+
+#: core/views.py:146
+msgid "Two-step authentication is enabled."
+msgstr "La autenticación en dos pasos está activada."
+
+#: core/views.py:161
+msgid "Incorrect password."
+msgstr "Contraseña incorrecta."
+
+#: core/views.py:165
+msgid "Two-step authentication is disabled."
+msgstr "La autenticación en dos pasos está desactivada."
+
+#: core/views.py:195
+msgid "Sign up enabled."
+msgstr "Registro activado."
+
+#: core/views.py:195
+msgid "Sign up disabled."
+msgstr "Registro desactivado."
+
+#: core/views.py:200
+#, python-format
+msgid "Two-step authentication removed for %(username)s."
+msgstr "Se quitó la autenticación en dos pasos de %(username)s."
+
+#: core/views.py:206
+#, python-format
+msgid "User “%(username)s” created."
+msgstr "Usuario «%(username)s» creado."
+
+#: projects/forms.py:10
+msgid "text — text"
+msgstr "text — texto"
+
+#: projects/forms.py:11
+msgid "integer — whole number"
+msgstr "integer — número entero"
+
+#: projects/forms.py:12
+msgid "bigint — large whole number"
+msgstr "bigint — entero grande"
+
+#: projects/forms.py:13
+msgid "decimal — exact number"
+msgstr "decimal — número exacto"
+
+#: projects/forms.py:14
+msgid "float — number with decimals"
+msgstr "float — número con decimales"
+
+#: projects/forms.py:15
+msgid "boolean — true/false"
+msgstr "boolean — verdadero/falso"
+
+#: projects/forms.py:16
+msgid "date — date"
+msgstr "date — fecha"
+
+#: projects/forms.py:17
+msgid "datetime — date and time"
+msgstr "datetime — fecha y hora"
+
+#: projects/forms.py:18
+msgid "json — object or list"
+msgstr "json — objeto o lista"
+
+#: projects/forms.py:19
+msgid "uuid — unique identifier"
+msgstr "uuid — identificador único"
+
+#: projects/forms.py:28
+msgid "Optional"
+msgstr "Opcional"
+
+#: projects/forms.py:32 projects/forms.py:39 projects/schema.py:161
+#: projects/services.py:34
+msgid "Table name"
+msgstr "Nombre de la tabla"
+
+#: projects/forms.py:33 templates/projects/new.html:21
+#: templates/projects/settings.html:16 templates/projects/table_new.html:21
+#: templates/projects/table_structure.html:79
+#: templates/projects/tables.html:12
+msgid "Description"
+msgstr "Descripción"
+
+#: projects/forms.py:34 templates/projects/table_new.html:25
+#: templates/projects/table_structure.html:70
+msgid "API access"
+msgstr "Acceso desde la API"
+
+#: projects/forms.py:43
+msgid "“new” is reserved, choose another name."
+msgstr "«new» está reservado, elige otro nombre."
+
+#: projects/forms.py:70 projects/schema.py:87
+#: templates/projects/settings.html:10 templates/projects/table_new.html:15
+#: templates/projects/table_new.html:39
+#: templates/projects/table_structure.html:44
+#: templates/projects/tables.html:12
+msgid "Name"
+msgstr "Nombre"
+
+#: projects/forms.py:71 templates/projects/table_new.html:39
+#: templates/projects/table_structure.html:10
+#: templates/projects/table_structure.html:49
+msgid "Type"
+msgstr "Tipo"
+
+#: projects/forms.py:72
+msgid "Default value"
+msgstr "Valor por defecto"
+
+#: projects/forms.py:73
+msgid "Optional. Use now() for dates or uuid() for uuid."
+msgstr "Opcional. Usa now() para fechas o uuid() para uuid."
+
+#: projects/forms.py:74 templates/projects/table_structure.html:58
+msgid "Required (NOT NULL)"
+msgstr "Obligatorio (NOT NULL)"
+
+#: projects/forms.py:75 templates/projects/table_new.html:39
+#: templates/projects/table_structure.html:59
+msgid "Unique"
+msgstr "Único"
+
+#: projects/forms.py:90 templates/projects/auth.html:55
+#: templates/registration/login.html:19
+msgid "Password"
+msgstr "Contraseña"
+
+#: projects/models.py:29
+msgid "name"
+msgstr "nombre"
+
+#: projects/models.py:31 projects/models.py:95
+msgid "description"
+msgstr "descripción"
+
+#: projects/models.py:35 templates/projects/base_project.html:12
+#: templates/projects/dashboard.html:39
+msgid "login enabled"
+msgstr "login activo"
+
+#: projects/models.py:36
+msgid "allow public sign up"
+msgstr "permitir registro público"
+
+#: projects/models.py:79
+msgid "Public — anyone with the anon key can read and write"
+msgstr "Pública — cualquiera con la anon key puede leer y escribir"
+
+#: projects/models.py:80
+msgid "Public read — anyone reads, only signed-in users write"
+msgstr "Lectura pública — leer libre, escribir solo usuarios con login"
+
+#: projects/models.py:81
+msgid "Signed-in users — only authenticated users read and write"
+msgstr "Usuarios con login — solo usuarios autenticados leen y escriben"
+
+#: projects/models.py:82
+msgid "Owner — each user only sees and edits their own rows"
+msgstr "Dueño — cada usuario solo ve y edita sus propias filas"
+
+#: projects/models.py:83
+msgid "Private — service key only"
+msgstr "Privada — solo con la service key"
+
+#: projects/models.py:86 templates/projects/_keys.html:10
+msgid "public"
+msgstr "pública"
+
+#: projects/models.py:87
+msgid "public read"
+msgstr "lectura pública"
+
+#: projects/models.py:88
+msgid "signed-in"
+msgstr "con login"
+
+#: projects/models.py:89
+msgid "by owner"
+msgstr "por dueño"
+
+#: projects/models.py:90
+msgid "private"
+msgstr "privada"
+
+#: projects/models.py:96
+msgid "access"
+msgstr "acceso"
+
+#: projects/models.py:124
+msgid "data"
+msgstr "datos"
+
+#: projects/models.py:125 templates/projects/auth.html:21
+msgid "active"
+msgstr "activo"
+
+#: projects/schema.py:86
+#, python-format
+msgid ""
+"%(kind)s “%(name)s” is not valid: use lowercase letters, numbers and "
+"underscores, starting with a letter (max. 63 characters)."
+msgstr ""
+"%(kind)s «%(name)s» no es válido: usa minúsculas, números y guion bajo, "
+"empezando por una letra (máx. 63 caracteres)."
+
+#: projects/schema.py:136
+msgid "Column name"
+msgstr "Nombre de columna"
+
+#: projects/schema.py:138
+#, python-format
+msgid "“%(name)s” is a reserved system column."
+msgstr "«%(name)s» es una columna reservada del sistema."
+
+#: projects/schema.py:140
+#, python-format
+msgid "Unknown column type: %(type)s."
+msgstr "Tipo de columna desconocido: %(type)s."
+
+#: projects/schema.py:148
+#, python-format
+msgid "The default %(default)s does not apply to type %(type)s."
+msgstr "El valor por defecto %(default)s no aplica al tipo %(type)s."
+
+#: projects/schema.py:164
+msgid "There are columns with duplicate names."
+msgstr "Hay columnas con nombres repetidos."
+
+#: projects/schema.py:190
+#, python-format
+msgid "“%(name)s” is a system column and cannot be removed."
+msgstr "«%(name)s» es una columna del sistema y no se puede eliminar."
+
+#: projects/schema.py:265 projects/schema.py:299 projects/schema.py:308
+#: projects/schema.py:333
+#, python-format
+msgid "Column “%(name)s” does not exist."
+msgstr "La columna «%(name)s» no existe."
+
+#: projects/schema.py:275
+msgid "The “is” operator accepts null, true or false."
+msgstr "El operador «is» acepta null, true o false."
+
+#: projects/schema.py:286
+#, python-format
+msgid "Unknown operator: %(op)s."
+msgstr "Operador desconocido: %(op)s."
+
+#: projects/schema.py:360
+msgid "There are no values to update."
+msgstr "No hay valores para actualizar."
+
+#: projects/schema.py:394
+#, python-format
+msgid "“%(name)s” does not contain valid JSON: %(error)s."
+msgstr "«%(name)s» no contiene JSON válido: %(error)s."
+
+#: projects/services.py:36
+#, python-format
+msgid "A table named “%(name)s” already exists."
+msgstr "Ya existe una tabla llamada «%(name)s»."
+
+#: projects/views.py:55
+#, python-format
+msgid "Project “%(name)s” created. Now create your first table!"
+msgstr "Proyecto «%(name)s» creado. ¡Ahora crea tu primera tabla!"
+
+#: projects/views.py:94
+#, python-format
+msgid "Table “%(name)s” created."
+msgstr "Tabla «%(name)s» creada."
+
+#: projects/views.py:121
+msgid "Row inserted."
+msgstr "Fila insertada."
+
+#: projects/views.py:156
+msgid "Column added."
+msgstr "Columna agregada."
+
+#: projects/views.py:160
+msgid "Column removed."
+msgstr "Columna eliminada."
+
+#: projects/views.py:165
+msgid "Unknown access policy."
+msgstr "Política de acceso desconocida."
+
+#: projects/views.py:168
+msgid "Settings saved."
+msgstr "Configuración guardada."
+
+#: projects/views.py:172
+msgid "Type the table name to confirm."
+msgstr "Escribe el nombre de la tabla para confirmar."
+
+#: projects/views.py:174
+#, python-format
+msgid "Table “%(name)s” deleted."
+msgstr "Tabla «%(name)s» eliminada."
+
+#: projects/views.py:224
+#, python-format
+msgid "Row %(id)s updated."
+msgstr "Fila %(id)s actualizada."
+
+#: projects/views.py:239
+#, python-format
+msgid "Row %(id)s deleted."
+msgstr "Fila %(id)s eliminada."
+
+#: projects/views.py:254
+msgid "Login settings saved."
+msgstr "Configuración de login guardada."
+
+#: projects/views.py:266
+#, python-format
+msgid "User %(email)s created."
+msgstr "Usuario %(email)s creado."
+
+#: projects/views.py:273
+#, python-format
+msgid "User %(email)s activated."
+msgstr "Usuario %(email)s activado."
+
+#: projects/views.py:273
+#, python-format
+msgid "User %(email)s deactivated."
+msgstr "Usuario %(email)s desactivado."
+
+#: projects/views.py:277
+#, python-format
+msgid "User %(email)s deleted."
+msgstr "Usuario %(email)s eliminado."
+
+#: projects/views.py:304
+msgid "Project updated."
+msgstr "Proyecto actualizado."
+
+#: projects/views.py:309
+msgid "New API keys were generated. The previous ones no longer work."
+msgstr "Se generaron nuevas API keys. Las anteriores ya no funcionan."
+
+#: projects/views.py:313
+msgid "The confirmation text does not match."
+msgstr "El texto de confirmación no coincide."
+
+#: projects/views.py:317
+#, python-format
+msgid "Project “%(name)s” deleted."
+msgstr "Proyecto «%(name)s» eliminado."
+
+#: templates/base.html:11
+msgid "Copied!"
+msgstr "¡Copiado!"
+
+#: templates/base.html:11 templates/projects/_keys.html:21
+msgid "Show"
+msgstr "Mostrar"
+
+#: templates/base.html:11
+msgid "Hide"
+msgstr "Ocultar"
+
+#: templates/base.html:20
+msgid "Search projects…"
+msgstr "Buscar proyectos…"
+
+#: templates/base.html:24 templates/base.html:42
+msgid "Home"
+msgstr "Inicio"
+
+#: templates/base.html:25 templates/base.html:43
+#: templates/projects/dashboard.html:3
+msgid "Dashboard"
+msgstr "Dashboard"
+
+#: templates/base.html:26
+msgid "Docs"
+msgstr "Docs"
+
+#: templates/base.html:27 templates/base.html:81 templates/blog/detail.html:7
+#: templates/blog/index.html:3 templates/blog/index.html:7
+msgid "Blog"
+msgstr "Blog"
+
+#: templates/base.html:28 templates/base.html:48 templates/core/users.html:3
+#: templates/core/users.html:16 templates/projects/overview.html:10
+msgid "Users"
+msgstr "Usuarios"
+
+#: templates/base.html:31
+msgid "Toggle light/dark mode"
+msgstr "Cambiar modo claro/oscuro"
+
+#: templates/base.html:36 templates/base.html:44
+#: templates/projects/dashboard.html:29 templates/projects/dashboard.html:60
+#: templates/projects/new.html:3
+msgid "New project"
+msgstr "Nuevo proyecto"
+
+#: templates/base.html:40
+#, python-format
+msgid "Signed in as <strong>%(username)s</strong>"
+msgstr "Conectado como <strong>%(username)s</strong>"
+
+#: templates/base.html:45 templates/base.html:80 templates/core/docs.html:3
+#: templates/core/docs.html:6
+msgid "Documentation"
+msgstr "Documentación"
+
+#: templates/base.html:47 templates/core/account.html:3
+#: templates/core/account.html:14 templates/projects/auth.html:83
+#: templates/projects/base_project.html:19
+#: templates/projects/dashboard.html:11
+msgid "Settings"
+msgstr "Configuración"
+
+#: templates/base.html:51
+msgid "Sign out"
+msgstr "Cerrar sesión"
+
+#: templates/base.html:56 templates/core/home.html:14
+#: templates/registration/login.html:3 templates/registration/login.html:22
+#: templates/registration/signup.html:20
+msgid "Sign in"
+msgstr "Iniciar sesión"
+
+#: templates/base.html:57 templates/registration/signup.html:3
+msgid "Sign up"
+msgstr "Crear cuenta"
+
+#: templates/base.html:82 templates/base.html:89 templates/core/cookies.html:3
+msgid "Cookie policy"
+msgstr "Política de cookies"
+
+#: templates/base.html:84
+msgid "Contact"
+msgstr "Contacto"
+
+#: templates/base.html:87
+msgid "Cookie consent"
+msgstr "Consentimiento de cookies"
+
+#: templates/base.html:88
+msgid ""
+"We use cookies that are essential for signing in and keeping the site "
+"secure, plus one to remember your language. We don't use advertising or "
+"tracking cookies."
+msgstr ""
+"Usamos cookies esenciales para iniciar sesión y mantener el sitio seguro, y "
+"una para recordar tu idioma. No usamos cookies de publicidad ni de "
+"seguimiento."
+
+#: templates/base.html:91
+#| msgid "Access"
+msgid "Accept"
+msgstr "Aceptar"
+
+#: templates/base.html:92
+msgid "Only essential"
+msgstr "Solo esenciales"
+
+#: templates/blog/_card.html:6 templates/blog/detail.html:11
+#, python-format
+#| msgid "%(counter)s row"
+#| msgid_plural "%(counter)s rows"
+msgid "%(counter)s min read"
+msgid_plural "%(counter)s min read"
+msgstr[0] "%(counter)s min de lectura"
+msgstr[1] "%(counter)s min de lectura"
+
+#: templates/blog/_category.html:1
+msgid "Tutorial"
+msgstr "Tutorial"
+
+#: templates/blog/_category.html:1
+msgid "Guide"
+msgstr "Guía"
+
+#: templates/blog/_category.html:1 templates/blog/index.html:13
+msgid "News"
+msgstr "Novedades"
+
+#: templates/blog/detail.html:17
+msgid "This article is not available in your language yet."
+msgstr "Este artículo aún no está disponible en tu idioma."
+
+#: templates/blog/detail.html:22 templates/projects/table_data.html:65
+msgid "Previous"
+msgstr "Anterior"
+
+#: templates/blog/detail.html:23 templates/projects/table_data.html:67
+msgid "Next"
+msgstr "Siguiente"
+
+#: templates/blog/detail.html:30
+msgid "On this page"
+msgstr "En esta página"
+
+#: templates/blog/index.html:8
+msgid "Tutorials, guides and news to get the most out of falcondatabase."
+msgstr ""
+"Tutoriales, guías y novedades para sacarle el máximo partido a "
+"falcondatabase."
+
+#: templates/blog/index.html:10
+msgid "All"
+msgstr "Todos"
+
+#: templates/blog/index.html:11
+msgid "Tutorials"
+msgstr "Tutoriales"
+
+#: templates/blog/index.html:12
+msgid "Guides"
+msgstr "Guías"
+
+#: templates/blog/index.html:22
+msgid "No articles in this category yet"
+msgstr "Aún no hay artículos en esta categoría"
+
+#: templates/core/_api_reference.html:3
+msgid "Authenticating requests"
+msgstr "Autenticación de las peticiones"
+
+#: templates/core/_api_reference.html:4
+msgid ""
+"Every request carries the <code class=\"inline\">apikey</code> header. Each "
+"project has two keys:"
+msgstr ""
+"Todas las peticiones llevan la cabecera <code "
+"class=\"inline\">apikey</code>. Hay dos claves por proyecto:"
+
+#: templates/core/_api_reference.html:6
+msgid "Key"
+msgstr "Clave"
+
+#: templates/core/_api_reference.html:6
+msgid "Where to use it"
+msgstr "Dónde usarla"
+
+#: templates/core/_api_reference.html:6
+msgid "What it allows"
+msgstr "Qué permite"
+
+#: templates/core/_api_reference.html:7
+msgid "Browser / mobile app"
+msgstr "Navegador / app móvil"
+
+#: templates/core/_api_reference.html:7
+msgid "Whatever each table's access rules allow"
+msgstr "Lo que dicten las reglas de acceso de cada tabla"
+
+#: templates/core/_api_reference.html:8
+msgid "Only on your server"
+msgstr "Solo en tu servidor"
+
+#: templates/core/_api_reference.html:8
+msgid "Everything, it ignores the rules"
+msgstr "Todo, ignora las reglas"
+
+#: templates/core/_api_reference.html:10
+msgid ""
+"When a user signs in they receive a <code class=\"inline\">token</code>; "
+"also send it in <code class=\"inline\">Authorization: Bearer "
+"&lt;token&gt;</code>."
+msgstr ""
+"Cuando un usuario inicia sesión recibe un <code "
+"class=\"inline\">token</code>; envíalo además en <code "
+"class=\"inline\">Authorization: Bearer &lt;token&gt;</code>."
+
+#: templates/core/_api_reference.html:12
+#: templates/projects/base_project.html:16 templates/projects/overview.html:8
+#: templates/projects/tables.html:6
+msgid "Tables"
+msgstr "Tablas"
+
+#: templates/core/_api_reference.html:14 templates/core/_api_reference.html:31
+msgid "Method"
+msgstr "Método"
+
+#: templates/core/_api_reference.html:14 templates/core/_api_reference.html:31
+msgid "Path"
+msgstr "Ruta"
+
+#: templates/core/_api_reference.html:14
+msgid "Action"
+msgstr "Acción"
+
+#: templates/core/_api_reference.html:15
+msgid "List tables and columns"
+msgstr "Lista tablas y columnas"
+
+#: templates/core/_api_reference.html:16
+msgid "List rows"
+msgstr "Lista filas"
+
+#: templates/core/_api_reference.html:17
+msgid "Insert one row (object) or several (list)"
+msgstr "Inserta una fila (objeto) o varias (lista)"
+
+#: templates/core/_api_reference.html:18 templates/projects/table_api.html:19
+msgid "Get one row"
+msgstr "Obtiene una fila"
+
+#: templates/core/_api_reference.html:19
+msgid "Update columns of a row"
+msgstr "Actualiza columnas de una fila"
+
+#: templates/core/_api_reference.html:20
+msgid "Delete a row"
+msgstr "Elimina una fila"
+
+#: templates/core/_api_reference.html:22
+msgid ""
+"Listings respond with <code class=\"inline\">{\"data\": [...], \"count\": "
+"42}</code>, where <code class=\"inline\">count</code> is the total without "
+"pagination."
+msgstr ""
+"Los listados responden <code class=\"inline\">{\"data\": [...], \"count\": "
+"42}</code>, donde <code class=\"inline\">count</code> es el total sin "
+"paginar."
+
+#: templates/core/_api_reference.html:24
+msgid "Filters, ordering and pagination"
+msgstr "Filtros, orden y paginación"
+
+#: templates/core/_api_reference.html:25
+msgid ""
+"Filter with <code class=\"inline\">column=operator.value</code>. Operators: "
+"<code>eq</code>, <code>neq</code>, <code>gt</code>, <code>gte</code>, "
+"<code>lt</code>, <code>lte</code>, <code>like</code>, <code>ilike</code>, "
+"<code>is</code> (null/true/false) and <code>in</code>."
+msgstr ""
+"Filtra con <code class=\"inline\">columna=operador.valor</code>. Operadores:"
+" <code>eq</code>, <code>neq</code>, <code>gt</code>, <code>gte</code>, "
+"<code>lt</code>, <code>lte</code>, <code>like</code>, <code>ilike</code>, "
+"<code>is</code> (null/true/false) e <code>in</code>."
+
+#: templates/core/_api_reference.html:29
+msgid "User login"
+msgstr "Login de usuarios"
+
+#: templates/core/_api_reference.html:31
+msgid "Body / result"
+msgstr "Cuerpo / resultado"
+
+#: templates/core/_api_reference.html:34
+msgid "Current user (requires token)"
+msgstr "Usuario actual (requiere token)"
+
+#: templates/core/_api_reference.html:35
+msgid "<code>{\"data\": {...}}</code> saves profile data"
+msgstr "<code>{\"data\": {...}}</code> guarda datos del perfil"
+
+#: templates/core/_api_reference.html:38
+msgid "Access rules per table"
+msgstr "Reglas de acceso por tabla"
+
+#: templates/core/_api_reference.html:40
+msgid "Rule"
+msgstr "Regla"
+
+#: templates/core/_api_reference.html:40
+msgid "Read"
+msgstr "Leer"
+
+#: templates/core/_api_reference.html:40 templates/core/_api_reference.html:62
+msgid "Write"
+msgstr "Escribir"
+
+#: templates/core/_api_reference.html:41
+msgid "Public"
+msgstr "Pública"
+
+#: templates/core/_api_reference.html:41 templates/core/_api_reference.html:42
+msgid "anyone"
+msgstr "cualquiera"
+
+#: templates/core/_api_reference.html:42
+msgid "Public read"
+msgstr "Lectura pública"
+
+#: templates/core/_api_reference.html:42 templates/core/_api_reference.html:43
+msgid "signed-in users"
+msgstr "usuarios con login"
+
+#: templates/core/_api_reference.html:43
+msgid "Signed-in users"
+msgstr "Usuarios con login"
+
+#: templates/core/_api_reference.html:44
+msgid "Owner"
+msgstr "Dueño"
+
+#: templates/core/_api_reference.html:44
+msgid "only their rows"
+msgstr "solo sus filas"
+
+#: templates/core/_api_reference.html:44
+msgid "only their rows (automatic <code>owner_id</code>)"
+msgstr "solo sus filas (<code>owner_id</code> automático)"
+
+#: templates/core/_api_reference.html:45
+msgid "Private"
+msgstr "Privada"
+
+#: templates/core/_api_reference.html:48
+msgid "JavaScript SDK"
+msgstr "SDK de JavaScript"
+
+#: templates/core/_api_reference.html:49
+msgid ""
+"A single file, no dependencies or build step. Import it straight from your "
+"server:"
+msgstr ""
+"Un único archivo, sin dependencias ni build. Impórtalo directamente desde tu"
+" servidor:"
+
+#: templates/core/_api_reference.html:54
+msgid "Chainable queries"
+msgstr "Consultas encadenables"
+
+#: templates/core/_api_reference.html:67
+msgid "Login (the token is stored in localStorage and sent automatically)"
+msgstr "Login (el token se guarda en localStorage y se envía solo)"
+
+#: templates/core/_api_reference.html:72
+msgid ""
+"Every call returns <code class=\"inline\">{ data, error }</code>: it never "
+"throws on API errors."
+msgstr ""
+"Cada llamada devuelve <code class=\"inline\">{ data, error }</code>: nunca "
+"lanza excepciones por errores de la API."
+
+#: templates/core/_api_reference.html:73
+msgid ""
+"API error messages follow the browser language (<code "
+"class=\"inline\">Accept-Language</code> header)."
+msgstr ""
+"Los mensajes de error de la API siguen el idioma del navegador (cabecera "
+"<code class=\"inline\">Accept-Language</code>)."
+
+#: templates/core/_language_menu.html:3 templates/core/_language_menu.html:5
+#: templates/core/account.html:20
+msgid "Language"
+msgstr "Idioma"
+
+#: templates/core/account.html:28
+msgid "Save language"
+msgstr "Guardar idioma"
+
+#: templates/core/account.html:33
+msgid "Appearance"
+msgstr "Apariencia"
+
+#: templates/core/account.html:35
+msgid "System"
+msgstr "Sistema"
+
+#: templates/core/account.html:36
+msgid "Light"
+msgstr "Claro"
+
+#: templates/core/account.html:37
+msgid "Dark"
+msgstr "Oscuro"
+
+#: templates/core/account.html:38
+msgid "Saved in this browser."
+msgstr "Se guarda en este navegador."
+
+#: templates/core/account.html:44
+msgid "Two-step authentication"
+msgstr "Autenticación en dos pasos"
+
+#: templates/core/account.html:45 templates/core/users.html:32
+msgid "enabled"
+msgstr "activada"
+
+#: templates/core/account.html:45
+msgid "disabled"
+msgstr "desactivada"
+
+#: templates/core/account.html:49
+#, python-format
+msgid ""
+"When you sign in we ask for a code from your authenticator app. You have "
+"%(counter)s recovery code left."
+msgid_plural ""
+"When you sign in we ask for a code from your authenticator app. You have "
+"%(counter)s recovery codes left."
+msgstr[0] ""
+"Al iniciar sesión te pedimos un código de tu app de autenticación. Te queda "
+"%(counter)s código de recuperación."
+msgstr[1] ""
+"Al iniciar sesión te pedimos un código de tu app de autenticación. Te quedan"
+" %(counter)s códigos de recuperación."
+
+#: templates/core/account.html:53
+msgid "Confirm with your password"
+msgstr "Confirma con tu contraseña"
+
+#: templates/core/account.html:57
+msgid "New recovery codes"
+msgstr "Nuevos códigos de recuperación"
+
+#: templates/core/account.html:58
+msgid "Disable"
+msgstr "Desactivar"
+
+#: templates/core/account.html:62
+msgid ""
+"Protect your account: besides your password, ask for a code from an "
+"authenticator app on your phone."
+msgstr ""
+"Protege tu cuenta: además de la contraseña, pide un código de una app de "
+"autenticación en tu teléfono."
+
+#: templates/core/account.html:63 templates/core/two_factor_setup.html:3
+#: templates/core/two_factor_setup.html:6
+msgid "Enable two-step authentication"
+msgstr "Activar autenticación en dos pasos"
+
+#: templates/core/account.html:70
+msgid "Change password"
+msgstr "Cambiar contraseña"
+
+#: templates/core/account.html:72
+msgid "You will stay signed in on this browser after the change."
+msgstr "Seguirás con la sesión iniciada en este navegador después del cambio."
+
+#: templates/core/account.html:81
+msgid "Update password"
+msgstr "Actualizar contraseña"
+
+#: templates/core/docs.html:7
+msgid ""
+"How to query a project's data from any frontend. Inside each project, the "
+"<strong>API</strong> tab shows these same examples with your real keys."
+msgstr ""
+"Cómo consultar los datos de un proyecto desde cualquier frontend. Dentro de "
+"cada proyecto, la pestaña <strong>API</strong> muestra estos mismos ejemplos"
+" con tus claves reales."
+
+#: templates/core/home.html:3
+msgid "your backend in minutes"
+msgstr "tu backend en minutos"
+
+#: templates/core/home.html:7
+msgid "Your database,"
+msgstr "Tu base de datos,"
+
+#: templates/core/home.html:7
+msgid "ready for any frontend"
+msgstr "lista para cualquier frontend"
+
+#: templates/core/home.html:8
+msgid ""
+"Create projects, define real PostgreSQL tables and add login to your apps. "
+"Query everything from React, Vue or plain JavaScript with a simple REST API."
+msgstr ""
+"Crea proyectos, define tablas reales de PostgreSQL y agrega login a tus "
+"apps. Consulta todo desde React, Vue o JavaScript puro con una API REST "
+"simple."
+
+#: templates/core/home.html:11
+msgid "Go to dashboard"
+msgstr "Ir al dashboard"
+
+#: templates/core/home.html:13
+msgid "Start for free"
+msgstr "Empezar gratis"
+
+#: templates/core/home.html:18 templates/core/home.html:20
+msgid "your-server"
+msgstr "tu-servidor"
+
+#: templates/core/home.html:22
+msgid "Sign in the users of your app"
+msgstr "Login de usuarios de tu app"
+
+#: templates/core/home.html:25
+msgid "Query a table"
+msgstr "Consultar una tabla"
+
+#: templates/core/home.html:34
+msgid "Isolated projects"
+msgstr "Proyectos aislados"
+
+#: templates/core/home.html:35
+msgid ""
+"Each project has its own PostgreSQL schema, its API URL and its own keys."
+msgstr ""
+"Cada proyecto tiene su propio esquema de PostgreSQL, su URL de API y sus "
+"propias claves."
+
+#: templates/core/home.html:39
+msgid "Real tables"
+msgstr "Tablas reales"
+
+#: templates/core/home.html:40
+msgid ""
+"Create tables with typed columns (text, numbers, dates, JSON, UUID…) and "
+"edit the data from the dashboard."
+msgstr ""
+"Crea tablas con columnas tipadas (texto, números, fechas, JSON, UUID…) y "
+"edita los datos desde el dashboard."
+
+#: templates/core/home.html:44
+msgid "Login included"
+msgstr "Login incluido"
+
+#: templates/core/home.html:45
+msgid ""
+"Enable email and password authentication for the users of your app in one "
+"click."
+msgstr ""
+"Activa autenticación por email y contraseña para los usuarios de tu app con "
+"un clic."
+
+#: templates/core/home.html:49
+msgid "Access rules"
+msgstr "Reglas de acceso"
+
+#: templates/core/home.html:50
+msgid ""
+"Decide per table who reads and who writes: public, signed-in users only, by "
+"owner or private."
+msgstr ""
+"Decide por tabla quién lee y quién escribe: pública, solo usuarios con "
+"login, por dueño o privada."
+
+#: templates/core/home.html:54
+msgid "REST API + SDK"
+msgstr "API REST + SDK"
+
+#: templates/core/home.html:55
+msgid ""
+"Filter, sort and paginate with simple parameters, or use the JavaScript "
+"client without installing anything."
+msgstr ""
+"Filtra, ordena y pagina con parámetros simples, o usa el cliente JavaScript "
+"sin instalar nada."
+
+#: templates/core/home.html:59
+msgid "From any frontend"
+msgstr "Desde cualquier frontend"
+
+#: templates/core/home.html:60
+msgid ""
+"CORS ready so your apps on other domains can consume the data directly."
+msgstr ""
+"CORS listo para que tus apps en otros dominios consuman los datos "
+"directamente."
+
+#: templates/core/home.html:68
+msgid "Latest from the blog"
+msgstr "Lo último del blog"
+
+#: templates/core/home.html:69
+msgid "All articles →"
+msgstr "Todos los artículos →"
+
+#: templates/core/home.html:76
+msgid "That simple"
+msgstr "Así de simple"
+
+#: templates/core/home.html:78
+msgid "Create your account and a project"
+msgstr "Crea tu cuenta y un proyecto"
+
+#: templates/core/home.html:78
+msgid ""
+"You get an API URL and two keys: <code class=\"inline\">anon</code> for the "
+"browser and <code class=\"inline\">service</code> for your server."
+msgstr ""
+"Obtienes una URL de API y dos claves: <code class=\"inline\">anon</code> "
+"para el navegador y <code class=\"inline\">service</code> para tu servidor."
+
+#: templates/core/home.html:79
+msgid "Add tables"
+msgstr "Agrega tablas"
+
+#: templates/core/home.html:79
+msgid ""
+"Define columns from the dashboard. They are created as real PostgreSQL "
+"tables."
+msgstr ""
+"Define columnas desde el dashboard. Se crean como tablas reales en "
+"PostgreSQL."
+
+#: templates/core/home.html:80
+msgid "Enable login (optional)"
+msgstr "Activa el login (opcional)"
+
+#: templates/core/home.html:80
+msgid "Your users sign up and sign in from your frontend."
+msgstr "Tus usuarios se registran e inician sesión desde tu frontend."
+
+#: templates/core/home.html:81
+msgid "Query from your app"
+msgstr "Consulta desde tu app"
+
+#: templates/core/home.html:81
+msgid ""
+"Use <code class=\"inline\">fetch</code> or the <code "
+"class=\"inline\">falcondb.js</code> SDK."
+msgstr ""
+"Usa <code class=\"inline\">fetch</code> o el SDK <code "
+"class=\"inline\">falcondb.js</code>."
+
+#: templates/core/home.html:81
+msgid "See the documentation →"
+msgstr "Ver documentación →"
+
+#: templates/core/recovery_codes.html:3
+msgid "Recovery codes"
+msgstr "Códigos de recuperación"
+
+#: templates/core/recovery_codes.html:6
+msgid "Save your recovery codes"
+msgstr "Guarda tus códigos de recuperación"
+
+#: templates/core/recovery_codes.html:8
+msgid ""
+"If you lose your phone, each of these codes lets you sign in once. This is "
+"the only time they are shown: store them somewhere safe."
+msgstr ""
+"Si pierdes tu teléfono, cada uno de estos códigos te permite entrar una vez."
+" Es la única vez que se muestran: guárdalos en un lugar seguro."
+
+#: templates/core/recovery_codes.html:13
+msgid "Copy codes"
+msgstr "Copiar códigos"
+
+#: templates/core/recovery_codes.html:16
+msgid "I have saved them"
+msgstr "Ya los guardé"
+
+#: templates/core/two_factor_setup.html:7
+msgid ""
+"After your password, you will be asked for a code from an authenticator app "
+"(Google Authenticator, Authy, 1Password, Microsoft Authenticator…)."
+msgstr ""
+"Después de tu contraseña se te pedirá un código de una app de autenticación "
+"(Google Authenticator, Authy, 1Password, Microsoft Authenticator…)."
+
+#: templates/core/two_factor_setup.html:10
+msgid "Scan this QR code with your app"
+msgstr "Escanea este código QR con tu app"
+
+#: templates/core/two_factor_setup.html:14
+msgid "Can't scan it? Enter this key manually:"
+msgstr "¿No puedes escanearlo? Escribe esta clave manualmente:"
+
+#: templates/core/two_factor_setup.html:25
+msgid "Enter the code the app shows"
+msgstr "Escribe el código que muestra la app"
+
+#: templates/core/two_factor_setup.html:31
+msgid "Verify and enable"
+msgstr "Verificar y activar"
+
+#: templates/core/two_factor_setup.html:35
+msgid "Back to settings"
+msgstr "Volver a configuración"
+
+#: templates/core/users.html:9
+#, python-format
+#| msgid "Signed in as <strong>%(username)s</strong>"
+msgid "New temporary password for <strong>%(username)s</strong>:"
+msgstr "Nueva contraseña temporal de <strong>%(username)s</strong>:"
+
+#: templates/core/users.html:12
+msgid ""
+"It is shown only once. Send it to the user and ask them to change it in "
+"Settings. Their open sessions were closed."
+msgstr ""
+"Solo se muestra una vez. Envíasela al usuario y pídele que la cambie en "
+"Configuración. Sus sesiones abiertas se cerraron."
+
+#: templates/core/users.html:17 templates/projects/auth.html:8
+#: templates/projects/dashboard.html:44
+#, python-format
+msgid "%(counter)s user"
+msgid_plural "%(counter)s users"
+msgstr[0] "%(counter)s usuario"
+msgstr[1] "%(counter)s usuarios"
+
+#: templates/core/users.html:21
+msgid "User"
+msgstr "Usuario"
+
+#: templates/core/users.html:21 templates/projects/dashboard.html:28
+msgid "Projects"
+msgstr "Proyectos"
+
+#: templates/core/users.html:21
+msgid "Joined"
+msgstr "Alta"
+
+#: templates/core/users.html:21 templates/projects/auth.html:16
+msgid "Last login"
+msgstr "Último login"
+
+#: templates/core/users.html:27 templates/projects/auth.html:21
+msgid "deactivated"
+msgstr "desactivado"
+
+#: templates/core/users.html:33
+#, python-format
+msgid ""
+"Remove two-step authentication for %(username)s? Use it only if they lost "
+"their phone and their codes."
+msgstr ""
+"¿Quitar la autenticación en dos pasos de %(username)s? Úsalo solo si perdió "
+"su teléfono y sus códigos."
+
+#: templates/core/users.html:35
+msgid "Reset"
+msgstr "Restablecer"
+
+#: templates/core/users.html:42
+#, python-format
+msgid ""
+"Reset the password of %(username)s? Their current password stops working."
+msgstr ""
+"¿Restablecer la contraseña de %(username)s? Su contraseña actual dejará de "
+"funcionar."
+
+#: templates/core/users.html:44
+#| msgid "Change password"
+msgid "Reset password"
+msgstr "Restablecer contraseña"
+
+#: templates/core/users.html:57
+msgid "Registration"
+msgstr "Registro"
+
+#: templates/core/users.html:61
+msgid "Allow new users to sign up"
+msgstr "Permitir que se registren nuevos usuarios"
+
+#: templates/core/users.html:62
+msgid "If you disable it, only you can create accounts from this page."
+msgstr "Si lo desactivas, solo tú puedes crear cuentas desde esta página."
+
+#: templates/core/users.html:64 templates/projects/auth.html:93
+#: templates/projects/settings.html:19
+#: templates/projects/table_structure.html:82
+msgid "Save"
+msgstr "Guardar"
+
+#: templates/core/users.html:70 templates/core/users.html:80
+#: templates/projects/auth.html:60
+msgid "Create user"
+msgstr "Crear usuario"
+
+#: templates/core/users.html:79
+msgid ""
+"The user will be able to sign in to the dashboard and create their own "
+"projects. They won't have admin permissions."
+msgstr ""
+"El usuario podrá entrar al dashboard y crear sus propios proyectos. No "
+"tendrá permisos de admin."
+
+#: templates/projects/_keys.html:3
+msgid "Project URL"
+msgstr "URL del proyecto"
+
+#: templates/projects/_keys.html:15
+msgid "Safe to use in the browser. It follows each table's access rules."
+msgstr ""
+"Segura para usar en el navegador. Respeta las reglas de acceso de cada "
+"tabla."
+
+#: templates/projects/_keys.html:18
+msgid "secret"
+msgstr "secreta"
+
+#: templates/projects/_keys.html:24
+msgid ""
+"Full access, ignores the rules. Only use it on your server, never in the "
+"frontend."
+msgstr ""
+"Acceso total, ignora las reglas. Úsala solo en tu servidor, nunca en el "
+"frontend."
+
+#: templates/projects/_row_input.html:12
+#, python-format
+msgid "default: %(default)s"
+msgstr "por defecto: %(default)s"
+
+#: templates/projects/_table_header.html:4 templates/projects/row_edit.html:6
+msgid "tables"
+msgstr "tablas"
+
+#: templates/projects/_table_header.html:10
+msgid "Data"
+msgstr "Datos"
+
+#: templates/projects/_table_header.html:11
+msgid "Structure"
+msgstr "Estructura"
+
+#: templates/projects/api.html:10 templates/projects/overview.html:70
+msgid "Connection"
+msgstr "Conexión"
+
+#: templates/projects/api.html:15
+msgid "Endpoints per table"
+msgstr "Endpoints por tabla"
+
+#: templates/projects/auth.html:7
+msgid "Users of your app"
+msgstr "Usuarios de tu app"
+
+#: templates/projects/auth.html:11
+msgid ""
+"Login is disabled. Enable it on the right so your users can sign up and sign"
+" in."
+msgstr ""
+"El login está desactivado. Actívalo a la derecha para que tus usuarios "
+"puedan registrarse e iniciar sesión."
+
+#: templates/projects/auth.html:16
+msgid "Status"
+msgstr "Estado"
+
+#: templates/projects/auth.html:16
+msgid "Created"
+msgstr "Creado"
+
+#: templates/projects/auth.html:27
+msgid "Deactivate"
+msgstr "Desactivar"
+
+#: templates/projects/auth.html:27
+msgid "Activate"
+msgstr "Activar"
+
+#: templates/projects/auth.html:29
+#, python-format
+msgid "Delete %(email)s?"
+msgstr "¿Eliminar a %(email)s?"
+
+#: templates/projects/auth.html:31 templates/projects/settings.html:41
+#: templates/projects/table_data.html:56
+msgid "Delete"
+msgstr "Eliminar"
+
+#: templates/projects/auth.html:39
+msgid "No users yet"
+msgstr "Aún no hay usuarios"
+
+#: templates/projects/auth.html:40
+msgid "They will sign up from your frontend, or you can create them here."
+msgstr "Se registrarán desde tu frontend, o puedes crearlos aquí."
+
+#: templates/projects/auth.html:46
+msgid "Add user"
+msgstr "Agregar usuario"
+
+#: templates/projects/auth.html:65
+msgid "Login from your frontend"
+msgstr "Login desde tu frontend"
+
+#: templates/projects/auth.html:70
+msgid "current user"
+msgstr "usuario actual"
+
+#: templates/projects/auth.html:71
+msgid "forgets the stored token"
+msgstr "olvida el token guardado"
+
+#: templates/projects/auth.html:72
+msgid "Without the SDK"
+msgstr "Sin SDK"
+
+#: templates/projects/auth.html:87
+msgid "Enable login"
+msgstr "Activar login"
+
+#: templates/projects/auth.html:87
+msgid "Email and password for the users of your app."
+msgstr "Email y contraseña para los usuarios de tu app."
+
+#: templates/projects/auth.html:91
+msgid "Allow public sign up"
+msgstr "Permitir registro público"
+
+#: templates/projects/auth.html:91
+msgid ""
+"If you disable it, only you create users (here or with the service key)."
+msgstr "Si lo desactivas, solo tú creas usuarios (aquí o con la service key)."
+
+#: templates/projects/base_project.html:12
+msgid "no login"
+msgstr "sin login"
+
+#: templates/projects/base_project.html:15
+msgid "Overview"
+msgstr "Resumen"
+
+#: templates/projects/base_project.html:17
+msgid "Authentication"
+msgstr "Autenticación"
+
+#: templates/projects/dashboard.html:13
+msgid "Your projects"
+msgstr "Tus proyectos"
+
+#: templates/projects/dashboard.html:14
+msgid "New"
+msgstr "Nuevo"
+
+#: templates/projects/dashboard.html:21
+msgid "You don't have any projects yet."
+msgstr "Todavía no tienes proyectos."
+
+#: templates/projects/dashboard.html:28
+#, python-format
+msgid "Results for “%(query)s”"
+msgstr "Resultados para «%(query)s»"
+
+#: templates/projects/dashboard.html:41
+msgid "No description"
+msgstr "Sin descripción"
+
+#: templates/projects/dashboard.html:43 templates/projects/overview.html:21
+#, python-format
+msgid "%(counter)s table"
+msgid_plural "%(counter)s tables"
+msgstr[0] "%(counter)s tabla"
+msgstr[1] "%(counter)s tablas"
+
+#: templates/projects/dashboard.html:46
+#, python-format
+msgid "Updated %(since)s ago"
+msgstr "Actualizado hace %(since)s"
+
+#: templates/projects/dashboard.html:49
+msgid "Open"
+msgstr "Abrir"
+
+#: templates/projects/dashboard.html:54
+msgid "No results"
+msgstr "Sin resultados"
+
+#: templates/projects/dashboard.html:54
+#, python-format
+msgid "No project matches “%(query)s”."
+msgstr "Ningún proyecto coincide con «%(query)s»."
+
+#: templates/projects/dashboard.html:58
+msgid "Create your first project"
+msgstr "Crea tu primer proyecto"
+
+#: templates/projects/dashboard.html:59
+msgid "A project groups your tables, users and API keys."
+msgstr "Un proyecto agrupa tus tablas, usuarios y claves de API."
+
+#: templates/projects/new.html:6
+msgid "Create a new project"
+msgstr "Crear un nuevo proyecto"
+
+#: templates/projects/new.html:7
+msgid ""
+"A project has its own database (PostgreSQL schema), its tables, its users "
+"and its API keys."
+msgstr ""
+"Un proyecto tiene su propia base de datos (esquema de PostgreSQL), sus "
+"tablas, sus usuarios y sus claves de API."
+
+#: templates/projects/new.html:12
+msgid "Project name"
+msgstr "Nombre del proyecto"
+
+#: templates/projects/new.html:18
+msgid "Short, memorable names are best."
+msgstr "Los nombres cortos y fáciles de recordar son los mejores."
+
+#: templates/projects/new.html:21 templates/projects/table_new.html:21
+msgid "optional"
+msgstr "opcional"
+
+#: templates/projects/new.html:25 templates/projects/row_edit.html:32
+#: templates/projects/table_new.html:61
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: templates/projects/new.html:26
+msgid "Create project"
+msgstr "Crear proyecto"
+
+#: templates/projects/overview.html:12
+msgid "Login"
+msgstr "Login"
+
+#: templates/projects/overview.html:12
+msgid "Enabled"
+msgstr "Activo"
+
+#: templates/projects/overview.html:12
+msgid "Disabled"
+msgstr "Inactivo"
+
+#: templates/projects/overview.html:14
+msgid "Schema"
+msgstr "Esquema"
+
+#: templates/projects/overview.html:22 templates/projects/table_new.html:5
+#: templates/projects/tables.html:7
+msgid "New table"
+msgstr "Nueva tabla"
+
+#: templates/projects/overview.html:30
+#, python-format
+msgid "%(counter)s row"
+msgid_plural "%(counter)s rows"
+msgstr[0] "%(counter)s fila"
+msgstr[1] "%(counter)s filas"
+
+#: templates/projects/overview.html:35
+msgid "This project has no tables yet"
+msgstr "Este proyecto aún no tiene tablas"
+
+#: templates/projects/overview.html:36
+msgid "Create a table to start storing data."
+msgstr "Crea una tabla para empezar a guardar datos."
+
+#: templates/projects/overview.html:37 templates/projects/table_new.html:62
+msgid "Create table"
+msgstr "Crear tabla"
+
+#: templates/projects/overview.html:43
+msgid "Quick start"
+msgstr "Inicio rápido"
+
+#: templates/projects/overview.html:45
+msgid ""
+"Query your data from any frontend with <code class=\"inline\">fetch</code>:"
+msgstr ""
+"Consulta tus datos desde cualquier frontend con <code "
+"class=\"inline\">fetch</code>:"
+
+#: templates/projects/overview.html:49
+msgid "Or with the JavaScript SDK, without installing anything:"
+msgstr "O con el SDK de JavaScript, sin instalar nada:"
+
+#: templates/projects/overview.html:54
+msgid "See the full API reference →"
+msgstr "Ver la referencia completa de la API →"
+
+#: templates/projects/overview.html:61
+msgid "About"
+msgstr "Acerca de"
+
+#: templates/projects/overview.html:62
+msgid "No description."
+msgstr "Sin descripción."
+
+#: templates/projects/overview.html:65
+#, python-format
+msgid "%(counter)s registered user"
+msgid_plural "%(counter)s registered users"
+msgstr[0] "%(counter)s usuario registrado"
+msgstr[1] "%(counter)s usuarios registrados"
+
+#: templates/projects/overview.html:66
+#, python-format
+msgid "Created on %(date)s"
+msgstr "Creado el %(date)s"
+
+#: templates/projects/row_edit.html:10
+#, python-format
+msgid "row %(id)s"
+msgstr "fila %(id)s"
+
+#: templates/projects/row_edit.html:29
+msgid "This table has no editable columns."
+msgstr "Esta tabla no tiene columnas editables."
+
+#: templates/projects/row_edit.html:33
+msgid "Save changes"
+msgstr "Guardar cambios"
+
+#: templates/projects/settings.html:7
+msgid "General"
+msgstr "General"
+
+#: templates/projects/settings.html:13
+#, python-format
+msgid "The project URL (<code class=\"inline\">%(path)s</code>) does not change."
+msgstr "La URL del proyecto (<code class=\"inline\">%(path)s</code>) no cambia."
+
+#: templates/projects/settings.html:29
+#: templates/projects/table_structure.html:89
+msgid "Danger zone"
+msgstr "Zona de peligro"
+
+#: templates/projects/settings.html:31
+msgid "Regenerate API keys"
+msgstr "Regenerar API keys"
+
+#: templates/projects/settings.html:31
+msgid "The current keys will stop working immediately."
+msgstr "Las claves actuales dejarán de funcionar inmediatamente."
+
+#: templates/projects/settings.html:32
+msgid "Apps using the current keys will stop working. Continue?"
+msgstr ""
+"Las apps que usan las claves actuales dejarán de funcionar. ¿Continuar?"
+
+#: templates/projects/settings.html:34
+msgid "Regenerate"
+msgstr "Regenerar"
+
+#: templates/projects/settings.html:37
+msgid "All tables, data and users will be deleted. Continue?"
+msgstr "Se borrarán todas las tablas, datos y usuarios. ¿Continuar?"
+
+#: templates/projects/settings.html:39
+msgid "Delete project"
+msgstr "Eliminar proyecto"
+
+#: templates/projects/settings.html:39
+#, python-format
+msgid ""
+"Deletes the <code>%(schema)s</code> schema with all its tables, data and "
+"users. This cannot be undone."
+msgstr ""
+"Borra el esquema <code>%(schema)s</code> con todas sus tablas, datos y "
+"usuarios. No se puede deshacer."
+
+#: templates/projects/table_api.html:8
+msgid "With the JavaScript SDK"
+msgstr "Con el SDK de JavaScript"
+
+#: templates/projects/table_api.html:12
+msgid "List (filters, ordering and pagination are optional)"
+msgstr "Listar (filtros, orden y paginación son opcionales)"
+
+#: templates/projects/table_api.html:22 templates/projects/table_api.html:38
+msgid "Insert"
+msgstr "Insertar"
+
+#: templates/projects/table_api.html:25
+msgid "Update and delete by id"
+msgstr "Actualizar y eliminar por id"
+
+#: templates/projects/table_api.html:29
+msgid "With fetch / curl"
+msgstr "Con fetch / curl"
+
+#: templates/projects/table_api.html:30
+msgid "List"
+msgstr "Listar"
+
+#: templates/projects/table_api.html:34
+msgid "Filter: column=operator.value"
+msgstr "Filtrar: columna=operador.valor"
+
+#: templates/projects/table_api.html:43
+msgid "Update / delete"
+msgstr "Actualizar / eliminar"
+
+#: templates/projects/table_api.html:49
+msgid ""
+"This table requires signed-in users to write. Send the token in <code "
+"class=\"inline\">Authorization: Bearer &lt;token&gt;</code> or use <code "
+"class=\"inline\">db.auth.signIn()</code>."
+msgstr ""
+"Esta tabla requiere usuarios con login para escribir. Envía el token en "
+"<code class=\"inline\">Authorization: Bearer &lt;token&gt;</code> o usa "
+"<code class=\"inline\">db.auth.signIn()</code>."
+
+#: templates/projects/table_api.html:53
+msgid ""
+"This table requires signed-in users to read and write. Send the token in "
+"<code class=\"inline\">Authorization: Bearer &lt;token&gt;</code> or use "
+"<code class=\"inline\">db.auth.signIn()</code>."
+msgstr ""
+"Esta tabla requiere usuarios con login para leer y escribir. Envía el token "
+"en <code class=\"inline\">Authorization: Bearer &lt;token&gt;</code> o usa "
+"<code class=\"inline\">db.auth.signIn()</code>."
+
+#: templates/projects/table_api.html:56
+msgid ""
+"Private table: it only responds to the <strong>service key</strong> (use it "
+"only on your server)."
+msgstr ""
+"Tabla privada: solo responde a la <strong>service key</strong> (úsala solo "
+"en tu servidor)."
+
+#: templates/projects/table_api.html:61
+msgid "Available filters"
+msgstr "Filtros disponibles"
+
+#: templates/projects/table_api.html:65
+msgid "equal"
+msgstr "igual"
+
+#: templates/projects/table_api.html:66
+msgid "not equal"
+msgstr "distinto"
+
+#: templates/projects/table_api.html:67
+msgid "greater (or equal)"
+msgstr "mayor (o igual)"
+
+#: templates/projects/table_api.html:68
+msgid "less (or equal)"
+msgstr "menor (o igual)"
+
+#: templates/projects/table_api.html:69
+#, python-format
+msgid "pattern, <code>%%</code> wildcard"
+msgstr "patrón, <code>%%</code> comodín"
+
+#: templates/projects/table_api.html:74
+msgid ""
+"Other parameters: <code>select=a,b</code>, <code>order=col.desc</code>, "
+"<code>limit</code>, <code>offset</code>."
+msgstr ""
+"Otros parámetros: <code>select=a,b</code>, <code>order=col.desc</code>, "
+"<code>limit</code>, <code>offset</code>."
+
+#: templates/projects/table_data.html:8
+msgid "Insert row"
+msgstr "Insertar fila"
+
+#: templates/projects/table_data.html:23
+#, python-format
+msgid ""
+"This table has no columns of its own. <a href=\"%(structure_url)s\">Add "
+"columns</a> or insert an empty row."
+msgstr ""
+"Esta tabla no tiene columnas propias. <a href=\"%(structure_url)s\">Agrega "
+"columnas</a> o inserta una fila vacía."
+
+#: templates/projects/table_data.html:26
+msgid "Save row"
+msgstr "Guardar fila"
+
+#: templates/projects/table_data.html:53
+msgid "Edit"
+msgstr "Editar"
+
+#: templates/projects/table_data.html:54
+#, python-format
+msgid "Delete row %(id)s?"
+msgstr "¿Eliminar la fila %(id)s?"
+
+#: templates/projects/table_data.html:66
+#, python-format
+msgid "Rows %(start)s–%(end)s of %(total)s"
+msgstr "Filas %(start)s–%(end)s de %(total)s"
+
+#: templates/projects/table_data.html:72
+msgid "The table is empty"
+msgstr "La tabla está vacía"
+
+#: templates/projects/table_data.html:73
+#, python-format
+msgid ""
+"Insert rows here or from your frontend with the <a "
+"href=\"%(api_url)s\">API</a>."
+msgstr ""
+"Inserta filas desde aquí o desde tu frontend con la <a "
+"href=\"%(api_url)s\">API</a>."
+
+#: templates/projects/table_new.html:6
+msgid ""
+"Each table automatically includes <code class=\"inline\">id</code> (auto-"
+"increment) and <code class=\"inline\">created_at</code>."
+msgstr ""
+"Cada tabla incluye automáticamente <code class=\"inline\">id</code> "
+"(autoincremental) y <code class=\"inline\">created_at</code>."
+
+#: templates/projects/table_new.html:16
+msgid "e.g. products"
+msgstr "ej: productos"
+
+#: templates/projects/table_new.html:18
+msgid ""
+"Lowercase letters, numbers and underscores. It's the name you will use in "
+"the API."
+msgstr "Minúsculas, números y guion bajo. Es el nombre que usarás en la API."
+
+#: templates/projects/table_new.html:36 templates/projects/tables.html:12
+msgid "Columns"
+msgstr "Columnas"
+
+#: templates/projects/table_new.html:37
+#: templates/projects/table_structure.html:39
+#: templates/projects/table_structure.html:62
+msgid "Add column"
+msgstr "Agregar columna"
+
+#: templates/projects/table_new.html:39
+#: templates/projects/table_structure.html:10
+#: templates/projects/table_structure.html:53
+msgid "Default"
+msgstr "Por defecto"
+
+#: templates/projects/table_new.html:39
+msgid "Req."
+msgstr "Oblig."
+
+#: templates/projects/table_new.html:45 templates/projects/table_new.html:69
+msgid "column_name"
+msgstr "nombre_columna"
+
+#: templates/projects/table_new.html:52 templates/projects/table_new.html:76
+msgid "Remove"
+msgstr "Quitar"
+
+#: templates/projects/table_new.html:56
+msgid ""
+"Special defaults: <code class=\"inline\">now()</code> for dates and <code "
+"class=\"inline\">uuid()</code> for uuid."
+msgstr ""
+"Valores por defecto especiales: <code class=\"inline\">now()</code> para "
+"fechas y <code class=\"inline\">uuid()</code> para uuid."
+
+#: templates/projects/table_structure.html:10
+msgid "Column"
+msgstr "Columna"
+
+#: templates/projects/table_structure.html:10
+msgid "Null"
+msgstr "Nulo"
+
+#: templates/projects/table_structure.html:10
+msgid "Constraints"
+msgstr "Restricciones"
+
+#: templates/projects/table_structure.html:16
+msgid "yes"
+msgstr "sí"
+
+#: templates/projects/table_structure.html:16
+msgid "no"
+msgstr "no"
+
+#: templates/projects/table_structure.html:20
+msgid "unique"
+msgstr "único"
+
+#: templates/projects/table_structure.html:21
+msgid "system"
+msgstr "sistema"
+
+#: templates/projects/table_structure.html:25
+#, python-format
+msgid "Delete column “%(name)s” and all its data?"
+msgstr "¿Eliminar la columna «%(name)s» y todos sus datos?"
+
+#: templates/projects/table_structure.html:27
+msgid "Delete column"
+msgstr "Eliminar columna"
+
+#: templates/projects/table_structure.html:61
+msgid ""
+"If the table already has rows, a required column needs a default value."
+msgstr ""
+"Si la tabla ya tiene filas, una columna obligatoria necesita un valor por "
+"defecto."
+
+#: templates/projects/table_structure.html:83
+msgid ""
+"The “Owner” policy adds the <code class=\"inline\">owner_id</code> column "
+"and fills it automatically with the user who inserts."
+msgstr ""
+"La política «Dueño» agrega la columna <code class=\"inline\">owner_id</code>"
+" y la rellena automáticamente con el usuario que inserta."
+
+#: templates/projects/table_structure.html:87
+msgid "This deletes the table and all its data. Continue?"
+msgstr "Esta acción borra la tabla y todos sus datos. ¿Continuar?"
+
+#: templates/projects/table_structure.html:91
+#, python-format
+msgid "Type <strong>%(name)s</strong> to confirm:"
+msgstr "Escribe <strong>%(name)s</strong> para confirmar:"
+
+#: templates/projects/table_structure.html:93
+msgid "Delete table"
+msgstr "Eliminar tabla"
+
+#: templates/projects/tables.html:12
+msgid "Access"
+msgstr "Acceso"
+
+#: templates/projects/tables.html:12
+msgid "Rows"
+msgstr "Filas"
+
+#: templates/projects/tables.html:12
+msgid "Updated"
+msgstr "Actualizada"
+
+#: templates/projects/tables.html:21
+#, python-format
+msgid "%(since)s ago"
+msgstr "hace %(since)s"
+
+#: templates/projects/tables.html:30
+msgid "No tables yet"
+msgstr "Sin tablas todavía"
+
+#: templates/projects/tables.html:31
+#, python-format
+msgid ""
+"Tables are created as real PostgreSQL tables in the <code "
+"class=\"inline\">%(schema)s</code> schema."
+msgstr ""
+"Las tablas se crean como tablas reales de PostgreSQL en el esquema <code "
+"class=\"inline\">%(schema)s</code>."
+
+#: templates/projects/tables.html:32
+msgid "Create the first table"
+msgstr "Crear la primera tabla"
+
+#: templates/registration/login.html:7
+msgid "Sign in to falcondatabase"
+msgstr "Inicia sesión en falcondatabase"
+
+#: templates/registration/login.html:9
+msgid "Incorrect username or password."
+msgstr "Usuario o contraseña incorrectos."
+
+#: templates/registration/login.html:15
+msgid "Username or email"
+msgstr "Usuario o email"
+
+#: templates/registration/login.html:25
+msgid "New to falcondatabase?"
+msgstr "¿Nuevo en falcondatabase?"
+
+#: templates/registration/login.html:25
+msgid "Create an account"
+msgstr "Crea una cuenta"
+
+#: templates/registration/login.html:27
+#, python-format
+msgid ""
+"Need an account? Contact the administrator at <a "
+"href=\"mailto:%(contact_email)s\">%(contact_email)s</a>."
+msgstr ""
+"¿Necesitas una cuenta? Contacta al administrador en <a "
+"href=\"mailto:%(contact_email)s\">%(contact_email)s</a>."
+
+#: templates/registration/login_verify.html:3
+#: templates/registration/login_verify.html:7
+msgid "Two-step verification"
+msgstr "Verificación en dos pasos"
+
+#: templates/registration/login_verify.html:12
+msgid "Authentication code"
+msgstr "Código de autenticación"
+
+#: templates/registration/login_verify.html:15
+msgid ""
+"Open your authenticator app and enter the 6-digit code. You can also use a "
+"recovery code."
+msgstr ""
+"Abre tu app de autenticación y escribe el código de 6 dígitos. También "
+"puedes usar un código de recuperación."
+
+#: templates/registration/login_verify.html:17
+msgid "Verify"
+msgstr "Verificar"
+
+#: templates/registration/login_verify.html:19
+msgid "Back to sign in"
+msgstr "Volver a iniciar sesión"
+
+#: templates/registration/signup.html:7
+msgid "Create your account"
+msgstr "Crea tu cuenta"
+
+#: templates/registration/signup.html:18
+msgid "Create account"
+msgstr "Crear cuenta"
+
+#: templates/registration/signup.html:20
+msgid "Already have an account?"
+msgstr "¿Ya tienes cuenta?"

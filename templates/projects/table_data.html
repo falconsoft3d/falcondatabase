@@ -1,0 +1,77 @@
+{% extends "projects/base_project.html" %}
+{% load i18n falcon %}
+{% block content %}
+<div class="container">
+  {% include "projects/_table_header.html" %}
+
+  <details class="box" style="margin-bottom:16px" {% if form_values %}open{% endif %}>
+    <summary class="box-header" style="cursor:pointer;border-radius:var(--radius)">{% icon 'plus' %} <strong>{% translate "Insert row" %}</strong></summary>
+    <form method="post" class="box-body">
+      {% csrf_token %}
+      {% if editable %}
+        <div class="stats">
+          {% for column in editable %}
+            <div class="field" style="margin:0">
+              <label for="f-{{ column.name }}" class="{% if not column.nullable and not column.default %}required{% endif %}">
+                {{ column.name }} <span class="muted mono" style="font-weight:400">{{ column.type }}</span>
+              </label>
+              {% with value=form_values|get_item:column.name %}{% include "projects/_row_input.html" %}{% endwith %}
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p class="muted">{% url 'projects:table_structure' project.owner.username project.slug table.name as structure_url %}{% blocktranslate %}This table has no columns of its own. <a href="{{ structure_url }}">Add columns</a> or insert an empty row.{% endblocktranslate %}</p>
+      {% endif %}
+      <div class="form-actions" style="border:0;padding-top:16px">
+        <button class="btn btn-primary" type="submit">{% translate "Save row" %}</button>
+      </div>
+    </form>
+  </details>
+
+  {% if rows %}
+    <div class="grid-wrap">
+      <table class="grid">
+        <thead>
+          <tr>
+            {% for column in columns %}
+              <th>
+                <a href="?order={% if order_name == column.name and not descending %}-{% endif %}{{ column.name }}">
+                  {{ column.name }}{% if order_name == column.name %} {% if descending %}↓{% else %}↑{% endif %}{% endif %}
+                </a><span class="type">{{ column.type }}</span>
+              </th>
+            {% endfor %}
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in rows %}
+            <tr>
+              {% for column in columns %}
+                <td class="{% if column.name == 'id' %}num{% endif %}" title="{{ row|get_item:column.name|default_if_none:'' }}">{{ row|get_item:column.name|cell }}</td>
+              {% endfor %}
+              <td class="actions nowrap">
+                <a class="btn btn-xs btn-invisible" href="{% url 'projects:row_edit' project.owner.username project.slug table.name row.id %}" title="{% translate 'Edit' %}">{% icon 'edit' 14 %}</a>
+                <form method="post" action="{% url 'projects:row_delete' project.owner.username project.slug table.name row.id %}" style="display:inline" data-confirm="{% blocktranslate with id=row.id %}Delete row {{ id }}?{% endblocktranslate %}">
+                  {% csrf_token %}<input type="hidden" name="next" value="{{ request.get_full_path }}">
+                  <button class="btn btn-xs btn-invisible" type="submit" title="{% translate 'Delete' %}">{% icon 'trash' 14 %}</button>
+                </form>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <div class="pagination">
+      {% if page.has_previous %}<a class="btn btn-sm" href="?page={{ page.previous_page_number }}&order={% if descending %}-{% endif %}{{ order_name }}">← {% translate "Previous" %}</a>{% endif %}
+      <span class="muted small">{% blocktranslate with start=page.start_index end=page.end_index %}Rows {{ start }}–{{ end }} of {{ total }}{% endblocktranslate %}</span>
+      {% if page.has_next %}<a class="btn btn-sm" href="?page={{ page.next_page_number }}&order={% if descending %}-{% endif %}{{ order_name }}">{% translate "Next" %} →</a>{% endif %}
+    </div>
+  {% else %}
+    <div class="box blankslate">
+      {% icon 'rows' 28 %}
+      <h3>{% translate "The table is empty" %}</h3>
+      <p class="muted">{% url 'projects:table_api' project.owner.username project.slug table.name as api_url %}{% blocktranslate %}Insert rows here or from your frontend with the <a href="{{ api_url }}">API</a>.{% endblocktranslate %}</p>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

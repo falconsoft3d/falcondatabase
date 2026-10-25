@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% load i18n falcon %}
+{% block title %}{% translate "Dashboard" %} · falcondatabase{% endblock %}
+{% block content %}
+<div class="container layout-sidebar">
+  <aside class="sidebar">
+    <div class="row" style="margin-bottom:8px">
+      <span class="avatar">{{ user|initial }}</span>
+      <strong>{{ user.username }}</strong>
+    </div>
+    <a class="btn btn-sm btn-block" href="{% url 'account' %}" style="margin-bottom:16px">{% icon 'gear' 14 %} {% translate "Settings" %}</a>
+    <div class="row">
+      <h3 class="grow" style="font-size:14px;margin:0">{% translate "Your projects" %}</h3>
+      <a class="btn btn-primary btn-sm" href="{% url 'project_new' %}">{% icon 'database' 14 %} {% translate "New" %}</a>
+    </div>
+    <ul class="sidebar-list">
+      {% for project in projects %}
+        <li><span class="avatar sm">{{ project.name|first|upper }}</span>
+          <a href="{{ project.get_absolute_url }}">{{ user.username }}/{{ project.slug }}</a></li>
+      {% empty %}
+        <li class="muted small">{% translate "You don't have any projects yet." %}</li>
+      {% endfor %}
+    </ul>
+  </aside>
+
+  <section>
+    <div class="row" style="margin-bottom:16px">
+      <h2 class="grow" style="margin:0">{% if query %}{% blocktranslate %}Results for “{{ query }}”{% endblocktranslate %}{% else %}{% translate "Projects" %}{% endif %}</h2>
+      <a class="btn btn-primary" href="{% url 'project_new' %}">{% icon 'plus' %} {% translate "New project" %}</a>
+    </div>
+
+    {% if projects %}
+      <div class="box">
+        {% for project in projects %}
+          <div class="project-card">
+            <div class="grow">
+              <h3>
+                <a href="{{ project.get_absolute_url }}">{{ project.name }}</a>
+                {% if project.auth_enabled %}<span class="label label-success">{% translate "login enabled" %}</span>{% endif %}
+              </h3>
+              <p class="muted" style="margin:0">{{ project.description|default:_("No description") }}</p>
+              <div class="meta">
+                <span>{% icon 'table' 14 %} {% blocktranslate count counter=project.table_count %}{{ counter }} table{% plural %}{{ counter }} tables{% endblocktranslate %}</span>
+                <span>{% icon 'users' 14 %} {% blocktranslate count counter=project.user_count %}{{ counter }} user{% plural %}{{ counter }} users{% endblocktranslate %}</span>
+                <span class="mono">{% icon 'key' 14 %} {{ project.ref }}</span>
+                <span>{% blocktranslate with since=project.updated_at|timesince %}Updated {{ since }} ago{% endblocktranslate %}</span>
+              </div>
+            </div>
+            <div><a class="btn btn-sm" href="{{ project.get_absolute_url }}">{% translate "Open" %}</a></div>
+          </div>
+        {% endfor %}
+      </div>
+    {% elif query %}
+      <div class="box blankslate"><h3>{% translate "No results" %}</h3><p class="muted">{% blocktranslate %}No project matches “{{ query }}”.{% endblocktranslate %}</p></div>
+    {% else %}
+      <div class="box blankslate">
+        {% icon 'database' 32 %}
+        <h3>{% translate "Create your first project" %}</h3>
+        <p class="muted">{% translate "A project groups your tables, users and API keys." %}</p>
+        <a class="btn btn-primary" href="{% url 'project_new' %}">{% icon 'plus' %} {% translate "New project" %}</a>
+      </div>
+    {% endif %}
+  </section>
+</div>
+{% endblock %}

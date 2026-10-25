@@ -1,0 +1,97 @@
+{% load static i18n falcon %}<!doctype html>
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}falcondatabase{% endblock %}</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2366D7D1' stroke-width='2'><ellipse cx='12' cy='5' rx='8' ry='3'/><path d='M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5'/><path d='M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3'/></svg>">
+  <link rel="stylesheet" href="{% static 'css/app.css' %}">
+  <script>try { var t = localStorage.getItem("falcondb-theme"); if (t === "light" || t === "dark") document.documentElement.dataset.theme = t; } catch (e) {}</script>
+</head>
+<body data-i18n-copied="{% translate 'Copied!' %}" data-i18n-show="{% translate 'Show' %}" data-i18n-hide="{% translate 'Hide' %}">
+  <header class="header">
+    <a class="brand" href="{% if user.is_authenticated %}{% url 'dashboard' %}{% else %}{% url 'home' %}{% endif %}">
+      <span class="brand-mark">{% icon 'database' 18 %}</span>
+      <span>falcondatabase</span>
+    </a>
+    {% if user.is_authenticated %}
+      <form class="header-search" action="{% url 'dashboard' %}" method="get" role="search">
+        {% icon 'search' 14 %}
+        <input type="search" name="q" placeholder="{% translate 'Search projects…' %}" value="{{ query|default:'' }}">
+      </form>
+    {% endif %}
+    <nav class="header-nav">
+      <a href="{% url 'home' %}" {% if request.resolver_match.url_name == 'home' %}aria-current="page"{% endif %}>{% translate "Home" %}</a>
+      {% if user.is_authenticated %}<a href="{% url 'dashboard' %}">{% translate "Dashboard" %}</a>{% endif %}
+      <a href="{% url 'docs' %}">{% translate "Docs" %}</a>
+      <a href="{% url 'blog:index' %}">{% translate "Blog" %}</a>
+      {% if user.is_superuser %}<a href="{% url 'users' %}">{% translate "Users" %}</a>{% endif %}
+    </nav>
+    <div class="header-actions">
+      <button type="button" class="icon-button" data-theme-toggle title="{% translate 'Toggle light/dark mode' %}" aria-label="{% translate 'Toggle light/dark mode' %}">
+        <span class="theme-icon-light">{% icon 'sun' %}</span><span class="theme-icon-dark">{% icon 'moon' %}</span>
+      </button>
+      {% include "core/_language_menu.html" %}
+      {% if user.is_authenticated %}
+        <a class="icon-button" href="{% url 'project_new' %}" title="{% translate 'New project' %}">{% icon 'plus' %}</a>
+        <details class="menu">
+          <summary><span class="avatar" title="{{ user.username }}">{{ user|initial }}</span></summary>
+          <div class="menu-items">
+            <div class="menu-title">{% blocktranslate with username=user.username %}Signed in as <strong>{{ username }}</strong>{% endblocktranslate %}</div>
+            <hr>
+            <a href="{% url 'home' %}">{% icon 'home' %} {% translate "Home" %}</a>
+            <a href="{% url 'dashboard' %}">{% icon 'database' %} {% translate "Dashboard" %}</a>
+            <a href="{% url 'project_new' %}">{% icon 'plus' %} {% translate "New project" %}</a>
+            <a href="{% url 'docs' %}">{% icon 'book' %} {% translate "Documentation" %}</a>
+            <hr>
+            <a href="{% url 'account' %}">{% icon 'gear' %} {% translate "Settings" %}</a>
+            {% if user.is_superuser %}<a href="{% url 'users' %}">{% icon 'users' %} {% translate "Users" %}</a>{% endif %}
+            <hr>
+            <form method="post" action="{% url 'logout' %}">{% csrf_token %}
+              <button type="submit">{% icon 'logout' %} {% translate "Sign out" %}</button>
+            </form>
+          </div>
+        </details>
+      {% else %}
+        <a class="btn btn-invisible" href="{% url 'login' %}">{% translate "Sign in" %}</a>
+        {% if signup_enabled %}<a class="btn" href="{% url 'signup' %}">{% translate "Sign up" %}</a>{% endif %}
+      {% endif %}
+    </div>
+  </header>
+
+  {% block subheader %}{% endblock %}
+
+  {% if messages %}
+    <div class="messages">
+      {% for message in messages %}
+        <div class="flash flash-{{ message.tags }}">
+          {% if message.tags == 'error' %}{% icon 'x' %}{% else %}{% icon 'check' %}{% endif %}
+          {{ message }}
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <main>{% block content %}{% endblock %}</main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <span class="row">{% icon 'database' %} © {% now "Y" %} falcondatabase</span>
+      <a href="{% url 'docs' %}">{% translate "Documentation" %}</a>
+      <a href="{% url 'blog:index' %}">{% translate "Blog" %}</a>
+      <a href="{% url 'cookies' %}">{% translate "Cookie policy" %}</a>
+      <span class="muted">Django + PostgreSQL</span>
+      <span class="footer-contact">{% translate "Contact" %}: {{ contact_name }} · <a href="mailto:{{ contact_email }}">{{ contact_email }}</a></span>
+    </div>
+  </footer>
+  <div class="cookie-banner" data-cookie-banner {% if cookie_consent %}hidden{% endif %} role="dialog" aria-label="{% translate 'Cookie consent' %}">
+    <p>{% translate "We use cookies that are essential for signing in and keeping the site secure, plus one to remember your language. We don't use advertising or tracking cookies." %}
+      <a href="{% url 'cookies' %}">{% translate "Cookie policy" %}</a></p>
+    <div class="row">
+      <button type="button" class="btn btn-primary btn-sm" data-cookie-choice="all">{% translate "Accept" %}</button>
+      <button type="button" class="btn btn-sm" data-cookie-choice="essential">{% translate "Only essential" %}</button>
+    </div>
+  </div>
+  <script src="{% static 'js/app.js' %}"></script>
+</body>
+</html>

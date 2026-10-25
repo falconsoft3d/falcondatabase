@@ -1,0 +1,25 @@
+{% load i18n falcon %}
+<div class="field">
+  <label for="key-url">{% translate "Project URL" %}</label>
+  <div class="key-field">
+    <input type="text" id="key-url" readonly value="{{ base_url }}/api/v1/{{ project.ref }}">
+    <button type="button" class="btn" data-copy="#key-url">{% icon 'copy' %}</button>
+  </div>
+</div>
+<div class="field">
+  <label for="key-anon">anon key <span class="label label-success">{% translate "public" %}</span></label>
+  <div class="key-field">
+    <input type="text" id="key-anon" readonly value="{{ project.anon_key }}">
+    <button type="button" class="btn" data-copy="#key-anon">{% icon 'copy' %}</button>
+  </div>
+  <span class="help">{% translate "Safe to use in the browser. It follows each table's access rules." %}</span>
+</div>
+<div class="field" style="margin-bottom:0">
+  <label for="key-service">service key <span class="label label-danger">{% translate "secret" %}</span></label>
+  <div class="key-field">
+    <input type="password" id="key-service" readonly value="{{ project.service_key }}">
+    <button type="button" class="btn" data-toggle-secret="#key-service">{% translate "Show" %}</button>
+    <button type="button" class="btn" data-copy="#key-service">{% icon 'copy' %}</button>
+  </div>
+  <span class="help">{% translate "Full access, ignores the rules. Only use it on your server, never in the frontend." %}</span>
+</div>

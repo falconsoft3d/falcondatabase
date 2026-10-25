@@ -1,0 +1,13 @@
+{% load i18n %}{% if column.type == 'boolean' %}
+  <select name="{{ column.name }}" id="f-{{ column.name }}">
+    <option value="" {% if not value %}selected{% endif %}>NULL</option>
+    <option value="true" {% if value == 'true' %}selected{% endif %}>true</option>
+    <option value="false" {% if value == 'false' %}selected{% endif %}>false</option>
+  </select>
+{% elif column.type == 'json' %}
+  <textarea name="{{ column.name }}" id="f-{{ column.name }}" placeholder='{"key": "value"}'>{{ value }}</textarea>
+{% else %}
+  <input type="{{ column.input_type }}" {% if column.input_type == 'number' %}step="any"{% endif %}
+         name="{{ column.name }}" id="f-{{ column.name }}" value="{{ value }}"
+         placeholder="{% if column.default %}{% blocktranslate with default=column.default %}default: {{ default }}{% endblocktranslate %}{% elif column.nullable %}NULL{% endif %}">
+{% endif %}

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load i18n falcon %}
+{% block title %}{% translate "Sign in" %} · falcondatabase{% endblock %}
+{% block content %}
+<div class="auth-page">
+  <div class="brand-mark">{% icon 'database' 26 %}</div>
+  <h1>{% translate "Sign in to falcondatabase" %}</h1>
+  {% if form.non_field_errors %}
+    <div class="flash flash-error">{% icon 'x' %} {% translate "Incorrect username or password." %}</div>
+  {% endif %}
+  <form method="post" class="box box-body surface">
+    {% csrf_token %}
+    <input type="hidden" name="next" value="{{ next }}">
+    <div class="field">
+      <label for="id_username">{% translate "Username or email" %}</label>
+      <input type="text" name="username" id="id_username" autofocus required value="{{ form.username.value|default:'' }}">
+    </div>
+    <div class="field">
+      <label for="id_password">{% translate "Password" %}</label>
+      <input type="password" name="password" id="id_password" required>
+    </div>
+    <button class="btn btn-primary btn-block" type="submit">{% translate "Sign in" %}</button>
+  </form>
+  {% if signup_enabled %}
+    <div class="auth-callout">{% translate "New to falcondatabase?" %} <a href="{% url 'signup' %}">{% translate "Create an account" %}</a>.</div>
+  {% else %}
+    <div class="auth-callout muted">{% blocktranslate %}Need an account? Contact the administrator at <a href="mailto:{{ contact_email }}">{{ contact_email }}</a>.{% endblocktranslate %}</div>
+  {% endif %}
+</div>
+{% endblock %}

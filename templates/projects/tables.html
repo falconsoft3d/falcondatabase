@@ -1,0 +1,36 @@
+{% extends "projects/base_project.html" %}
+{% load i18n falcon %}
+{% block content %}
+<div class="container">
+  <div class="row" style="margin-bottom:16px">
+    <h2 class="grow" style="margin:0">{% translate "Tables" %}</h2>
+    <a class="btn btn-primary" href="{% url 'projects:table_new' project.owner.username project.slug %}">{% icon 'plus' %} {% translate "New table" %}</a>
+  </div>
+  {% if tables %}
+    <div class="box">
+      <table class="list">
+        <thead><tr><th>{% translate "Name" %}</th><th>{% translate "Description" %}</th><th>{% translate "Access" %}</th><th>{% translate "Columns" %}</th><th>{% translate "Rows" %}</th><th>{% translate "Updated" %}</th></tr></thead>
+        <tbody>
+          {% for table in tables %}
+            <tr>
+              <td><a class="row" href="{% url 'projects:table' project.owner.username project.slug table.name %}">{% icon 'table' %} <strong>{{ table.name }}</strong></a></td>
+              <td class="muted">{{ table.description }}</td>
+              <td><span class="label">{{ table.access_label }}</span></td>
+              <td class="muted">{{ table.column_count }}</td>
+              <td class="muted">{{ table.rows }}</td>
+              <td class="muted small">{% blocktranslate with since=table.updated_at|timesince %}{{ since }} ago{% endblocktranslate %}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <div class="box blankslate">
+      {% icon 'table' 32 %}
+      <h3>{% translate "No tables yet" %}</h3>
+      <p class="muted">{% blocktranslate with schema=project.schema %}Tables are created as real PostgreSQL tables in the <code class="inline">{{ schema }}</code> schema.{% endblocktranslate %}</p>
+      <a class="btn btn-primary" href="{% url 'projects:table_new' project.owner.username project.slug %}">{% translate "Create the first table" %}</a>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

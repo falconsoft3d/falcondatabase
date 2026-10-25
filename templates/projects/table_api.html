@@ -1,0 +1,79 @@
+{% extends "projects/base_project.html" %}
+{% load i18n falcon %}
+{% block content %}
+<div class="container">
+  {% include "projects/_table_header.html" %}
+  <div class="layout-split">
+    <div class="markdown">
+      <h3 style="margin-top:0">{% translate "With the JavaScript SDK" %}</h3>
+<pre class="code"><span class="k">import</span> { createClient } <span class="k">from</span> <span class="s">"{{ base_url }}/sdk/falcondb.js"</span>
+<span class="k">const</span> db = <span class="f">createClient</span>(<span class="s">"{{ base_url }}"</span>, <span class="s">"{{ project.ref }}"</span>, <span class="s">"{{ project.anon_key }}"</span>)
+
+<span class="c">// {% translate "List (filters, ordering and pagination are optional)" %}</span>
+<span class="k">const</span> { data, count } = <span class="k">await</span> db.<span class="f">from</span>(<span class="s">"{{ table.name }}"</span>)
+  .<span class="f">select</span>()
+  .<span class="f">eq</span>(<span class="s">"{{ filter_column }}"</span>, <span class="s">"value"</span>)
+  .<span class="f">order</span>(<span class="s">"created_at"</span>, { desc: <span class="k">true</span> })
+  .<span class="f">limit</span>(<span class="s">20</span>)
+
+<span class="c">// {% translate "Get one row" %}</span>
+<span class="k">await</span> db.<span class="f">from</span>(<span class="s">"{{ table.name }}"</span>).<span class="f">get</span>(<span class="s">1</span>)
+
+<span class="c">// {% translate "Insert" %}</span>
+<span class="k">await</span> db.<span class="f">from</span>(<span class="s">"{{ table.name }}"</span>).<span class="f">insert</span>({{ sample_json }})
+
+<span class="c">// {% translate "Update and delete by id" %}</span>
+<span class="k">await</span> db.<span class="f">from</span>(<span class="s">"{{ table.name }}"</span>).<span class="f">update</span>(<span class="s">1</span>, { {{ filter_column }}: <span class="s">"new value"</span> })
+<span class="k">await</span> db.<span class="f">from</span>(<span class="s">"{{ table.name }}"</span>).<span class="f">delete</span>(<span class="s">1</span>)</pre>
+
+      <h3>{% translate "With fetch / curl" %}</h3>
+<pre class="code"><span class="c"># {% translate "List" %}</span>
+curl <span class="s">"{{ base_url }}/api/v1/{{ project.ref }}/tables/{{ table.name }}?order=id.desc&amp;limit=20"</span> \
+  -H <span class="s">"apikey: {{ project.anon_key }}"</span>
+
+<span class="c"># {% translate "Filter: column=operator.value" %}</span>
+curl <span class="s">"{{ base_url }}/api/v1/{{ project.ref }}/tables/{{ table.name }}?{{ filter_column }}=eq.value"</span> \
+  -H <span class="s">"apikey: {{ project.anon_key }}"</span>
+
+<span class="c"># {% translate "Insert" %}</span>
+curl -X POST <span class="s">"{{ base_url }}/api/v1/{{ project.ref }}/tables/{{ table.name }}"</span> \
+  -H <span class="s">"apikey: {{ project.anon_key }}"</span> -H <span class="s">"Content-Type: application/json"</span> \
+  -d <span class="s">'{{ sample_json }}'</span>
+
+<span class="c"># {% translate "Update / delete" %}</span>
+curl -X PATCH <span class="s">"{{ base_url }}/api/v1/{{ project.ref }}/tables/{{ table.name }}/1"</span> -H <span class="s">"apikey: …"</span> -d <span class="s">'{"{{ filter_column }}": "x"}'</span>
+curl -X DELETE <span class="s">"{{ base_url }}/api/v1/{{ project.ref }}/tables/{{ table.name }}/1"</span> -H <span class="s">"apikey: …"</span></pre>
+
+      {% if table.access == 'public_read' %}
+        <div class="flash flash-info">{% icon 'lock' %}
+          <span>{% blocktranslate %}This table requires signed-in users to write. Send the token in <code class="inline">Authorization: Bearer &lt;token&gt;</code> or use <code class="inline">db.auth.signIn()</code>.{% endblocktranslate %}</span>
+        </div>
+      {% elif table.access == 'authenticated' or table.access == 'owner' %}
+        <div class="flash flash-info">{% icon 'lock' %}
+          <span>{% blocktranslate %}This table requires signed-in users to read and write. Send the token in <code class="inline">Authorization: Bearer &lt;token&gt;</code> or use <code class="inline">db.auth.signIn()</code>.{% endblocktranslate %}</span>
+        </div>
+      {% elif table.access == 'private' %}
+        <div class="flash flash-error">{% icon 'lock' %} <span>{% blocktranslate %}Private table: it only responds to the <strong>service key</strong> (use it only on your server).{% endblocktranslate %}</span></div>
+      {% endif %}
+    </div>
+
+    <aside class="box">
+      <div class="box-header"><strong>{% translate "Available filters" %}</strong></div>
+      <div class="box-body small">
+        <table class="list" style="font-size:12px">
+          <tbody>
+            <tr><td><code>eq</code></td><td>{% translate "equal" %}</td></tr>
+            <tr><td><code>neq</code></td><td>{% translate "not equal" %}</td></tr>
+            <tr><td><code>gt</code> <code>gte</code></td><td>{% translate "greater (or equal)" %}</td></tr>
+            <tr><td><code>lt</code> <code>lte</code></td><td>{% translate "less (or equal)" %}</td></tr>
+            <tr><td><code>like</code> <code>ilike</code></td><td>{% blocktranslate %}pattern, <code>%</code> wildcard{% endblocktranslate %}</td></tr>
+            <tr><td><code>is</code></td><td>null, true, false</td></tr>
+            <tr><td><code>in</code></td><td><code>in.(a,b,c)</code></td></tr>
+          </tbody>
+        </table>
+        <p class="muted" style="margin-top:12px">{% blocktranslate %}Other parameters: <code>select=a,b</code>, <code>order=col.desc</code>, <code>limit</code>, <code>offset</code>.{% endblocktranslate %}</p>
+      </div>
+    </aside>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends "projects/base_project.html" %}
+{% load i18n falcon %}
+{% block content %}
+<div class="container layout-split">
+  <div>
+    {% with ref=project.ref anon_key=project.anon_key %}{% include "core/_api_reference.html" %}{% endwith %}
+  </div>
+  <aside class="stack">
+    <div class="box">
+      <div class="box-header">{% icon 'key' %} <strong>{% translate "Connection" %}</strong></div>
+      <div class="box-body">{% include "projects/_keys.html" %}</div>
+    </div>
+    {% if tables %}
+      <div class="box">
+        <div class="box-header">{% icon 'table' %} <strong>{% translate "Endpoints per table" %}</strong></div>
+        {% for table in tables %}
+          <div class="box-row">
+            <a class="grow mono" href="{% url 'projects:table_api' project.owner.username project.slug table.name %}">/tables/{{ table.name }}</a>
+            <span class="label">{{ table.access_label }}</span>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </aside>
+</div>
+{% endblock %}

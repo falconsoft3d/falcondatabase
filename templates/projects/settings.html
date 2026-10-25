@@ -1,0 +1,45 @@
+{% extends "projects/base_project.html" %}
+{% load i18n falcon %}
+{% block content %}
+<div class="container-md stack">
+  <form method="post" class="box">
+    {% csrf_token %}<input type="hidden" name="action" value="update">
+    <div class="box-header"><strong>{% translate "General" %}</strong></div>
+    <div class="box-body">
+      <div class="field">
+        <label for="id_name">{% translate "Name" %}</label>
+        <input type="text" name="name" id="id_name" maxlength="100" required value="{{ form.name.value|default:'' }}">
+        {% for error in form.name.errors %}<p class="error">{{ error }}</p>{% endfor %}
+        <span class="help">{% blocktranslate with path=project.owner.username|add:"/"|add:project.slug %}The project URL (<code class="inline">{{ path }}</code>) does not change.{% endblocktranslate %}</span>
+      </div>
+      <div class="field">
+        <label for="id_description">{% translate "Description" %}</label>
+        <input type="text" name="description" id="id_description" maxlength="300" value="{{ form.description.value|default:'' }}">
+      </div>
+      <button class="btn" type="submit">{% translate "Save" %}</button>
+    </div>
+  </form>
+
+  <div class="box">
+    <div class="box-header">{% icon 'key' %} <strong>API keys</strong></div>
+    <div class="box-body">{% include "projects/_keys.html" %}</div>
+  </div>
+
+  <div class="box box-danger">
+    <div class="box-header box-header-danger"><strong>{% translate "Danger zone" %}</strong></div>
+    <div class="box-row">
+      <div class="grow"><strong>{% translate "Regenerate API keys" %}</strong><p class="muted small" style="margin:0">{% translate "The current keys will stop working immediately." %}</p></div>
+      <form method="post" data-confirm="{% translate 'Apps using the current keys will stop working. Continue?' %}">
+        {% csrf_token %}<input type="hidden" name="action" value="regenerate_keys">
+        <button class="btn btn-danger" type="submit">{% icon 'refresh' %} {% translate "Regenerate" %}</button>
+      </form>
+    </div>
+    <form method="post" class="box-row" style="flex-wrap:wrap" data-confirm="{% translate 'All tables, data and users will be deleted. Continue?' %}">
+      {% csrf_token %}<input type="hidden" name="action" value="delete">
+      <div class="grow"><strong>{% translate "Delete project" %}</strong><p class="muted small" style="margin:0">{% blocktranslate with schema=project.schema %}Deletes the <code>{{ schema }}</code> schema with all its tables, data and users. This cannot be undone.{% endblocktranslate %}</p></div>
+      <input type="text" name="confirm" placeholder="{{ project.owner.username }}/{{ project.slug }}" autocomplete="off" style="max-width:240px">
+      <button class="btn btn-danger" type="submit">{% icon 'trash' %} {% translate "Delete" %}</button>
+    </form>
+  </div>
+</div>
+{% endblock %}
