@@ -10,6 +10,7 @@
       <p class="muted" style="font-size:16px">{% translate "Sign in once and see the visitors, sessions and pageviews of your projects from the browser toolbar, with today's visits right on the icon." %}</p>
       <div class="row" style="flex-wrap:wrap;margin-top:16px">
         <a class="btn btn-primary" href="{% url 'extension_zip' %}" download>{% icon 'download' %} {% translate "Download the extension" %}</a>
+        <a class="btn" href="{% url 'blog:detail' 'chrome-extension' %}">{% icon 'book' %} {% translate "Installation guide" %}</a>
         <span class="muted small">{% blocktranslate %}Pre-configured for this server · Chrome, Edge, Brave and other Chromium browsers{% endblocktranslate %}</span>
       </div>
     </div>

@@ -2,7 +2,7 @@
 {% load i18n static falcon %}
 {% block title %}falcondatabase — {% translate "your backend in minutes" %}{% endblock %}
 {% block content %}
-<section class="hero">
+<section class="hero" data-mesh>
   <span class="label label-accent" style="margin-bottom:24px">{% icon 'zap' 12 %} Django + PostgreSQL</span>
   <h1>{% translate "Your database," %} <span class="grad">{% translate "ready for any frontend" %}</span></h1>
   <p class="lead">{% translate "Create projects, define real PostgreSQL tables and add login to your apps. Query everything from React, Vue or plain JavaScript with a simple REST API." %}</p>
@@ -70,7 +70,10 @@
         <h2 style="margin:0 0 4px">{% translate "Your statistics in the browser" %}</h2>
         <p class="muted" style="margin:0">{% translate "Install the Chrome extension, sign in, and see the visits to your projects from the toolbar." %}</p>
       </div>
-      <a class="btn btn-primary" href="{% url 'extension' %}">{% icon 'download' %} {% translate "Get the Chrome extension" %}</a>
+      <div class="row" style="flex-wrap:wrap">
+        <a class="btn" href="{% url 'blog:detail' 'chrome-extension' %}">{% icon 'book' %} {% translate "Installation guide" %}</a>
+        <a class="btn btn-primary" href="{% url 'extension' %}">{% icon 'download' %} {% translate "Get the Chrome extension" %}</a>
+      </div>
     </div>
   </div>
 </section>
@@ -95,3 +98,4 @@
   </ol>
 </section>
 {% endblock %}
+{% block scripts %}<script src="{% static 'js/mesh.js' %}" defer></script>{% endblock %}

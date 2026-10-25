@@ -15,6 +15,7 @@ Each file starts with a small front matter block::
 
 import datetime
 import re
+import unicodedata
 from dataclasses import dataclass, field
 from functools import lru_cache
 from pathlib import Path
@@ -109,6 +110,31 @@ def posts_for(lang, category=None):
     if category:
         posts = [post for post in posts if post.category == category]
     return sorted(posts, key=lambda post: (post.date, post.slug), reverse=True)
+
+
+def fold(text):
+    """Lowercase and strip accents, so "analitica" finds "Analítica"."""
+    return "".join(c for c in unicodedata.normalize("NFKD", text.lower()) if not unicodedata.combining(c))
+
+
+def search(posts, query):
+    """Posts containing every word of ``query``.
+
+    Ranking: whole words in the title or tags first, then partial matches there,
+    then matches only in the summary or body.
+    """
+    words = fold(query).split()
+    if not words:
+        return posts
+    results = []
+    for post in posts:
+        head = fold(" ".join([post.title, *post.tags]))
+        text = " ".join([head, fold(post.summary), fold(post.body)])
+        if all(word in text for word in words):
+            score = sum((word in head) + 2 * bool(re.search(rf"\b{re.escape(word)}\b", head)) for word in words)
+            results.append((score, post))
+    # Stable sort keeps the newest-first order inside each relevance level.
+    return [post for _score, post in sorted(results, key=lambda item: -item[0])]
 
 
 def get_post(slug, lang):

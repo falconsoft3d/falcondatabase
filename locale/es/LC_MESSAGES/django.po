@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-25 17:49+0000\n"
+"POT-Creation-Date: 2026-10-25 17:56+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -597,7 +597,6 @@ msgid "added app user"
 msgstr "agregó al usuario de la app"
 
 #: projects/models.py:229
-#| msgid "signed-in"
 msgid "signed up"
 msgstr "se registró"
 
@@ -1296,7 +1295,7 @@ msgstr "Documentación"
 msgid "Sign out"
 msgstr "Cerrar sesión"
 
-#: templates/base.html:61 templates/core/extension.html:36
+#: templates/base.html:61 templates/core/extension.html:37
 #: templates/core/home.html:14 templates/portal/base.html:20
 #: templates/portal/home.html:11 templates/portal/login.html:19
 #: templates/portal/login.html:23 templates/registration/login.html:3
@@ -1353,7 +1352,7 @@ msgstr "Tutorial"
 msgid "Guide"
 msgstr "Guía"
 
-#: templates/blog/_category.html:1 templates/blog/index.html:13
+#: templates/blog/_category.html:1 templates/blog/index.html:22
 msgid "News"
 msgstr "Novedades"
 
@@ -1381,21 +1380,67 @@ msgstr ""
 "Tutoriales, guías y novedades para sacarle el máximo partido a "
 "falcondatabase."
 
-#: templates/blog/index.html:10
+#: templates/blog/index.html:14
+#| msgid "Search projects…"
+msgid "Search articles…"
+msgstr "Buscar artículos…"
+
+#: templates/blog/index.html:14
+#| msgid "Search projects…"
+msgid "Search articles"
+msgstr "Buscar artículos"
+
+#: templates/blog/index.html:15 templates/portal/table.html:13
+msgid "Search"
+msgstr "Buscar"
+
+#: templates/blog/index.html:18
+msgid "Categories"
+msgstr "Categorías"
+
+#: templates/blog/index.html:19
 msgid "All"
 msgstr "Todos"
 
-#: templates/blog/index.html:11
+#: templates/blog/index.html:22
 msgid "Tutorials"
 msgstr "Tutoriales"
 
-#: templates/blog/index.html:12
+#: templates/blog/index.html:22
 msgid "Guides"
 msgstr "Guías"
 
-#: templates/blog/index.html:22
-msgid "No articles in this category yet"
-msgstr "Aún no hay artículos en esta categoría"
+#: templates/blog/index.html:32
+#, python-format
+#| msgid "%(counter)s file"
+#| msgid_plural "%(counter)s files"
+msgid "%(counter)s article"
+msgid_plural "%(counter)s articles"
+msgstr[0] "%(counter)s artículo"
+msgstr[1] "%(counter)s artículos"
+
+#: templates/blog/index.html:35
+#| msgid "Available filters"
+msgid "Clear filters"
+msgstr "Quitar filtros"
+
+#: templates/blog/index.html:44
+#| msgid "All articles →"
+msgid "No articles found"
+msgstr "No se encontraron artículos"
+
+#: templates/blog/index.html:45
+msgid "Try other words or another category."
+msgstr "Prueba con otras palabras u otra categoría."
+
+#: templates/blog/index.html:46
+#| msgid "All articles →"
+msgid "See all articles"
+msgstr "Ver todos los artículos"
+
+#: templates/blog/index.html:52
+msgid "Topics"
+msgstr "Temas"
 
 #: templates/core/_api_reference.html:3
 msgid "Authenticating requests"
@@ -1885,7 +1930,11 @@ msgstr ""
 msgid "Download the extension"
 msgstr "Descargar la extensión"
 
-#: templates/core/extension.html:13
+#: templates/core/extension.html:13 templates/core/home.html:74
+msgid "Installation guide"
+msgstr "Guía de instalación"
+
+#: templates/core/extension.html:14
 msgid ""
 "Pre-configured for this server · Chrome, Edge, Brave and other Chromium "
 "browsers"
@@ -1893,15 +1942,15 @@ msgstr ""
 "Configurada para este servidor · Chrome, Edge, Brave y otros navegadores "
 "Chromium"
 
-#: templates/core/extension.html:16
+#: templates/core/extension.html:17
 msgid "The extension popup"
 msgstr "La ventana de la extensión"
 
-#: templates/core/extension.html:20
+#: templates/core/extension.html:21
 msgid "Key indicators"
 msgstr "Indicadores clave"
 
-#: templates/core/extension.html:21
+#: templates/core/extension.html:22
 msgid ""
 "Visitors, sessions, pageviews and bounce rate, compared with the previous "
 "period."
@@ -1909,20 +1958,20 @@ msgstr ""
 "Visitantes, sesiones, páginas vistas y tasa de rebote, comparados con el "
 "periodo anterior."
 
-#: templates/core/extension.html:22
+#: templates/core/extension.html:23
 msgid "Where visits come from"
 msgstr "De dónde vienen las visitas"
 
-#: templates/core/extension.html:23
+#: templates/core/extension.html:24
 msgid "Top pages, sources and countries, for all your projects or just one."
 msgstr ""
 "Páginas, fuentes y países principales, de todos tus proyectos o de uno solo."
 
-#: templates/core/extension.html:24
+#: templates/core/extension.html:25
 msgid "Secure sign-in"
 msgstr "Acceso seguro"
 
-#: templates/core/extension.html:25
+#: templates/core/extension.html:26
 msgid ""
 "Uses your account, with two-step authentication if you enabled it. Changing "
 "your password signs the extension out."
@@ -1930,15 +1979,15 @@ msgstr ""
 "Usa tu cuenta, con autenticación en dos pasos si la activaste. Cambiar tu "
 "contraseña cierra la sesión de la extensión."
 
-#: templates/core/extension.html:29
+#: templates/core/extension.html:30
 msgid "How to install it"
 msgstr "Cómo instalarla"
 
-#: templates/core/extension.html:32
+#: templates/core/extension.html:33
 msgid "Download and unzip"
 msgstr "Descarga y descomprime"
 
-#: templates/core/extension.html:32
+#: templates/core/extension.html:33
 msgid ""
 "Download the zip above and unzip it. You get a <code "
 "class=\"inline\">falcondatabase-extension</code> folder."
@@ -1946,29 +1995,29 @@ msgstr ""
 "Descarga el zip de arriba y descomprímelo. Obtendrás una carpeta <code "
 "class=\"inline\">falcondatabase-extension</code>."
 
-#: templates/core/extension.html:33
+#: templates/core/extension.html:34
 msgid "Open the extensions page"
 msgstr "Abre la página de extensiones"
 
-#: templates/core/extension.html:33
+#: templates/core/extension.html:34
 msgid "Type <code class=\"inline\">chrome://extensions</code> in the address bar."
 msgstr ""
 "Escribe <code class=\"inline\">chrome://extensions</code> en la barra de "
 "direcciones."
 
-#: templates/core/extension.html:34
+#: templates/core/extension.html:35
 msgid "Turn on developer mode"
 msgstr "Activa el modo de desarrollador"
 
-#: templates/core/extension.html:34
+#: templates/core/extension.html:35
 msgid "Use the switch in the top right corner."
 msgstr "Usa el interruptor de la esquina superior derecha."
 
-#: templates/core/extension.html:35
+#: templates/core/extension.html:36
 msgid "Load the folder"
 msgstr "Carga la carpeta"
 
-#: templates/core/extension.html:35
+#: templates/core/extension.html:36
 msgid ""
 "Click <strong>Load unpacked</strong> and choose the <code "
 "class=\"inline\">falcondatabase-extension</code> folder. Pin it from the "
@@ -1978,14 +2027,14 @@ msgstr ""
 "class=\"inline\">falcondatabase-extension</code>. Fíjala desde el icono del "
 "puzle para que quede visible."
 
-#: templates/core/extension.html:36
+#: templates/core/extension.html:37
 msgid ""
 "Click the icon and sign in with your falcondatabase username and password."
 msgstr ""
 "Pulsa el icono e inicia sesión con tu usuario y contraseña de "
 "falcondatabase."
 
-#: templates/core/extension.html:38
+#: templates/core/extension.html:39
 msgid ""
 "Chrome only installs extensions directly from the Chrome Web Store; until it"
 " is published there, it is installed this way. Updates: download the zip "
@@ -2118,27 +2167,27 @@ msgstr ""
 "Instala la extensión de Chrome, inicia sesión y ve las visitas de tus "
 "proyectos desde la barra del navegador."
 
-#: templates/core/home.html:73
+#: templates/core/home.html:75
 msgid "Get the Chrome extension"
 msgstr "Obtener la extensión de Chrome"
 
-#: templates/core/home.html:81
+#: templates/core/home.html:84
 msgid "Latest from the blog"
 msgstr "Lo último del blog"
 
-#: templates/core/home.html:82
+#: templates/core/home.html:85
 msgid "All articles →"
 msgstr "Todos los artículos →"
 
-#: templates/core/home.html:89
+#: templates/core/home.html:92
 msgid "That simple"
 msgstr "Así de simple"
 
-#: templates/core/home.html:91
+#: templates/core/home.html:94
 msgid "Create your account and a project"
 msgstr "Crea tu cuenta y un proyecto"
 
-#: templates/core/home.html:91
+#: templates/core/home.html:94
 msgid ""
 "You get an API URL and two keys: <code class=\"inline\">anon</code> for the "
 "browser and <code class=\"inline\">service</code> for your server."
@@ -2146,11 +2195,11 @@ msgstr ""
 "Obtienes una URL de API y dos claves: <code class=\"inline\">anon</code> "
 "para el navegador y <code class=\"inline\">service</code> para tu servidor."
 
-#: templates/core/home.html:92
+#: templates/core/home.html:95
 msgid "Add tables"
 msgstr "Agrega tablas"
 
-#: templates/core/home.html:92
+#: templates/core/home.html:95
 msgid ""
 "Define columns from the dashboard. They are created as real PostgreSQL "
 "tables."
@@ -2158,19 +2207,19 @@ msgstr ""
 "Define columnas desde el dashboard. Se crean como tablas reales en "
 "PostgreSQL."
 
-#: templates/core/home.html:93
+#: templates/core/home.html:96
 msgid "Enable login (optional)"
 msgstr "Activa el login (opcional)"
 
-#: templates/core/home.html:93
+#: templates/core/home.html:96
 msgid "Your users sign up and sign in from your frontend."
 msgstr "Tus usuarios se registran e inician sesión desde tu frontend."
 
-#: templates/core/home.html:94
+#: templates/core/home.html:97
 msgid "Query from your app"
 msgstr "Consulta desde tu app"
 
-#: templates/core/home.html:94
+#: templates/core/home.html:97
 msgid ""
 "Use <code class=\"inline\">fetch</code> or the <code "
 "class=\"inline\">falcondb.js</code> SDK."
@@ -2178,7 +2227,7 @@ msgstr ""
 "Usa <code class=\"inline\">fetch</code> o el SDK <code "
 "class=\"inline\">falcondb.js</code>."
 
-#: templates/core/home.html:94
+#: templates/core/home.html:97
 msgid "See the documentation →"
 msgstr "Ver documentación →"
 
@@ -2406,10 +2455,6 @@ msgstr "Continuar sin iniciar sesión"
 #: templates/portal/table.html:11
 msgid "Search…"
 msgstr "Buscar…"
-
-#: templates/portal/table.html:13
-msgid "Search"
-msgstr "Buscar"
 
 #: templates/portal/table.html:14
 msgid "Clear"
@@ -3518,3 +3563,6 @@ msgstr ""
 "Para subir se necesita un usuario de tu app con sesión o la service key. En "
 "los buckets privados, cada usuario solo ve, comparte y elimina los archivos "
 "que subió."
+
+#~ msgid "No articles in this category yet"
+#~ msgstr "Aún no hay artículos en esta categoría"

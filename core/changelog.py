@@ -6,6 +6,29 @@ Change kinds: "added", "improved", "fixed".
 
 RELEASES = [
     {
+        "version": "0.7.2",
+        "date": "2026-10-25",
+        "title": {"en": "Animated home page", "es": "Inicio animado"},
+        "changes": [
+            ("added", "Animated triangle mesh in the home page header that opens around the mouse.",
+                      "Malla de triángulos animada en la cabecera del inicio que se abre alrededor del ratón."),
+            ("improved", "README reorganized by topic, with new screenshots.", "README reorganizado por temas, con capturas nuevas."),
+        ],
+    },
+    {
+        "version": "0.7.1",
+        "date": "2026-10-25",
+        "title": {"en": "Blog search and categories", "es": "Búsqueda y categorías en el blog"},
+        "changes": [
+            ("added", "Search the blog: titles, summaries, tags and text, ignoring accents and capital letters.",
+                      "Busca en el blog: títulos, resúmenes, etiquetas y texto, sin importar tildes ni mayúsculas."),
+            ("added", "Blog categories with their number of articles, and clickable topics (tags) to filter.",
+                      "Categorías del blog con su número de artículos, y temas (etiquetas) clicables para filtrar."),
+            ("improved", "Link to the extension's installation guide on the home page and the extension page.",
+                         "Enlace a la guía de instalación de la extensión en el inicio y en la página de la extensión."),
+        ],
+    },
+    {
         "version": "0.7.0",
         "date": "2026-10-25",
         "title": {"en": "Teams, contributions and the Chrome extension", "es": "Equipos, contribuciones y la extensión de Chrome"},

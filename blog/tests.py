@@ -52,3 +52,41 @@ class BlogViewTests(TestCase):
 
     def test_home_shows_latest_articles(self):
         self.assertContains(self.get(reverse("home"), "en"), "Latest from the blog")
+
+
+class BlogSearchTests(TestCase):
+    def get(self, query, lang="en"):
+        return self.client.get(reverse("blog:index") + query, headers={"Accept-Language": lang})
+
+    def slugs(self, response):
+        return [p.slug for p in response.context["posts"]]
+
+    def test_search(self):
+        self.assertEqual(self.slugs(self.get("?q=install+extension")), ["chrome-extension"])
+        self.assertIn("chrome-extension", self.slugs(self.get("?q=EXTENSION")))
+        # Accents and case don't matter: "analitica" finds "Analítica".
+        spanish = self.slugs(self.get("?q=analitica", "es"))
+        self.assertIn("web-analytics-without-cookies", spanish)
+        self.assertEqual(self.slugs(self.get("?q=zzzz-nothing")), [])
+        self.assertContains(self.get("?q=zzzz-nothing"), "No articles found")
+
+    def test_title_matches_rank_first(self):
+        results = self.slugs(self.get("?q=portal"))
+        self.assertEqual(results[0], "project-portal")
+
+    def test_tags_and_combined_filters(self):
+        tagged = self.get("?tag=docker")
+        self.assertEqual(self.slugs(tagged), ["deploy-with-docker"])
+        combined = self.slugs(self.get("?category=guide&q=json"))
+        self.assertEqual(combined[0], "export-import-projects")  # "JSON" is in its title
+        self.assertTrue(all(blog_posts.get_post(s, "en").category == "guide" for s in combined))
+        self.assertEqual(self.get("?category=bogus").context["category"], None)
+
+    def test_categories_have_counts(self):
+        response = self.get("")
+        counts = dict(response.context["categories"])
+        self.assertEqual(sum(counts.values()), response.context["total"])
+        self.assertGreaterEqual(counts["tutorial"], 5)
+
+    def test_home_links_installation_guide(self):
+        self.assertContains(self.client.get(reverse("home")), reverse("blog:detail", args=["chrome-extension"]))

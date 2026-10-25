@@ -10,44 +10,54 @@ A simple, self-hosted alternative to Firebase and Supabase with a GitHub-style i
 Create projects, add real PostgreSQL tables and user login to them, and query everything from any frontend through a REST API or a tiny JavaScript SDK.
 
 - **Install on a server:** `./install.sh` (Docker, step by step). See **[DEPLOY.md](DEPLOY.md)**.
-- **Tutorials:** the built-in blog at `/blog/` has 17 articles in English and Spanish.
+- **Tutorials:** the built-in blog at `/blog/` has 17 articles in English and Spanish, with search, categories and topics.
+- **What's new:** the release history is at `/changelog/` (current version **0.7.2**).
 
 ## Features
 
-**For app builders**
+**Data and API**
 
 - **Projects** at `/<username>/<project>/`, each with its own PostgreSQL schema (`proj_<ref>`), API URL and two keys: `anon` (browser) and `service` (server).
 - **Real tables** with typed columns (`text`, `integer`, `bigint`, `decimal`, `float`, `boolean`, `date`, `datetime`, `json`, `uuid`), defaults (`now()`, `uuid()`), required and unique constraints.
 - **Data editor**: insert, edit, delete, sort and paginate rows; add or remove columns.
+- **REST API** with filters (`eq`, `gt`, `ilike`, `in`, `is`…), ordering, pagination and CORS.
+- **JavaScript SDK** with no dependencies, served at `/sdk/falcondb.js`: tables, login and storage.
+- **File storage**: public and private buckets per project, a file browser, uploads from your app and signed links that expire. A simple alternative to S3.
+- **Export / import** a project as JSON (structure, optionally with data), on the same or another server.
+
+**Apps and users**
+
 - **Login for your apps**: email/password sign up and sign in per project, user management in the dashboard.
 - **Access rules per table**: public, public read, signed-in users, owner (automatic `owner_id`) or private.
-- **REST API** with filters (`eq`, `gt`, `ilike`, `in`, `is`…), ordering, pagination and CORS.
-- **JavaScript SDK** with no dependencies, served at `/sdk/falcondb.js`.
-- **Web analytics** per project: enable it in the project's **Analytics** tab and paste one `<script>` tag on your website. It uses no cookies. You get charts for sessions, users and pageviews, plus breakdowns by country, medium, source, page, device, browser and OS. A combined page at `/analytics/` covers all your projects or a selection.
-- **Export / import**: download a project as JSON (structure, optionally with data) and import it as a new project, on the same or another server.
-- **Portal**: turn a project into a standalone app at `/app/<username>/<address>/`. The project's users sign in there and view or edit the tables you choose, with forms and search generated automatically.
-- **File storage**: public and private buckets per project, a file browser in the dashboard, uploads from your app, and signed links that expire. A simple alternative to S3.
+- **Portal**: turn a project into a standalone app at `/app/<username>/<address>/`, where its users view or edit the tables you choose with generated forms and search.
 
-**Platform**
+**Insights**
 
-- **English and Spanish** interface. Switch it from the header (also on the home page) or from your profile. API error messages follow `Accept-Language`.
-- **Light and dark mode**, following the system by default.
-- **Two-step authentication (TOTP)** for dashboard accounts, with 8 single-use recovery codes.
-- **A single admin** who sees every user at `/users/`, creates accounts, resets passwords and 2FA, and can turn public sign up off.
-- **Blog** with tutorials, guides and news (Markdown files, bilingual).
-- **Cookie notice** and cookie policy page (`/cookies/`). Only essential and preference cookies are used.
+- **Web analytics** per project with one cookie-free `<script>` tag: sessions, users, pageviews, countries, mediums, sources, pages, devices and browsers. `/analytics/` combines all your projects or a selection.
 - **Dashboard KPIs**: ten headline numbers (projects, tables, rows, storage, app users, new and active users, visitors, pageviews, bounce rate).
-- **Profile picture**, resized and stored in the database.
-- **Versions page** (`/changelog/`) with the release history. The current version is shown in the footer and returned by `/healthz`.
-- **Teams**: share a project with other accounts by email, as **editor** or **viewer**.
 - **Contribution graph** of the last year, GitHub style, for all your projects or one, plus a recent activity list per project.
-- **Chrome extension** with your analytics and today's visits on its icon, downloadable from `/extension/`.
+- **Chrome extension** with your analytics and today's visits on its icon: download it from `/extension/` and follow the installation guide in the blog.
+
+**Teams and accounts**
+
+- **Sharing**: invite other accounts to a project by email, as **editor** or **viewer**.
+- **Two-step authentication (TOTP)** with 8 single-use recovery codes, and a **profile picture**.
+- **A single admin** who sees every user at `/users/`, creates accounts, resets passwords and 2FA, turns public sign up off and can measure the visits to the site itself.
+
+**Site**
+
+- **English and Spanish** interface, switchable from the header or the profile. API errors follow `Accept-Language`.
+- **Light and dark mode**, following the system by default, with a validated color palette.
+- **Home page** with an animated triangle mesh that opens around the mouse (static when the system asks for reduced motion).
+- **Blog** with tutorials, guides and news in both languages, with **search**, **categories** and **topics**.
+- **Versions page** (`/changelog/`). The current version is shown in the footer and returned by `/healthz`.
+- **Cookie notice** and cookie policy (`/cookies/`): only essential and preference cookies.
 
 ## Screenshots
 
 | | |
 |---|---|
-| **Dashboard** with the ten key indicators<br><img alt="Dashboard" src="docs/screenshots/dashboard.png"> | **Data editor** of a table<br><img alt="Table data editor" src="docs/screenshots/table.png"> |
+| **Dashboard**: key indicators and contribution graph<br><img alt="Dashboard" src="docs/screenshots/dashboard.png"> | **Data editor** of a table<br><img alt="Table data editor" src="docs/screenshots/table.png"> |
 | **Web analytics** of a project<br><img alt="Web analytics" src="docs/screenshots/analytics.png"> | **Portal**: the project as a standalone app<br><img alt="Project portal" src="docs/screenshots/portal.png"> |
 | **Storage**: buckets and files<br><img alt="File storage" src="docs/screenshots/storage.png"> | **Chrome extension**<br><img alt="Chrome extension popup" src="docs/screenshots/extension.png" width="300"> |
 
@@ -312,7 +322,7 @@ storage/       buckets and files (files.py), API, public/signed downloads, file 
 blog/          Markdown blog (posts/<slug>.<lang>.md)
 locale/        Spanish translation (django.po)
 templates/     GitHub-style pages
-static/        CSS (light/dark tokens), dashboard JS and the SDK (falcondb.js)
+static/        CSS (light/dark tokens), dashboard JS, home mesh (mesh.js) and the SDK (falcondb.js)
 docker/        entrypoint and Caddyfile
 install.sh     step-by-step Docker installer
 ```

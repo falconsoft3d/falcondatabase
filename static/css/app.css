@@ -675,3 +675,25 @@ img.avatar { object-fit: cover; background: var(--bg-subtle); }
 .activity-list { list-style: none; margin: 0; padding: 0; }
 .activity-list li { display: flex; gap: 10px; align-items: baseline; padding: 8px 16px; border-top: 1px solid var(--border-muted); }
 .activity-list li:first-child { border-top: 0; }
+
+/* --- blog search & filters --------------------------------------------------- */
+.blog-search { display: flex; align-items: center; gap: 8px; max-width: 560px; margin: 16px 0 12px; padding: 4px 4px 4px 12px;
+  border: 1px solid var(--border); border-radius: 8px; background: var(--bg); }
+.blog-search input[type=search] { border: 0; background: none; box-shadow: none; padding: 4px 0; min-height: 28px; }
+.blog-search:focus-within { border-color: var(--link); box-shadow: 0 0 0 3px var(--focus-ring); }
+.blog-categories { display: flex; gap: 8px; flex-wrap: wrap; }
+.chip.active { border-color: var(--link); background: var(--tint-success); color: var(--fg); }
+a.chip { color: var(--fg); }
+a.chip:hover { text-decoration: none; border-color: var(--link); }
+a.tag:hover { text-decoration: underline; }
+.blog-tags { margin: 32px 0 8px; }
+.blog-tags h2 { text-transform: uppercase; letter-spacing: .06em; }
+
+/* --- home hero mesh -------------------------------------------------------------- */
+.hero > * { position: relative; z-index: 1; }
+.hero > .hero-mesh {
+  position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none;
+  /* Fade the mesh under the title so the text stays readable. */
+  -webkit-mask-image: radial-gradient(ellipse 46% 52% at 50% 42%, rgba(0, 0, 0, .25), #000 78%);
+  mask-image: radial-gradient(ellipse 46% 52% at 50% 42%, rgba(0, 0, 0, .25), #000 78%);
+}

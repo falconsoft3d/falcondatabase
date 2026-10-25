@@ -6,21 +6,56 @@
   <div class="container-md">
     <h1>{% translate "Blog" %}</h1>
     <p class="muted">{% translate "Tutorials, guides and news to get the most out of falcondatabase." %}</p>
-    <nav class="subnav" style="display:inline-flex;margin-top:8px">
-      <a href="{% url 'blog:index' %}" class="{% if not category %}selected{% endif %}">{% translate "All" %}</a>
-      <a href="?category=tutorial" class="{% if category == 'tutorial' %}selected{% endif %}">{% translate "Tutorials" %}</a>
-      <a href="?category=guide" class="{% if category == 'guide' %}selected{% endif %}">{% translate "Guides" %}</a>
-      <a href="?category=news" class="{% if category == 'news' %}selected{% endif %}">{% translate "News" %}</a>
+
+    <form method="get" class="blog-search" role="search">
+      {% if category %}<input type="hidden" name="category" value="{{ category }}">{% endif %}
+      {% if tag %}<input type="hidden" name="tag" value="{{ tag }}">{% endif %}
+      <span class="muted">{% icon 'search' 16 %}</span>
+      <input type="search" name="q" value="{{ query }}" placeholder="{% translate 'Search articles…' %}" aria-label="{% translate 'Search articles' %}">
+      <button class="btn btn-primary btn-sm" type="submit">{% translate "Search" %}</button>
+    </form>
+
+    <nav class="blog-categories" aria-label="{% translate 'Categories' %}">
+      <a href="?{% if query %}q={{ query|urlencode }}{% endif %}{% if tag %}&tag={{ tag|urlencode }}{% endif %}" class="chip {% if not category %}active{% endif %}">{% translate "All" %} <span class="counter">{{ total }}</span></a>
+      {% for value, count in categories %}
+        <a href="?category={{ value }}{% if query %}&q={{ query|urlencode }}{% endif %}{% if tag %}&tag={{ tag|urlencode }}{% endif %}" class="chip {% if category == value %}active{% endif %}">
+          {% if value == "tutorial" %}{% translate "Tutorials" %}{% elif value == "guide" %}{% translate "Guides" %}{% else %}{% translate "News" %}{% endif %}
+          <span class="counter">{{ count }}</span></a>
+      {% endfor %}
     </nav>
   </div>
 </section>
+
 <div class="container-md">
+  {% if filtered %}
+    <div class="row small" style="margin-bottom:16px;flex-wrap:wrap">
+      <span class="muted">{% blocktranslate count counter=posts|length %}{{ counter }} article{% plural %}{{ counter }} articles{% endblocktranslate %}</span>
+      {% if query %}<span class="label">“{{ query }}”</span>{% endif %}
+      {% if tag %}<span class="label label-accent">#{{ tag }}</span>{% endif %}
+      <a href="{% url 'blog:index' %}">{% translate "Clear filters" %}</a>
+    </div>
+  {% endif %}
+
   <div class="post-grid">
     {% for post in posts %}
       {% include "blog/_card.html" %}
     {% empty %}
-      <div class="box blankslate">{% icon 'book' 28 %}<h3>{% translate "No articles in this category yet" %}</h3></div>
+      <div class="box blankslate" style="grid-column:1/-1">{% icon 'search' 28 %}
+        <h3>{% translate "No articles found" %}</h3>
+        <p class="muted">{% translate "Try other words or another category." %}</p>
+        <a class="btn" href="{% url 'blog:index' %}">{% translate "See all articles" %}</a></div>
     {% endfor %}
   </div>
+
+  {% if tags %}
+    <section class="blog-tags">
+      <h2 class="small muted">{% translate "Topics" %}</h2>
+      <div class="row" style="flex-wrap:wrap;gap:6px">
+        {% for name, count in tags %}
+          <a class="chip {% if tag == name %}active{% endif %}" href="?tag={{ name|urlencode }}">#{{ name }} <span class="counter">{{ count }}</span></a>
+        {% endfor %}
+      </div>
+    </section>
+  {% endif %}
 </div>
 {% endblock %}
