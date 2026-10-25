@@ -13,12 +13,25 @@ falcondatabase incluye una configuración de Docker y un instalador que hace una
 - **Docker** con el plugin **Compose**.
 - Para HTTPS: un dominio (por ejemplo `db.ejemplo.com`) cuyo **registro A** apunte al servidor, y los puertos **80** y **443** abiertos.
 
-Instala Docker en Ubuntu o Debian con el script oficial:
+En un servidor nuevo, primero actualiza el sistema y abre el cortafuegos:
+
+```bash
+sudo apt update && sudo apt full-upgrade -y
+sudo apt install -y git curl ufw unattended-upgrades
+sudo ufw allow OpenSSH && sudo ufw allow 80,443/tcp && sudo ufw enable
+```
+
+Después instala Docker con el script oficial y compruébalo:
 
 ```bash
 curl -fsSL https://get.docker.com | sudo sh
+sudo systemctl enable --now docker
 sudo usermod -aG docker $USER   # luego cierra sesión y vuelve a entrar
+docker compose version
+docker run --rm hello-world
 ```
+
+DEPLOY.md explica cada paso, además de la instalación desde el repositorio apt oficial, el swap para servidores pequeños y un usuario que no sea root.
 
 ## 1. Descarga el código
 
@@ -80,11 +93,20 @@ docker compose logs -f web     # logs
 docker compose restart web     # reiniciar la app
 ```
 
-Actualizar a una versión nueva (tus datos y tu `.env` se conservan):
+Mantén el servidor al día (una vez al mes es un buen hábito). Haz antes una copia de seguridad (ver abajo) y luego:
 
 ```bash
+# 1. Sistema operativo y Docker
+sudo apt update && sudo apt full-upgrade -y && sudo apt autoremove -y
+[ -f /var/run/reboot-required ] && sudo reboot   # la app vuelve a arrancar sola
+
+# 2. falcondatabase (tus datos y el .env se conservan)
 git pull
-./install.sh
+./install.sh                    # también descarga las últimas imágenes de PostgreSQL 16 y Caddy
+
+# 3. Limpia y comprueba la versión
+docker image prune -f
+curl -s http://127.0.0.1:8000/healthz
 ```
 
 Copia de seguridad de la base de datos:

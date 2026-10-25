@@ -11,7 +11,7 @@ Create projects, add real PostgreSQL tables and user login to them, and query ev
 
 - **Install on a server:** `./install.sh` (Docker, step by step). See **[DEPLOY.md](DEPLOY.md)**.
 - **Tutorials:** the built-in blog at `/blog/` has 17 articles in English and Spanish, with search, categories and topics.
-- **What's new:** the release history is at `/changelog/` (current version **0.7.2**).
+- **What's new:** the release history is at `/changelog/` (current version **0.7.4**).
 
 ## Features
 
@@ -65,7 +65,26 @@ Screenshots are stored in `docs/screenshots/`.
 
 ## Quick start with Docker
 
-On a Linux server or your computer with Docker installed:
+### 1. Prepare the server and install Docker
+
+On a fresh Ubuntu 22.04/24.04 or Debian 12 server:
+
+```bash
+# Update the system and open the firewall
+sudo apt update && sudo apt full-upgrade -y
+sudo apt install -y git curl ufw unattended-upgrades
+sudo ufw allow OpenSSH && sudo ufw allow 80,443/tcp && sudo ufw enable
+
+# Install Docker with the Compose plugin and start it on boot
+curl -fsSL https://get.docker.com | sudo sh
+sudo systemctl enable --now docker
+sudo usermod -aG docker $USER        # log out and back in afterwards
+docker compose version               # check it works
+```
+
+[DEPLOY.md](DEPLOY.md#prepare-the-server) explains every step, with the official apt repository install, a non-root user, automatic security updates and swap for small servers.
+
+### 2. Install falcondatabase
 
 ```bash
 git clone https://github.com/falconsoft3d/falcondatabase.git
@@ -75,7 +94,18 @@ cd falcondatabase
 
 The installer checks the requirements, asks a few questions (domain, HTTPS, port, language, admin account), generates `.env` with random secrets, builds the image, starts PostgreSQL and the app, and creates your admin account.
 
-[DEPLOY.md](DEPLOY.md) covers HTTPS, updates, backups and troubleshooting.
+### 3. Keep it up to date
+
+Back up first ([how](DEPLOY.md#backups-and-restore)), then:
+
+```bash
+sudo apt update && sudo apt full-upgrade -y        # system and Docker
+[ -f /var/run/reboot-required ] && sudo reboot     # falcondatabase starts again on its own
+cd falcondatabase && git pull && ./install.sh      # new version, latest PostgreSQL/Caddy images
+docker image prune -f                              # remove old images
+```
+
+Your data and `.env` are kept. [DEPLOY.md](DEPLOY.md#keeping-the-server-up-to-date) has the full routine, including major PostgreSQL upgrades, and also covers HTTPS, backups and troubleshooting.
 
 ## Local development
 

@@ -151,7 +151,7 @@ sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin d
 sudo systemctl enable --now docker
 ```
 
-On **Debian**, use the same commands but replace `linux/ubuntu` with `linux/debian` in steps 2 (both lines).
+On **Debian**, use the same commands but replace `linux/ubuntu` with `linux/debian` in step 2 (in the key URL and in the repository line).
 
 ### Option B — The quick script
 
@@ -563,7 +563,7 @@ All settings live in `.env`. After editing it, apply the changes with `docker co
 | `The Docker daemon is not running` | Start Docker (`sudo systemctl start docker`). For `permission denied` on the socket: `sudo usermod -aG docker $USER`, then log in again. |
 | `port is already allocated` | Another service uses the port. Change `FALCONDB_PORT` in `.env` (or stop the other service) and run `docker compose up -d`. |
 | The installer says the app did not answer in time | Read `docker compose logs web`. Common causes: a wrong value in `.env`, or the server ran out of memory during the first start. |
-| `Bad Request (400)` in the browser | The host name isn't in `ALLOWED_HOSTS`. Add it and run `docker compose up -d`. |
+| `Bad Request (400)` in the browser | The address you typed isn't in `ALLOWED_HOSTS` (usually because the install was left on `localhost`). Run `./install.sh` again: it asks for the domain or IP and fixes `.env`. Or non-interactively: `FALCONDB_DOMAIN=203.0.113.10 ./install.sh --yes`. By hand: put the address in `ALLOWED_HOSTS`, `CSRF_TRUSTED_ORIGINS` and `FALCONDB_PUBLIC_URL` in `.env`, then `docker compose up -d`. |
 | `Forbidden (403) CSRF verification failed` when signing in | `CSRF_TRUSTED_ORIGINS` must match the exact URL in the browser (scheme, host and port). Behind HTTPS also set `USE_HTTPS=true`. |
 | Caddy can't get a certificate | Check that DNS points to the server (`dig +short db.example.com`) and that ports 80/443 are reachable from the internet. See `docker compose logs caddy`. |
 | `unexpected character … in variable name` when running Compose | Old Compose versions need values with spaces or accents in quotes: `FALCONDB_CONTACT_NAME="Marlon Falcon Hernández"`. The installer already writes them that way. |

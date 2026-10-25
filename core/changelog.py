@@ -6,6 +6,30 @@ Change kinds: "added", "improved", "fixed".
 
 RELEASES = [
     {
+        "version": "0.7.4",
+        "date": "2026-10-25",
+        "title": {"en": "Installer: server address", "es": "Instalador: dirección del servidor"},
+        "changes": [
+            ("fixed", "\"Bad Request (400)\" when opening an install by its IP: the installer now suggests the server's IP instead of localhost and accepts it too.",
+                      "\"Bad Request (400)\" al abrir una instalación por su IP: el instalador ahora propone la IP del servidor en lugar de localhost y también la acepta."),
+            ("improved", "Running ./install.sh again on an install left on localhost asks for the address and fixes .env.",
+                         "Volver a ejecutar ./install.sh en una instalación que quedó en localhost pide la dirección y corrige el .env."),
+        ],
+    },
+    {
+        "version": "0.7.3",
+        "date": "2026-10-25",
+        "title": {"en": "Server setup and updates guide", "es": "Guía de preparación y actualización del servidor"},
+        "changes": [
+            ("added", "DEPLOY.md: preparing a fresh server (updates, user, firewall, swap) and installing Docker step by step.",
+                      "DEPLOY.md: preparar un servidor nuevo (actualizaciones, usuario, cortafuegos, swap) e instalar Docker paso a paso."),
+            ("added", "DEPLOY.md: routine to keep the server, Docker, falcondatabase and its images up to date.",
+                      "DEPLOY.md: rutina para mantener al día el servidor, Docker, falcondatabase y sus imágenes."),
+            ("improved", "The installer also downloads the latest PostgreSQL and Caddy images when updating.",
+                         "El instalador también descarga las últimas imágenes de PostgreSQL y Caddy al actualizar."),
+        ],
+    },
+    {
         "version": "0.7.2",
         "date": "2026-10-25",
         "title": {"en": "Animated home page", "es": "Inicio animado"},

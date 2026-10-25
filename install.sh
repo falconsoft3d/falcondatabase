@@ -25,7 +25,9 @@ Usage: ./install.sh [--yes] [--force] [--help]
 
   --yes     Don't ask questions. Values come from these environment variables
             (defaults in brackets):
-              FALCONDB_DOMAIN          [localhost]  domain or IP address of the server
+              FALCONDB_DOMAIN          [server IP]  domain or IP address of the server
+                                                    (on an update: changes the address of an
+                                                    HTTP install)
               FALCONDB_HTTPS           [no]         "yes" to enable HTTPS with Caddy
               FALCONDB_PORT            [8000]       HTTP port when HTTPS is disabled
               FALCONDB_LANGUAGE        [en]         default interface language: en or es
@@ -109,6 +111,36 @@ is_ip_or_local() {
   [[ "$1" == "localhost" || "$1" =~ ^[0-9.]+$ || "$1" == *:* ]]
 }
 
+env_set() {
+  local tmp; tmp="$(mktemp)"
+  awk -v key="$1" -v value="$2" '
+    $0 ~ "^" key "=" { print key "=" value; found = 1; next } { print }
+    END { if (!found) print key "=" value }' "$ENV_FILE" > "$tmp"
+  cat "$tmp" > "$ENV_FILE"   # keeps the file's private permissions
+  rm -f "$tmp"
+}
+
+# Main IPv4 address of this server (the one used to reach the internet). Nothing is sent.
+detect_ip() {
+  local ip=""
+  if command -v ip >/dev/null 2>&1; then
+    ip="$(ip -4 route get 1.1.1.1 2>/dev/null | awk '{ for (i = 1; i < NF; i++) if ($i == "src") { print $(i + 1); exit } }' || true)"
+  fi
+  if [ -z "$ip" ] && hostname -I >/dev/null 2>&1; then
+    ip="$(hostname -I | awk '{ print $1 }' || true)"
+  fi
+  printf '%s' "$ip"
+}
+
+# Host names Django accepts for an HTTP install: the address, the server IP and localhost.
+http_hosts() {
+  local hosts="$1"
+  [ -n "$DETECTED_IP" ] && [ "$DETECTED_IP" != "$1" ] && hosts="$hosts,$DETECTED_IP"
+  printf '%s,localhost,127.0.0.1' "$hosts"
+}
+
+DETECTED_IP="$(detect_ip)"
+
 printf '%s\n' "${BOLD}falcondatabase installer${RESET}"
 printf '%s\n' "${DIM}Django + PostgreSQL backend for your apps — Docker setup${RESET}"
 
@@ -159,7 +191,8 @@ GENERATED_PASSWORD=""
 if $FIRST_INSTALL; then
   info "Answer a few questions. Press Enter to accept the value in brackets."
   echo
-  ask FALCONDB_DOMAIN "Domain or IP address of this server" "localhost"
+  info "${DIM}Use the domain or the public IP that you'll type in the browser.${RESET}"
+  ask FALCONDB_DOMAIN "Domain or IP address of this server" "${DETECTED_IP:-localhost}"
   FALCONDB_HTTPS_ENABLED=false
   if is_ip_or_local "$FALCONDB_DOMAIN"; then
     info "${DIM}HTTPS needs a real domain name; it stays disabled for $FALCONDB_DOMAIN.${RESET}"
@@ -192,7 +225,7 @@ if $FIRST_INSTALL; then
     FALCONDB_BIND="127.0.0.1"
   else
     PUBLIC_URL="http://$FALCONDB_DOMAIN:$FALCONDB_PORT"
-    ALLOWED_HOSTS="$FALCONDB_DOMAIN,localhost,127.0.0.1"
+    ALLOWED_HOSTS="$(http_hosts "$FALCONDB_DOMAIN")"
     FALCONDB_BIND="0.0.0.0"
   fi
 
@@ -231,6 +264,25 @@ ENV
   ok "Configuration written to $ENV_FILE (with random secrets)"
 fi
 
+# Change the address of an existing HTTP install. Installs left on "localhost" only
+# answer on the server itself (other computers get "Bad Request (400)"), so ask.
+if ! $FIRST_INSTALL && [ "$(env_get USE_HTTPS)" != "true" ]; then
+  CURRENT_DOMAIN="$(env_get FALCONDB_DOMAIN)"
+  NEW_DOMAIN="${FALCONDB_DOMAIN:-}"
+  if [ -z "$NEW_DOMAIN" ] && ! $ASSUME_YES && [[ "$CURRENT_DOMAIN" == "localhost" || "$CURRENT_DOMAIN" == "127.0.0.1" ]]; then
+    warn "falcondatabase only answers on $CURRENT_DOMAIN: other computers get \"Bad Request (400)\"."
+    ask NEW_DOMAIN "Domain or IP address of this server" "${DETECTED_IP:-$CURRENT_DOMAIN}"
+  fi
+  if [ -n "$NEW_DOMAIN" ] && [ "$NEW_DOMAIN" != "$CURRENT_DOMAIN" ]; then
+    NEW_URL="http://$NEW_DOMAIN:$(env_get FALCONDB_PORT)"
+    env_set FALCONDB_DOMAIN "$NEW_DOMAIN"
+    env_set ALLOWED_HOSTS "$(http_hosts "$NEW_DOMAIN")"
+    env_set CSRF_TRUSTED_ORIGINS "$NEW_URL"
+    env_set FALCONDB_PUBLIC_URL "$NEW_URL"
+    ok "Address changed to $NEW_URL"
+  fi
+fi
+
 USE_HTTPS="$(env_get USE_HTTPS)"
 PUBLIC_URL="$(env_get FALCONDB_PUBLIC_URL)"
 PORT="$(env_get FALCONDB_PORT)"
@@ -245,6 +297,12 @@ elif [ -f "$OVERRIDE_FILE" ] && grep -q "Caddy" "$OVERRIDE_FILE"; then
 fi
 
 # --- 3. build -----------------------------------------------------------------
+
+step "Downloading the latest PostgreSQL and Caddy images"
+PULL_SERVICES=(db)
+[ "$USE_HTTPS" = "true" ] && PULL_SERVICES+=(caddy)
+"${COMPOSE[@]}" pull --quiet "${PULL_SERVICES[@]}"
+ok "Images up to date"
 
 step "Building the application image (this can take a few minutes the first time)"
 "${COMPOSE[@]}" build --pull
