@@ -27,6 +27,11 @@ button.primary { width: 100%; padding: 8px; border: 0; border-radius: 6px; backg
 .error { color: var(--bad); margin: 0 0 10px; }
 .filters { display: flex; gap: 8px; }
 .filters select { margin: 0; }
+button.icon { flex: none; width: 32px; font-size: 16px; line-height: 1; color: var(--fg); background: var(--bg); border: 1px solid var(--border); border-radius: 6px; cursor: pointer; }
+button.icon:hover { border-color: var(--link); color: var(--link); }
+button.icon:disabled { cursor: default; opacity: .6; }
+button.icon.spinning { animation: spin .8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
 #status { margin: 8px 0 0; min-height: 1em; }
 .kpis { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 8px 0; }
 .kpi { border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; }

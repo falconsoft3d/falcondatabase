@@ -24,5 +24,6 @@
   "openAnalytics": { "message": "Abrir la analítica completa" },
   "today": { "message": "Hoy: $COUNT$ páginas vistas", "placeholders": { "count": { "content": "$1" } } },
   "sessionExpired": { "message": "Tu sesión caducó. Inicia sesión de nuevo." },
+  "refresh": { "message": "Actualizar" },
   "loading": { "message": "Cargando…" }
 }

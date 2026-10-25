@@ -6,12 +6,27 @@ Change kinds: "added", "improved", "fixed".
 
 RELEASES = [
     {
+        "version": "0.7.5",
+        "date": "2026-10-25",
+        "title": {"en": "Extension: refresh button", "es": "Extensión: botón de actualizar"},
+        "changes": [
+            ("added", "Refresh button in the Chrome extension to reload the statistics without closing it.",
+                      "Botón de actualizar en la extensión de Chrome para recargar las estadísticas sin cerrarla."),
+            ("fixed", "Changing the project or the period in the extension always shows that selection's KPIs: late answers are ignored and a failed load no longer leaves the previous numbers.",
+                      "Al cambiar de proyecto o de periodo en la extensión se ven siempre los KPI de esa selección: se ignoran respuestas tardías y una carga fallida ya no deja los números anteriores."),
+        ],
+    },
+    {
         "version": "0.7.4",
         "date": "2026-10-25",
         "title": {"en": "Installer: server address", "es": "Instalador: dirección del servidor"},
         "changes": [
             ("fixed", "\"Bad Request (400)\" when opening an install by its IP: the installer now suggests the server's IP instead of localhost and accepts it too.",
                       "\"Bad Request (400)\" al abrir una instalación por su IP: el instalador ahora propone la IP del servidor en lugar de localhost y también la acepta."),
+            ("fixed", "\"CSRF verification failed\" when the site is opened through https:// and the proxy doesn't tell the app: your own domains are now trusted with https.",
+                      "\"La verificación CSRF ha fallado\" al abrir la web por https:// cuando el proxy no se lo indica a la app: ahora tus propios dominios se aceptan con https."),
+            ("improved", "A rejected form shows a clear page with the reason, instead of Django's generic error.",
+                         "Un formulario rechazado muestra una página clara con el motivo, en lugar del error genérico de Django."),
             ("improved", "Running ./install.sh again on an install left on localhost asks for the address and fixes .env.",
                          "Volver a ejecutar ./install.sh en una instalación que quedó en localhost pide la dirección y corrige el .env."),
             ("added", "Step-by-step guide in Spanish to update the server: docs/actualizar-servidor.md.",

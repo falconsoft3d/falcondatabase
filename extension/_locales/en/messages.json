@@ -24,5 +24,6 @@
   "openAnalytics": { "message": "Open full analytics" },
   "today": { "message": "Today: $COUNT$ pageviews", "placeholders": { "count": { "content": "$1" } } },
   "sessionExpired": { "message": "Your session expired. Sign in again." },
+  "refresh": { "message": "Refresh" },
   "loading": { "message": "Loading…" }
 }

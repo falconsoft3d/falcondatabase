@@ -30,7 +30,7 @@ async function call(server, path, { method = "GET", token, body } = {}) {
   if (token) headers.Authorization = `Bearer ${token}`;
   if (body) headers["Content-Type"] = "application/json";
   try {
-    const response = await fetch(`${server}${path}`, { method, headers, body: body ? JSON.stringify(body) : undefined });
+    const response = await fetch(`${server}${path}`, { method, headers, cache: "no-store", body: body ? JSON.stringify(body) : undefined });
     const data = await response.json().catch(() => ({}));
     return response.ok ? { data, error: null } : { data, error: { status: response.status, message: data.error || response.statusText } };
   } catch (err) {

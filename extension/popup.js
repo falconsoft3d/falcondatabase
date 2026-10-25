@@ -10,6 +10,7 @@ let regions = null;
 try { regions = new Intl.DisplayNames([lang], { type: "region" }); } catch { /* keep codes */ }
 
 document.querySelectorAll("[data-i18n]").forEach((node) => { node.textContent = t(node.dataset.i18n); });
+document.querySelectorAll("[data-i18n-title]").forEach((node) => { node.title = node.ariaLabel = t(node.dataset.i18nTitle); });
 
 function showLogin(message) {
   $("stats").hidden = true;
@@ -171,7 +172,18 @@ function fillSelect(select, options, selected) {
   }));
 }
 
+let lastRequest = 0;
+
+function clearReport() {
+  $("kpis").replaceChildren();
+  $("chart").replaceChildren();
+  $("readout").textContent = "";
+  ["pages", "sources", "countries"].forEach((id) => $(id).replaceChildren());
+  $("today").textContent = "";
+}
+
 async function render() {
+  const request = ++lastRequest;
   const state = await loadState();
   if (!state.token) {
     $("server").value = state.server || DEFAULT_SERVER;
@@ -183,19 +195,27 @@ async function render() {
   $("who").textContent = state.user ? state.user.username : "";
   $("status").textContent = t("loading");
   $("stats").style.opacity = ".6";   // keep the previous render while loading
+  $("refresh").disabled = true;
+  $("refresh").classList.add("spinning");
 
   const { data, error } = await fetchAnalytics(state);
+  if (request !== lastRequest) return;   // a newer request (another filter or a refresh) is on its way
   $("stats").style.opacity = "";
+  $("refresh").disabled = false;
+  $("refresh").classList.remove("spinning");
   if (error) {
     if (error.status === 401) {
       await saveState({ token: null });
       return showLogin(t("sessionExpired"));
     }
+    clearReport();   // don't leave another project's numbers on screen
     $("status").textContent = error.message;
     return;
   }
+  // The server falls back to all projects when the selected one no longer exists.
+  if (state.project && data.selected !== state.project) await saveState({ project: "" });
   $("status").textContent = data.report.totals.pageviews ? "" : t("noData");
-  fillSelect($("project"), [["", t("allProjects")], ...data.projects.map((p) => [p.ref, p.name])], state.project);
+  fillSelect($("project"), [["", t("allProjects")], ...data.projects.map((p) => [p.ref, p.name])], data.selected);
   fillSelect($("days"), [7, 14, 30, 90].map((d) => [d, t("days", String(d))]), state.days);
   renderKpis(data.report);
   renderChart(data.report.series);
@@ -210,5 +230,6 @@ async function render() {
 
 $("project").addEventListener("change", async (e) => { await saveState({ project: e.target.value }); render(); });
 $("days").addEventListener("change", async (e) => { await saveState({ days: Number(e.target.value) }); render(); });
+$("refresh").addEventListener("click", () => render());
 
 render();
