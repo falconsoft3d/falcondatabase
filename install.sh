@@ -26,9 +26,9 @@ Usage: ./install.sh [--yes] [--force] [--help]
   --yes     Don't ask questions. Values come from these environment variables
             (defaults in brackets):
               FALCONDB_DOMAIN          [server IP]  domain or IP address of the server
-                                                    (on an update: changes the address of an
-                                                    HTTP install)
+                                                    (on an update: changes the address)
               FALCONDB_HTTPS           [no]         "yes" to enable HTTPS with Caddy
+                                                    (on an update: "yes"/"no" switches it)
               FALCONDB_PORT            [8000]       HTTP port when HTTPS is disabled
               FALCONDB_LANGUAGE        [en]         default interface language: en or es
               FALCONDB_ADMIN_USERNAME  [admin-user]
@@ -132,10 +132,13 @@ detect_ip() {
   printf '%s' "$ip"
 }
 
-# Host names Django accepts for an HTTP install: the address, the server IP and localhost.
+# Host names Django accepts for an HTTP install: the address, the server IP,
+# an optional previous address (so the old URL keeps working) and localhost.
 http_hosts() {
-  local hosts="$1"
-  [ -n "$DETECTED_IP" ] && [ "$DETECTED_IP" != "$1" ] && hosts="$hosts,$DETECTED_IP"
+  local hosts="$1" extra
+  for extra in "$DETECTED_IP" "${2:-}"; do
+    if [ -n "$extra" ] && [[ ",$hosts,localhost,127.0.0.1," != *",$extra,"* ]]; then hosts="$hosts,$extra"; fi
+  done
   printf '%s,localhost,127.0.0.1' "$hosts"
 }
 
@@ -264,19 +267,43 @@ ENV
   ok "Configuration written to $ENV_FILE (with random secrets)"
 fi
 
-# Change the address of an existing HTTP install. Installs left on "localhost" only
-# answer on the server itself (other computers get "Bad Request (400)"), so ask.
-if ! $FIRST_INSTALL && [ "$(env_get USE_HTTPS)" != "true" ]; then
+# Change the address (or switch to HTTPS) of an existing install:
+#   FALCONDB_DOMAIN=db.example.com [FALCONDB_HTTPS=yes] ./install.sh --yes
+# Installs left on "localhost" only answer on the server itself (other computers
+# get "Bad Request (400)"), so for those the address is asked.
+if ! $FIRST_INSTALL; then
   CURRENT_DOMAIN="$(env_get FALCONDB_DOMAIN)"
+  CURRENT_HTTPS="$(env_get USE_HTTPS)"
   NEW_DOMAIN="${FALCONDB_DOMAIN:-}"
-  if [ -z "$NEW_DOMAIN" ] && ! $ASSUME_YES && [[ "$CURRENT_DOMAIN" == "localhost" || "$CURRENT_DOMAIN" == "127.0.0.1" ]]; then
+  if [ -z "$NEW_DOMAIN" ] && ! $ASSUME_YES && [ "$CURRENT_HTTPS" != "true" ] \
+     && [[ "$CURRENT_DOMAIN" == "localhost" || "$CURRENT_DOMAIN" == "127.0.0.1" ]]; then
     warn "falcondatabase only answers on $CURRENT_DOMAIN: other computers get \"Bad Request (400)\"."
     ask NEW_DOMAIN "Domain or IP address of this server" "${DETECTED_IP:-$CURRENT_DOMAIN}"
   fi
-  if [ -n "$NEW_DOMAIN" ] && [ "$NEW_DOMAIN" != "$CURRENT_DOMAIN" ]; then
-    NEW_URL="http://$NEW_DOMAIN:$(env_get FALCONDB_PORT)"
+  NEW_DOMAIN="${NEW_DOMAIN:-$CURRENT_DOMAIN}"
+  case "${FALCONDB_HTTPS:-}" in
+    yes) NEW_HTTPS=true ;;
+    no) NEW_HTTPS=false ;;
+    *) NEW_HTTPS="$CURRENT_HTTPS" ;;
+  esac
+  if [ "$NEW_HTTPS" = "true" ] && is_ip_or_local "$NEW_DOMAIN"; then
+    fail "HTTPS needs a domain name, not $NEW_DOMAIN. Run: FALCONDB_DOMAIN=db.example.com FALCONDB_HTTPS=yes ./install.sh --yes"
+  fi
+  if [ "$NEW_DOMAIN" != "$CURRENT_DOMAIN" ] || [ "$NEW_HTTPS" != "$CURRENT_HTTPS" ]; then
+    if [ "$NEW_HTTPS" = "true" ]; then
+      NEW_URL="https://$NEW_DOMAIN"
+      env_set ALLOWED_HOSTS "$NEW_DOMAIN,localhost,127.0.0.1"
+      env_set FALCONDB_PORT 8000
+      env_set FALCONDB_BIND 127.0.0.1   # only Caddy is reachable from outside
+    else
+      NEW_PORT="${FALCONDB_PORT:-$(env_get FALCONDB_PORT)}"
+      NEW_URL="http://$NEW_DOMAIN:${NEW_PORT:-8000}"
+      env_set ALLOWED_HOSTS "$(http_hosts "$NEW_DOMAIN" "$CURRENT_DOMAIN")"
+      env_set FALCONDB_PORT "${NEW_PORT:-8000}"
+      env_set FALCONDB_BIND 0.0.0.0
+    fi
+    env_set USE_HTTPS "$NEW_HTTPS"
     env_set FALCONDB_DOMAIN "$NEW_DOMAIN"
-    env_set ALLOWED_HOSTS "$(http_hosts "$NEW_DOMAIN")"
     env_set CSRF_TRUSTED_ORIGINS "$NEW_URL"
     env_set FALCONDB_PUBLIC_URL "$NEW_URL"
     ok "Address changed to $NEW_URL"

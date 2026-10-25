@@ -316,11 +316,27 @@ server {
 }
 ```
 
+### Changing the address of an existing install
+
+Started with the IP and now have a domain? Run the installer again with the new address. It updates `ALLOWED_HOSTS`, `CSRF_TRUSTED_ORIGINS` and `FALCONDB_PUBLIC_URL` in `.env` and keeps everything else (data, secrets, admin):
+
+```bash
+FALCONDB_DOMAIN=db.example.com ./install.sh --yes      # http://db.example.com:8000 (the old address keeps working)
+```
+
 ### Switching an existing HTTP install to HTTPS
 
-1. Point the domain's DNS to the server and open ports 80/443.
-2. Edit `.env`: set `FALCONDB_DOMAIN`, `USE_HTTPS=true`, `FALCONDB_BIND=127.0.0.1`, `FALCONDB_PORT=8000`, add the domain to `ALLOWED_HOSTS`, and set `CSRF_TRUSTED_ORIGINS` and `FALCONDB_PUBLIC_URL` to `https://<domain>`.
-3. Run `./install.sh` again. With `USE_HTTPS=true` it enables Caddy.
+1. Point the domain's DNS **A record** to the server (`dig +short db.example.com` must print the server IP).
+2. Open ports 80 and 443: `sudo ufw allow 80,443/tcp`.
+3. Run:
+
+   ```bash
+   FALCONDB_DOMAIN=db.example.com FALCONDB_HTTPS=yes ./install.sh --yes
+   ```
+
+   It enables Caddy, which gets the Let's Encrypt certificate, moves the app behind it (port 8000 is no longer reachable from outside) and sets the `https://` address in `.env`. Open `https://db.example.com`.
+
+`FALCONDB_HTTPS=no` switches back to plain HTTP.
 
 ## Manual install (without the script)
 
@@ -563,7 +579,7 @@ All settings live in `.env`. After editing it, apply the changes with `docker co
 | `The Docker daemon is not running` | Start Docker (`sudo systemctl start docker`). For `permission denied` on the socket: `sudo usermod -aG docker $USER`, then log in again. |
 | `port is already allocated` | Another service uses the port. Change `FALCONDB_PORT` in `.env` (or stop the other service) and run `docker compose up -d`. |
 | The installer says the app did not answer in time | Read `docker compose logs web`. Common causes: a wrong value in `.env`, or the server ran out of memory during the first start. |
-| `Bad Request (400)` in the browser | The address you typed isn't in `ALLOWED_HOSTS` (usually because the install was left on `localhost`). Run `./install.sh` again: it asks for the domain or IP and fixes `.env`. Or non-interactively: `FALCONDB_DOMAIN=203.0.113.10 ./install.sh --yes`. By hand: put the address in `ALLOWED_HOSTS`, `CSRF_TRUSTED_ORIGINS` and `FALCONDB_PUBLIC_URL` in `.env`, then `docker compose up -d`. |
+| `Bad Request (400)` in the browser | The address you typed isn't in `ALLOWED_HOSTS` (usually because the install was left on `localhost`). Run `./install.sh` again: it asks for the domain or IP and fixes `.env`. Or non-interactively: `FALCONDB_DOMAIN=203.0.113.10 ./install.sh --yes` (a domain works too; see [Changing the address](#changing-the-address-of-an-existing-install)). By hand: put the address in `ALLOWED_HOSTS`, `CSRF_TRUSTED_ORIGINS` and `FALCONDB_PUBLIC_URL` in `.env`, then `docker compose up -d`. |
 | `Forbidden (403) CSRF verification failed` when signing in | `CSRF_TRUSTED_ORIGINS` must match the exact URL in the browser (scheme, host and port). Behind HTTPS also set `USE_HTTPS=true`. |
 | Caddy can't get a certificate | Check that DNS points to the server (`dig +short db.example.com`) and that ports 80/443 are reachable from the internet. See `docker compose logs caddy`. |
 | `unexpected character … in variable name` when running Compose | Old Compose versions need values with spaces or accents in quotes: `FALCONDB_CONTACT_NAME="Marlon Falcon Hernández"`. The installer already writes them that way. |
