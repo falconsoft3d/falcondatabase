@@ -1,5 +1,8 @@
 from django.urls import path
 
+from analytics import views as analytics_views
+from storage import views as storage_views
+
 from . import views
 
 app_name = "projects"
@@ -18,5 +21,13 @@ urlpatterns = [
     path(f"{T}/rows/<int:row_id>/delete/", views.row_delete, name="row_delete"),
     path(f"{P}/auth/", views.auth, name="auth"),
     path(f"{P}/api/", views.api_docs, name="api"),
+    path(f"{P}/analytics/", analytics_views.project_analytics, name="analytics"),
+    path(f"{P}/portal/", views.portal_settings, name="portal"),
+    path(f"{P}/storage/", storage_views.dashboard, name="storage"),
+    path(f"{P}/storage/<slug:bucket_name>/", storage_views.bucket_browser, name="bucket"),
+    path(f"{P}/storage/<slug:bucket_name>/files/<int:file_id>/", storage_views.owner_download, name="bucket_file"),
+    path(f"{P}/storage/<slug:bucket_name>/files/<int:file_id>/sign/", storage_views.owner_sign, name="bucket_file_sign"),
     path(f"{P}/settings/", views.settings, name="settings"),
+    path(f"{P}/export/", views.project_export, name="export"),
+    path(f"{P}/leave/", views.leave_project, name="leave"),
 ]

@@ -15,6 +15,9 @@
       <a class="tab {% if tab == 'overview' %}selected{% endif %}" href="{{ project.get_absolute_url }}">{% icon 'home' %} {% translate "Overview" %}</a>
       <a class="tab {% if tab == 'tables' %}selected{% endif %}" href="{% url 'projects:tables' project.owner.username project.slug %}">{% icon 'table' %} {% translate "Tables" %} <span class="counter">{{ project.tables.count }}</span></a>
       <a class="tab {% if tab == 'auth' %}selected{% endif %}" href="{% url 'projects:auth' project.owner.username project.slug %}">{% icon 'lock' %} {% translate "Authentication" %} <span class="counter">{{ project.users.count }}</span></a>
+      <a class="tab {% if tab == 'analytics' %}selected{% endif %}" href="{% url 'projects:analytics' project.owner.username project.slug %}">{% icon 'chart' %} {% translate "Analytics" %}{% if project.analytics_enabled %} <span class="dot-live" title="{% translate 'enabled' %}"></span>{% endif %}</a>
+      <a class="tab {% if tab == 'storage' %}selected{% endif %}" href="{% url 'projects:storage' project.owner.username project.slug %}">{% icon 'folder' %} {% translate "Storage" %}{% if project.storage_enabled %} <span class="dot-live" title="{% translate 'enabled' %}"></span>{% endif %}</a>
+      <a class="tab {% if tab == 'portal' %}selected{% endif %}" href="{% url 'projects:portal' project.owner.username project.slug %}">{% icon 'globe' %} {% translate "Portal" %}{% if project.portal_enabled %} <span class="dot-live" title="{% translate 'enabled' %}"></span>{% endif %}</a>
       <a class="tab {% if tab == 'api' %}selected{% endif %}" href="{% url 'projects:api' project.owner.username project.slug %}">{% icon 'code' %} API</a>
       <a class="tab {% if tab == 'settings' %}selected{% endif %}" href="{% url 'projects:settings' project.owner.username project.slug %}">{% icon 'gear' %} {% translate "Settings" %}</a>
     </nav>

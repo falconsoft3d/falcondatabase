@@ -22,6 +22,7 @@ COPY . .
 RUN SECRET_KEY=build-only DEBUG=false python manage.py compilemessages --ignore=.venv \
     && SECRET_KEY=build-only DEBUG=false python manage.py collectstatic --noinput \
     && chmod +x docker/entrypoint.sh \
+    && mkdir -p /app/media/storage \
     && useradd --create-home --uid 10001 falcon \
     && chown -R falcon:falcon /app
 

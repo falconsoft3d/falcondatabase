@@ -45,6 +45,30 @@ GET /api/v1/{{ ref }}/tables/products?category=in.(drinks,desserts)&amp;stock=is
     <tr><td>{% translate "Private" %}</td><td>service key</td><td>service key</td></tr>
   </table>
 
+  <h2>{% translate "File storage" %}</h2>
+  <p>{% blocktranslate %}Enable it in the project's <strong>Storage</strong> tab and create buckets. Public buckets give every file a direct URL; private ones serve files only to the uploader, with the service key, or through a signed URL that expires.{% endblocktranslate %}</p>
+  <table>
+    <tr><th>{% translate "Method" %}</th><th>{% translate "Path" %}</th><th>{% translate "Action" %}</th></tr>
+    <tr><td><code>GET</code></td><td><code>/api/v1/{{ ref }}/storage</code></td><td>{% translate "List buckets" %}</td></tr>
+    <tr><td><code>GET</code></td><td><code>/api/v1/{{ ref }}/storage/&lt;bucket&gt;?prefix=</code></td><td>{% translate "List files" %}</td></tr>
+    <tr><td><code>POST</code></td><td><code>/api/v1/{{ ref }}/storage/&lt;bucket&gt;/&lt;path&gt;</code></td><td>{% blocktranslate %}Upload (multipart field <code>file</code>; <code>?upsert=true</code> replaces){% endblocktranslate %}</td></tr>
+    <tr><td><code>DELETE</code></td><td><code>/api/v1/{{ ref }}/storage/&lt;bucket&gt;/&lt;path&gt;</code></td><td>{% translate "Delete a file" %}</td></tr>
+    <tr><td><code>POST</code></td><td><code>/api/v1/{{ ref }}/storage/sign/&lt;bucket&gt;/&lt;path&gt;</code></td><td>{% blocktranslate %}Signed URL: <code>{"expires_in": 3600}</code>{% endblocktranslate %}</td></tr>
+    <tr><td><code>GET</code></td><td><code>/storage/v1/{{ ref }}/&lt;bucket&gt;/&lt;path&gt;</code></td><td>{% blocktranslate %}Download (<code>?token=</code> for signed URLs){% endblocktranslate %}</td></tr>
+  </table>
+<pre class="code"><span class="k">const</span> bucket = db.storage.<span class="f">from</span>(<span class="s">"avatars"</span>)
+<span class="k">await</span> bucket.<span class="f">upload</span>(<span class="s">"users/ana.png"</span>, file, { upsert: <span class="k">true</span> })
+<span class="k">const</span> url = bucket.<span class="f">getPublicUrl</span>(<span class="s">"users/ana.png"</span>)
+<span class="k">const</span> { data: link } = <span class="k">await</span> bucket.<span class="f">createSignedUrl</span>(<span class="s">"users/ana.png"</span>, <span class="s">3600</span>)</pre>
+
+  <h2>{% translate "Web analytics" %}</h2>
+  <p>{% blocktranslate %}Enable it in the project's <strong>Analytics</strong> tab and add this tag to the <code>&lt;head&gt;</code> of your website. It sets no cookies and stores no IP addresses.{% endblocktranslate %}</p>
+<pre class="code">&lt;script defer data-project=<span class="s">"{{ ref }}"</span> src=<span class="s">"{{ base_url }}/a.js"</span>&gt;&lt;/script&gt;</pre>
+  <p>{% blocktranslate %}Campaigns: add <code>utm_source</code>, <code>utm_medium</code> and <code>utm_campaign</code> to your links.{% endblocktranslate %}</p>
+
+  <h2>{% translate "Portal" %}</h2>
+  <p>{% blocktranslate %}The project's <strong>Portal</strong> tab publishes a standalone app at <code>/app/&lt;username&gt;/&lt;address&gt;/</code>. The project's users sign in there and view or edit the tables you choose, without writing any frontend code.{% endblocktranslate %}</p>
+
   <h2>{% translate "JavaScript SDK" %}</h2>
   <p>{% translate "A single file, no dependencies or build step. Import it straight from your server:" %}</p>
 <pre class="code"><span class="k">import</span> { createClient } <span class="k">from</span> <span class="s">"{{ base_url }}/sdk/falcondb.js"</span>

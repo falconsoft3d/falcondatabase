@@ -1,0 +1,63 @@
+{% extends "projects/base_project.html" %}
+{% load i18n falcon %}
+{% block content %}
+<div class="container-md stack">
+  <div>
+    <h2>{% translate "Portal" %}</h2>
+    <p class="muted">{% translate "Turn this project into a standalone app: its users sign in at its own address and view or edit the tables you choose, with forms generated automatically." %}</p>
+  </div>
+
+  {% if project.portal_enabled %}
+    <div class="flash flash-success">{% icon 'globe' %}
+      <span>{% translate "Your portal is live at" %}
+        <a href="{{ project.portal_url }}" target="_blank" rel="noopener"><strong>{{ base_url }}{{ project.portal_url }}</strong></a></span>
+    </div>
+  {% endif %}
+
+  <form method="post" class="stack">
+    {% csrf_token %}
+    <div class="box">
+      <div class="box-header">{% icon 'gear' %} <strong>{% translate "Settings" %}</strong></div>
+      <div class="box-body">
+        <label class="checkbox" style="margin-bottom:16px">
+          <input type="checkbox" name="portal_enabled" {% if project.portal_enabled %}checked{% endif %}>
+          <span><strong>{% translate "Enable portal" %}</strong></span>
+        </label>
+        <div class="field">
+          <label for="id_portal_slug" class="required">{% translate "Address" %}</label>
+          <div class="row"><span class="label">{{ base_url }}/app/{{ project.owner.username }}/</span>
+            <input type="text" id="id_portal_slug" name="portal_slug" value="{{ portal_slug }}" required maxlength="50" style="max-width:280px"></div>
+          {% if error %}<p class="error">{{ error }}</p>{% endif %}
+          <span class="help">{% translate "Lowercase letters, numbers and hyphens, e.g. project1." %}</span>
+        </div>
+        <label class="checkbox">
+          <input type="checkbox" name="portal_public" {% if project.portal_public %}checked{% endif %}>
+          <span><strong>{% translate "Public portal" %}</strong>
+            <span class="muted small">{% translate "Anyone can view the tables without signing in. Editing always requires signing in, and Owner tables always require it." %}</span></span>
+        </label>
+      </div>
+    </div>
+
+    <div class="box">
+      <div class="box-header">{% icon 'table' %} <strong>{% translate "Tables in the portal" %}</strong></div>
+      {% for table in tables %}
+        <div class="box-row" style="flex-wrap:wrap">
+          <span class="grow"><strong>{{ table.name }}</strong> <span class="label">{{ table.access_label }}</span></span>
+          <select name="mode-{{ table.name }}" style="max-width:220px" aria-label="{{ table.name }}">
+            {% for value, label in portal_choices %}<option value="{{ value }}" {% if table.portal_mode == value %}selected{% endif %}>{{ label }}</option>{% endfor %}
+          </select>
+        </div>
+      {% empty %}
+        <div class="box-body muted">{% translate "This project has no tables yet." %}</div>
+      {% endfor %}
+    </div>
+
+    <div class="flash flash-info">{% icon 'users' %}
+      <span>{% blocktranslate count counter=user_count %}People sign in to the portal with the users of the Authentication tab ({{ counter }} user now).{% plural %}People sign in to the portal with the users of the Authentication tab ({{ counter }} users now).{% endblocktranslate %}
+        <a href="{% url 'projects:auth' project.owner.username project.slug %}">{% translate "Manage users" %}</a></span>
+    </div>
+
+    <div><button class="btn btn-primary" type="submit">{% translate "Save" %}</button></div>
+  </form>
+</div>
+{% endblock %}

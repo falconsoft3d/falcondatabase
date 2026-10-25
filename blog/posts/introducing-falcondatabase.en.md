@@ -24,8 +24,11 @@ Firebase and Supabase are great, but sometimes you want something you can read e
 | Overview | URL, keys and a quick start snippet |
 | Tables | Create tables, edit rows, add or remove columns |
 | Authentication | Enable login and manage your app's users |
+| Analytics | Cookie-free web analytics for your websites |
+| Storage | Buckets for images, documents and other files |
+| Portal | Publish the project as a ready-made app for its users |
 | API | Full reference with your real keys filled in |
-| Settings | Rename, regenerate keys or delete the project |
+| Settings | Rename, export, regenerate keys or delete the project |
 
 Your account can also be protected with **two-step authentication**, and the whole interface is available in **English and Spanish**, in light and dark mode.
 

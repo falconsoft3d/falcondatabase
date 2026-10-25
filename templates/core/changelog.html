@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load i18n falcon %}
+{% block title %}{% translate "Versions" %} · falcondatabase{% endblock %}
+{% block content %}
+<div class="container-md">
+  <h1>{% translate "Versions" %}</h1>
+  <p class="muted">{% blocktranslate %}What's new in falcondatabase. You are using version <strong>{{ app_version }}</strong>.{% endblocktranslate %}</p>
+  <ol class="releases">
+    {% for release in releases %}
+      <li class="release" id="v{{ release.version }}">
+        <div class="release-head">
+          <a class="label {% if forloop.first %}label-success{% endif %}" href="#v{{ release.version }}">v{{ release.version }}</a>
+          <time class="muted small" datetime="{{ release.date }}">{{ release.date }}</time>
+          {% if forloop.first %}<span class="label label-done">{% translate "Latest" %}</span>{% endif %}
+        </div>
+        <h2>{{ release.title }}</h2>
+        <ul class="changes">
+          {% for change in release.changes %}
+            <li><span class="change-kind change-{{ change.kind }}">{% if change.kind == "added" %}{% translate "New" %}{% elif change.kind == "improved" %}{% translate "Improved" %}{% else %}{% translate "Fixed" %}{% endif %}</span>
+              {{ change.text }}</li>
+          {% endfor %}
+        </ul>
+      </li>
+    {% endfor %}
+  </ol>
+</div>
+{% endblock %}

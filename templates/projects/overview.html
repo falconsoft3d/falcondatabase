@@ -16,7 +16,7 @@
 
     <div class="box">
       <div class="box-header">
-        <span class="avatar sm">{{ project.owner|initial }}</span>
+        {% avatar project.owner 20 %}
         <strong>{{ project.owner.username }}</strong>
         <span class="muted grow">{% blocktranslate count counter=tables|length %}{{ counter }} table{% plural %}{{ counter }} tables{% endblocktranslate %}</span>
         <a class="btn btn-primary btn-sm" href="{% url 'projects:table_new' project.owner.username project.slug %}">{% icon 'plus' 14 %} {% translate "New table" %}</a>

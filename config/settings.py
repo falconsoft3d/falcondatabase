@@ -45,6 +45,9 @@ INSTALLED_APPS = [
     "projects",
     "api",
     "blog",
+    "analytics",
+    "portal",
+    "storage",
 ]
 
 MIDDLEWARE = [
@@ -116,6 +119,11 @@ USE_TZ = True
 STATIC_URL = "static/"
 STATICFILES_DIRS = [BASE_DIR / "static"]
 STATIC_ROOT = BASE_DIR / "staticfiles"
+
+# Files uploaded to the projects' storage buckets (a Docker volume in production).
+FALCONDB_STORAGE_ROOT = os.environ.get("FALCONDB_STORAGE_ROOT", str(BASE_DIR / "media" / "storage"))
+FALCONDB_STORAGE_MAX_FILE_MB = int(os.environ.get("FALCONDB_STORAGE_MAX_FILE_MB", 50))
+FALCONDB_STORAGE_QUOTA_MB = int(os.environ.get("FALCONDB_STORAGE_QUOTA_MB", 1024))
 STORAGES = {
     "default": {"BACKEND": "django.core.files.storage.FileSystemStorage"},
     "staticfiles": {"BACKEND": "whitenoise.storage.CompressedStaticFilesStorage"},
@@ -136,6 +144,8 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 FALCONDB_CORS_ORIGINS = env_list("FALCONDB_CORS_ORIGINS", "*")
 # Lifetime of the tokens issued to the end users of each project (seconds).
 FALCONDB_TOKEN_MAX_AGE = int(os.environ.get("FALCONDB_TOKEN_MAX_AGE", 60 * 60 * 24 * 7))
+# Trust X-Forwarded-For (set by the reverse proxy) to get the visitor IP for analytics.
+FALCONDB_TRUST_PROXY = env_bool("FALCONDB_TRUST_PROXY", USE_HTTPS)
 # Maximum number of rows returned by a single API request.
 FALCONDB_MAX_PAGE_SIZE = int(os.environ.get("FALCONDB_MAX_PAGE_SIZE", 1000))
 # Contact shown in the site footer.

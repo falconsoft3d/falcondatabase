@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n falcon %}
+{% load i18n static falcon %}
 {% block title %}falcondatabase — {% translate "your backend in minutes" %}{% endblock %}
 {% block content %}
 <section class="hero">
@@ -58,6 +58,19 @@
       <div class="stat-icon">{% icon 'globe' 20 %}</div>
       <h3>{% translate "From any frontend" %}</h3>
       <p class="muted">{% translate "CORS ready so your apps on other domains can consume the data directly." %}</p>
+    </div>
+  </div>
+</section>
+
+<section class="container" style="padding-top:48px">
+  <div class="box extension-banner">
+    <div class="box-body row" style="flex-wrap:wrap;gap:24px">
+      <img src="{% static 'img/extension-icon.png' %}" width="56" height="56" alt="">
+      <div class="grow">
+        <h2 style="margin:0 0 4px">{% translate "Your statistics in the browser" %}</h2>
+        <p class="muted" style="margin:0">{% translate "Install the Chrome extension, sign in, and see the visits to your projects from the toolbar." %}</p>
+      </div>
+      <a class="btn btn-primary" href="{% url 'extension' %}">{% icon 'download' %} {% translate "Get the Chrome extension" %}</a>
     </div>
   </div>
 </section>

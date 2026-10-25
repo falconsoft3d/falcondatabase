@@ -1,0 +1,8 @@
+{% load i18n analytics_tags %}{# Expects: item (with change, higher_is_better), days #}
+<div class="delta small">
+  {% if item.change is None %}<span class="muted">—</span>
+  {% elif item.change > 0 %}<span class="{% if item.higher_is_better %}delta-good{% else %}delta-bad{% endif %}">↑ {{ item.change }}%</span>
+  {% elif item.change < 0 %}<span class="{% if item.higher_is_better %}delta-bad{% else %}delta-good{% endif %}">↓ {{ item.change|abs }}%</span>
+  {% else %}<span class="muted">0%</span>{% endif %}
+  <span class="muted">{% blocktranslate %}vs previous {{ days }} days{% endblocktranslate %}</span>
+</div>

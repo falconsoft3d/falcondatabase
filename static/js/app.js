@@ -116,3 +116,14 @@ document.addEventListener("click", (event) => {
     if (cookieBanner) cookieBanner.hidden = false;
   }
 });
+
+// File pickers: show the chosen file names in the page language (the native text follows the OS).
+document.addEventListener("change", (event) => {
+  const picker = event.target.closest("[data-file-picker]");
+  if (!picker || event.target.type !== "file") return;
+  const files = [...event.target.files];
+  const label = picker.querySelector(".file-picker-name");
+  if (!files.length) label.textContent = picker.dataset.none;
+  else if (files.length === 1) label.textContent = files[0].name;
+  else label.textContent = picker.dataset.many.replace("{count}", files.length);
+});

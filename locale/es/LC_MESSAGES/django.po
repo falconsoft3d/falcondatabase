@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-25 16:43+0000\n"
+"POT-Creation-Date: 2026-10-25 17:30+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,57 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: analytics/templatetags/analytics_tags.py:7
+msgid "Direct"
+msgstr "Directo"
+
+#: analytics/templatetags/analytics_tags.py:7
+msgid "Organic search"
+msgstr "Búsqueda orgánica"
+
+#: analytics/templatetags/analytics_tags.py:7
+msgid "Social"
+msgstr "Redes sociales"
+
+#: analytics/templatetags/analytics_tags.py:7
+msgid "Referral"
+msgstr "Referencia"
+
+#: analytics/templatetags/analytics_tags.py:8
+msgid "Paid search"
+msgstr "Búsqueda de pago"
+
+#: analytics/templatetags/analytics_tags.py:8
+msgid "Paid"
+msgstr "Pago"
+
+#: analytics/templatetags/analytics_tags.py:8 core/forms.py:18
+#: projects/forms.py:89 templates/core/users.html:21
+#: templates/portal/login.html:12 templates/projects/auth.html:16
+#: templates/projects/auth.html:50
+msgid "Email"
+msgstr "Email"
+
+#: analytics/templatetags/analytics_tags.py:10
+msgid "Desktop"
+msgstr "Escritorio"
+
+#: analytics/templatetags/analytics_tags.py:10
+msgid "Mobile"
+msgstr "Móvil"
+
+#: analytics/templatetags/analytics_tags.py:10
+msgid "Tablet"
+msgstr "Tableta"
+
+#: analytics/views.py:55
+msgid "Analytics enabled."
+msgstr "Analítica activada."
+
+#: analytics/views.py:55
+msgid "Analytics disabled."
+msgstr "Analítica desactivada."
 
 #: api/auth.py:61
 msgid "Missing API key. Send it in the “apikey” header."
@@ -34,7 +85,7 @@ msgstr "El login no está activado en este proyecto."
 msgid "Invalid or expired token."
 msgstr "Token inválido o expirado."
 
-#: api/auth.py:79
+#: api/auth.py:79 storage/views.py:102 storage/views.py:124
 msgid "You need to sign in for this operation."
 msgstr "Necesitas iniciar sesión para esta operación."
 
@@ -74,7 +125,7 @@ msgstr "«%(name)s» no puede ser negativo."
 msgid "Each row must be a JSON object."
 msgstr "Cada fila debe ser un objeto JSON."
 
-#: api/views.py:197 api/views.py:205 projects/views.py:214
+#: api/views.py:197 api/views.py:205 projects/views.py:252
 msgid "Row not found."
 msgstr "Fila no encontrada."
 
@@ -90,16 +141,16 @@ msgstr "«email» y «password» son obligatorios."
 msgid "Public sign up is disabled for this project."
 msgstr "El registro público está desactivado en este proyecto."
 
-#: api/views.py:238
+#: api/views.py:238 portal/views.py:145
 msgid "The email is not valid."
 msgstr "El email no es válido."
 
-#: api/views.py:240
+#: api/views.py:240 portal/views.py:147
 #, python-format
 msgid "The password must have at least %(n)s characters."
 msgstr "La contraseña debe tener al menos %(n)s caracteres."
 
-#: api/views.py:242 projects/views.py:261
+#: api/views.py:242 portal/views.py:149 projects/views.py:299
 msgid "A user with that email already exists."
 msgstr "Ya existe un usuario con ese email."
 
@@ -107,7 +158,7 @@ msgstr "Ya existe un usuario con ese email."
 msgid "“data” must be an object."
 msgstr "«data» debe ser un objeto."
 
-#: api/views.py:258
+#: api/views.py:258 portal/views.py:132
 msgid "Incorrect email or password."
 msgstr "Email o contraseña incorrectos."
 
@@ -119,10 +170,17 @@ msgstr "Envía el token del usuario en «Authorization: Bearer <token>»."
 msgid "Send a “data” object with the fields to save."
 msgstr "Envía un objeto «data» con los campos a guardar."
 
-#: core/forms.py:18 projects/forms.py:89 templates/core/users.html:21
-#: templates/projects/auth.html:16 templates/projects/auth.html:50
-msgid "Email"
-msgstr "Email"
+#: core/avatars.py:21
+msgid "The image is too large (maximum 5 MB)."
+msgstr "La imagen es demasiado grande (máximo 5 MB)."
+
+#: core/avatars.py:25
+msgid "Use a PNG, JPG, WebP or GIF image."
+msgstr "Usa una imagen PNG, JPG, WebP o GIF."
+
+#: core/avatars.py:28
+msgid "The file is not a valid image."
+msgstr "El archivo no es una imagen válida."
 
 #: core/forms.py:23
 msgid "Username"
@@ -153,65 +211,97 @@ msgstr "Ya existe una cuenta con ese email."
 msgid "allow sign up"
 msgstr "permitir registro"
 
-#: core/views.py:53
+#: core/views.py:57
 msgid "Sign up is disabled. Ask the administrator for an account."
 msgstr "El registro está desactivado. Pide una cuenta al administrador."
 
-#: core/views.py:86
+#: core/views.py:90
 msgid "The verification expired. Sign in again."
 msgstr "La verificación caducó. Inicia sesión de nuevo."
 
-#: core/views.py:99
+#: core/views.py:103
 msgid "You have few recovery codes left. Generate new ones in Settings."
 msgstr ""
 "Te quedan pocos códigos de recuperación. Genera nuevos en Configuración."
 
-#: core/views.py:104
+#: core/views.py:108
 msgid "Too many failed attempts. Sign in again."
 msgstr "Demasiados intentos fallidos. Inicia sesión de nuevo."
 
-#: core/views.py:107
+#: core/views.py:111
 msgid "Invalid code. Try again."
 msgstr "Código incorrecto. Inténtalo de nuevo."
 
-#: core/views.py:119
+#: core/views.py:122
+msgid "Choose an image."
+msgstr "Elige una imagen."
+
+#: core/views.py:127
+msgid "Profile picture updated."
+msgstr "Foto de perfil actualizada."
+
+#: core/views.py:131
+msgid "Profile picture removed."
+msgstr "Foto de perfil eliminada."
+
+#: core/views.py:141
 msgid "Your password was changed."
 msgstr "Tu contraseña se cambió correctamente."
 
-#: core/views.py:140
+#: core/views.py:164
 msgid "Invalid code. Check the time on your phone and try again."
 msgstr ""
 "Código incorrecto. Revisa la hora de tu teléfono e inténtalo de nuevo."
 
-#: core/views.py:146
+#: core/views.py:170
 msgid "Two-step authentication is enabled."
 msgstr "La autenticación en dos pasos está activada."
 
-#: core/views.py:161
+#: core/views.py:185
 msgid "Incorrect password."
 msgstr "Contraseña incorrecta."
 
-#: core/views.py:165
+#: core/views.py:189
 msgid "Two-step authentication is disabled."
 msgstr "La autenticación en dos pasos está desactivada."
 
-#: core/views.py:195
+#: core/views.py:219
 msgid "Sign up enabled."
 msgstr "Registro activado."
 
-#: core/views.py:195
+#: core/views.py:219
 msgid "Sign up disabled."
 msgstr "Registro desactivado."
 
-#: core/views.py:200
+#: core/views.py:228
+msgid "Visits to the public pages of this site"
+msgstr "Visitas a las páginas públicas de este sitio"
+
+#: core/views.py:235
+msgid "Site analytics enabled."
+msgstr "Analítica del sitio activada."
+
+#: core/views.py:235
+msgid "Site analytics disabled."
+msgstr "Analítica del sitio desactivada."
+
+#: core/views.py:240
 #, python-format
 msgid "Two-step authentication removed for %(username)s."
 msgstr "Se quitó la autenticación en dos pasos de %(username)s."
 
-#: core/views.py:206
+#: core/views.py:246
 #, python-format
 msgid "User “%(username)s” created."
 msgstr "Usuario «%(username)s» creado."
+
+#: portal/views.py:210 portal/views.py:234
+msgid "Saved."
+msgstr "Guardado."
+
+#: portal/views.py:248
+msgid "Deleted."
+msgstr "Eliminado."
 
 #: projects/forms.py:10
 msgid "text — text"
@@ -258,7 +348,7 @@ msgid "Optional"
 msgstr "Opcional"
 
 #: projects/forms.py:32 projects/forms.py:39 projects/schema.py:161
-#: projects/services.py:34
+#: projects/services.py:37
 msgid "Table name"
 msgstr "Nombre de la tabla"
 
@@ -282,13 +372,13 @@ msgstr "«new» está reservado, elige otro nombre."
 #: templates/projects/settings.html:10 templates/projects/table_new.html:15
 #: templates/projects/table_new.html:39
 #: templates/projects/table_structure.html:44
-#: templates/projects/tables.html:12
+#: templates/projects/tables.html:12 templates/storage/bucket.html:29
 msgid "Name"
 msgstr "Nombre"
 
 #: projects/forms.py:71 templates/projects/table_new.html:39
 #: templates/projects/table_structure.html:10
-#: templates/projects/table_structure.html:49
+#: templates/projects/table_structure.html:49 templates/storage/bucket.html:29
 msgid "Type"
 msgstr "Tipo"
 
@@ -309,21 +399,21 @@ msgstr "Obligatorio (NOT NULL)"
 msgid "Unique"
 msgstr "Único"
 
-#: projects/forms.py:90 templates/projects/auth.html:55
-#: templates/registration/login.html:19
+#: projects/forms.py:90 templates/portal/login.html:16
+#: templates/projects/auth.html:55 templates/registration/login.html:19
 msgid "Password"
 msgstr "Contraseña"
 
-#: projects/models.py:29
+#: projects/models.py:29 storage/models.py:19
 msgid "name"
 msgstr "nombre"
 
-#: projects/models.py:31 projects/models.py:95
+#: projects/models.py:31 projects/models.py:112
 msgid "description"
 msgstr "descripción"
 
 #: projects/models.py:35 templates/projects/base_project.html:12
-#: templates/projects/dashboard.html:39
+#: templates/projects/dashboard.html:59
 msgid "login enabled"
 msgstr "login activo"
 
@@ -331,55 +421,98 @@ msgstr "login activo"
 msgid "allow public sign up"
 msgstr "permitir registro público"
 
-#: projects/models.py:79
+#: projects/models.py:37
+msgid "analytics enabled"
+msgstr "analítica activada"
+
+#: projects/models.py:39
+msgid "allowed domains"
+msgstr "dominios permitidos"
+
+#: projects/models.py:41
+msgid "portal enabled"
+msgstr "portal activado"
+
+#: projects/models.py:42
+msgid "portal address"
+msgstr "dirección del portal"
+
+#: projects/models.py:43
+msgid "public portal"
+msgstr "portal público"
+
+#: projects/models.py:44
+msgid "storage enabled"
+msgstr "almacenamiento activado"
+
+#: projects/models.py:96
 msgid "Public — anyone with the anon key can read and write"
 msgstr "Pública — cualquiera con la anon key puede leer y escribir"
 
-#: projects/models.py:80
+#: projects/models.py:97
 msgid "Public read — anyone reads, only signed-in users write"
 msgstr "Lectura pública — leer libre, escribir solo usuarios con login"
 
-#: projects/models.py:81
+#: projects/models.py:98
 msgid "Signed-in users — only authenticated users read and write"
 msgstr "Usuarios con login — solo usuarios autenticados leen y escriben"
 
-#: projects/models.py:82
+#: projects/models.py:99
 msgid "Owner — each user only sees and edits their own rows"
 msgstr "Dueño — cada usuario solo ve y edita sus propias filas"
 
-#: projects/models.py:83
+#: projects/models.py:100
 msgid "Private — service key only"
 msgstr "Privada — solo con la service key"
 
-#: projects/models.py:86 templates/projects/_keys.html:10
+#: projects/models.py:103 storage/models.py:20
+#: templates/projects/_keys.html:10 templates/storage/bucket.html:11
+#: templates/storage/dashboard.html:34
 msgid "public"
 msgstr "pública"
 
-#: projects/models.py:87
+#: projects/models.py:104
 msgid "public read"
 msgstr "lectura pública"
 
-#: projects/models.py:88
+#: projects/models.py:105
 msgid "signed-in"
 msgstr "con login"
 
-#: projects/models.py:89
+#: projects/models.py:106
 msgid "by owner"
 msgstr "por dueño"
 
-#: projects/models.py:90
+#: projects/models.py:107 templates/storage/bucket.html:11
+#: templates/storage/dashboard.html:34
 msgid "private"
 msgstr "privada"
 
-#: projects/models.py:96
+#: projects/models.py:113
 msgid "access"
 msgstr "acceso"
 
-#: projects/models.py:124
+#: projects/models.py:118
+msgid "Hidden"
+msgstr "Oculta"
+
+#: projects/models.py:118 templates/portal/home.html:10
+msgid "View only"
+msgstr "Solo ver"
+
+#: projects/models.py:118 templates/portal/home.html:10
+msgid "View and edit"
+msgstr "Ver y editar"
+
+#: projects/models.py:119
+msgid "in the portal"
+msgstr "en el portal"
+
+#: projects/models.py:147
 msgid "data"
 msgstr "datos"
 
-#: projects/models.py:125 templates/projects/auth.html:21
+#: projects/models.py:148 templates/projects/auth.html:21
 msgid "active"
 msgstr "activo"
 
@@ -420,8 +553,8 @@ msgstr "Hay columnas con nombres repetidos."
 msgid "“%(name)s” is a system column and cannot be removed."
 msgstr "«%(name)s» es una columna del sistema y no se puede eliminar."
 
-#: projects/schema.py:265 projects/schema.py:299 projects/schema.py:308
-#: projects/schema.py:333
+#: projects/schema.py:265 projects/schema.py:308 projects/schema.py:317
+#: projects/schema.py:364
 #, python-format
 msgid "Column “%(name)s” does not exist."
 msgstr "La columna «%(name)s» no existe."
@@ -435,203 +568,614 @@ msgstr "El operador «is» acepta null, true o false."
 msgid "Unknown operator: %(op)s."
 msgstr "Operador desconocido: %(op)s."
 
-#: projects/schema.py:360
+#: projects/schema.py:391
 msgid "There are no values to update."
 msgstr "No hay valores para actualizar."
 
-#: projects/schema.py:394
+#: projects/schema.py:425
 #, python-format
 msgid "“%(name)s” does not contain valid JSON: %(error)s."
 msgstr "«%(name)s» no contiene JSON válido: %(error)s."
 
-#: projects/services.py:36
+#: projects/services.py:39
 #, python-format
 msgid "A table named “%(name)s” already exists."
 msgstr "Ya existe una tabla llamada «%(name)s»."
 
-#: projects/views.py:55
+#: projects/transfer.py:104
+msgid "This is not a falcondatabase export file."
+msgstr "Este no es un archivo de exportación de falcondatabase."
+
+#: projects/transfer.py:105
+#, python-format
+msgid "Unsupported file version: %(version)s."
+msgstr "Versión de archivo no compatible: %(version)s."
+
+#: projects/transfer.py:106
+msgid "The file has no project information."
+msgstr "El archivo no tiene información del proyecto."
+
+#: projects/transfer.py:108
+msgid "“tables” must be a list."
+msgstr "«tables» debe ser una lista."
+
+#: projects/transfer.py:112
+msgid "Every table needs a name and a list of columns."
+msgstr "Cada tabla necesita un nombre y una lista de columnas."
+
+#: projects/transfer.py:114
+#, python-format
+msgid "Unknown access rule in table “%(name)s”."
+msgstr "Regla de acceso desconocida en la tabla «%(name)s»."
+
+#: projects/transfer.py:116
+#, python-format
+msgid "The rows of table “%(name)s” must be a list."
+msgstr "Las filas de la tabla «%(name)s» deben ser una lista."
+
+#: projects/transfer.py:138
+msgid "Every bucket must be an object."
+msgstr "Cada bucket debe ser un objeto."
+
+#: projects/transfer.py:160
+msgid "Every row must be an object."
+msgstr "Cada fila debe ser un objeto."
+
+#: projects/views.py:60
 #, python-format
 msgid "Project “%(name)s” created. Now create your first table!"
 msgstr "Proyecto «%(name)s» creado. ¡Ahora crea tu primera tabla!"
 
-#: projects/views.py:94
+#: projects/views.py:71
+msgid "Choose a JSON file exported from falcondatabase."
+msgstr "Elige un archivo JSON exportado desde falcondatabase."
+
+#: projects/views.py:73
+msgid "The file is too large (maximum 20 MB)."
+msgstr "El archivo es demasiado grande (máximo 20 MB)."
+
+#: projects/views.py:77
+msgid "The file is not valid JSON."
+msgstr "El archivo no es un JSON válido."
+
+#: projects/views.py:80
+#, python-format
+msgid "Import failed: %(error)s"
+msgstr "La importación falló: %(error)s"
+
+#: projects/views.py:82
+#, python-format
+msgid "Project “%(name)s” imported."
+msgstr "Proyecto «%(name)s» importado."
+
+#: projects/views.py:132
 #, python-format
 msgid "Table “%(name)s” created."
 msgstr "Tabla «%(name)s» creada."
 
-#: projects/views.py:121
+#: projects/views.py:159
 msgid "Row inserted."
 msgstr "Fila insertada."
 
-#: projects/views.py:156
+#: projects/views.py:194
 msgid "Column added."
 msgstr "Columna agregada."
 
-#: projects/views.py:160
+#: projects/views.py:198
 msgid "Column removed."
 msgstr "Columna eliminada."
 
-#: projects/views.py:165
+#: projects/views.py:203
 msgid "Unknown access policy."
 msgstr "Política de acceso desconocida."
 
-#: projects/views.py:168
+#: projects/views.py:206
 msgid "Settings saved."
 msgstr "Configuración guardada."
 
-#: projects/views.py:172
+#: projects/views.py:210
 msgid "Type the table name to confirm."
 msgstr "Escribe el nombre de la tabla para confirmar."
 
-#: projects/views.py:174
+#: projects/views.py:212
 #, python-format
 msgid "Table “%(name)s” deleted."
 msgstr "Tabla «%(name)s» eliminada."
 
-#: projects/views.py:224
+#: projects/views.py:262
 #, python-format
 msgid "Row %(id)s updated."
 msgstr "Fila %(id)s actualizada."
 
-#: projects/views.py:239
+#: projects/views.py:277
 #, python-format
 msgid "Row %(id)s deleted."
 msgstr "Fila %(id)s eliminada."
 
-#: projects/views.py:254
+#: projects/views.py:292
 msgid "Login settings saved."
 msgstr "Configuración de login guardada."
 
-#: projects/views.py:266
+#: projects/views.py:304
 #, python-format
 msgid "User %(email)s created."
 msgstr "Usuario %(email)s creado."
 
-#: projects/views.py:273
+#: projects/views.py:311
 #, python-format
 msgid "User %(email)s activated."
 msgstr "Usuario %(email)s activado."
 
-#: projects/views.py:273
+#: projects/views.py:311
 #, python-format
 msgid "User %(email)s deactivated."
 msgstr "Usuario %(email)s desactivado."
 
-#: projects/views.py:277
+#: projects/views.py:315
 #, python-format
 msgid "User %(email)s deleted."
 msgstr "Usuario %(email)s eliminado."
 
-#: projects/views.py:304
+#: projects/views.py:335
+msgid "Use 3 to 50 lowercase letters, numbers and hyphens."
+msgstr "Usa de 3 a 50 minúsculas, números y guiones."
+
+#: projects/views.py:337
+msgid "You already use that address for another project."
+msgstr "Ya usas esa dirección en otro proyecto."
+
+#: projects/views.py:349
+msgid "Portal settings saved."
+msgstr "Configuración del portal guardada."
+
+#: projects/views.py:377
 msgid "Project updated."
 msgstr "Proyecto actualizado."
 
-#: projects/views.py:309
+#: projects/views.py:382
 msgid "New API keys were generated. The previous ones no longer work."
 msgstr "Se generaron nuevas API keys. Las anteriores ya no funcionan."
 
-#: projects/views.py:313
+#: projects/views.py:386
 msgid "The confirmation text does not match."
 msgstr "El texto de confirmación no coincide."
 
-#: projects/views.py:317
+#: projects/views.py:390
 #, python-format
 msgid "Project “%(name)s” deleted."
 msgstr "Proyecto «%(name)s» eliminado."
 
-#: templates/base.html:11
-msgid "Copied!"
-msgstr "¡Copiado!"
+#: storage/files.py:33
+msgid "Bucket names use 3 to 63 lowercase letters, numbers and hyphens."
+msgstr "Los nombres de bucket usan de 3 a 63 minúsculas, números y guiones."
 
-#: templates/base.html:11 templates/projects/_keys.html:21
-msgid "Show"
-msgstr "Mostrar"
+#: storage/files.py:41
+msgid ""
+"Invalid file path. Use letters, numbers, spaces, dots, dashes and “/” for "
+"folders."
+msgstr ""
+"Ruta de archivo no válida. Usa letras, números, espacios, puntos, guiones y "
+"«/» para carpetas."
 
-#: templates/base.html:11
-msgid "Hide"
-msgstr "Ocultar"
+#: storage/files.py:44
+msgid "The file path is too long."
+msgstr "La ruta del archivo es demasiado larga."
 
-#: templates/base.html:20
-msgid "Search projects…"
-msgstr "Buscar proyectos…"
+#: storage/files.py:51
+#, python-format
+msgid "A bucket named “%(name)s” already exists."
+msgstr "Ya existe un bucket llamado «%(name)s»."
 
-#: templates/base.html:24 templates/base.html:42
-msgid "Home"
-msgstr "Inicio"
+#: storage/files.py:65
+#, python-format
+msgid "The file is too large (maximum %(mb)s MB)."
+msgstr "El archivo es demasiado grande (máximo %(mb)s MB)."
 
-#: templates/base.html:25 templates/base.html:43
-#: templates/projects/dashboard.html:3
-msgid "Dashboard"
-msgstr "Dashboard"
+#: storage/files.py:68
+#, python-format
+msgid "A file already exists at “%(path)s”."
+msgstr "Ya existe un archivo en «%(path)s»."
 
-#: templates/base.html:26
-msgid "Docs"
-msgstr "Docs"
+#: storage/files.py:71
+#, python-format
+msgid "The project storage quota (%(mb)s MB) is full."
+msgstr "La cuota de almacenamiento del proyecto (%(mb)s MB) está llena."
 
-#: templates/base.html:27 templates/base.html:81 templates/blog/detail.html:7
-#: templates/blog/index.html:3 templates/blog/index.html:7
-msgid "Blog"
-msgstr "Blog"
+#: storage/views.py:51
+msgid "Storage is not enabled for this project."
+msgstr "El almacenamiento no está activado en este proyecto."
 
-#: templates/base.html:28 templates/base.html:48 templates/core/users.html:3
+#: storage/views.py:57
+#, python-format
+msgid "Bucket “%(name)s” does not exist."
+msgstr "El bucket «%(name)s» no existe."
+
+#: storage/views.py:83
+msgid "This file is private. Use a signed URL or the service key."
+msgstr "Este archivo es privado. Usa un enlace firmado o la service key."
+
+#: storage/views.py:117 storage/views.py:143
+msgid "File not found."
+msgstr "Archivo no encontrado."
+
+#: storage/views.py:119
+msgid "Only the service key or the user who uploaded the file can delete it."
+msgstr ""
+"Solo la service key o el usuario que subió el archivo pueden eliminarlo."
+
+#: storage/views.py:127
+msgid "Send the file as multipart/form-data in a field named “file”."
+msgstr "Envía el archivo como multipart/form-data en un campo llamado «file»."
+
+#: storage/views.py:130
+msgid "Only the service key or the user who uploaded the file can replace it."
+msgstr ""
+"Solo la service key o el usuario que subió el archivo pueden reemplazarlo."
+
+#: storage/views.py:145
+msgid "Only the service key or the user who uploaded the file can share it."
+msgstr ""
+"Solo la service key o el usuario que subió el archivo pueden compartirlo."
+
+#: storage/views.py:151
+msgid "“expires_in” must be a number of seconds."
+msgstr "«expires_in» debe ser un número de segundos."
+
+#: storage/views.py:167
+msgid "Storage settings saved."
+msgstr "Configuración de almacenamiento guardada."
+
+#: storage/views.py:170
+#, python-format
+msgid "Bucket “%(name)s” created."
+msgstr "Bucket «%(name)s» creado."
+
+#: storage/views.py:202
+#, python-format
+msgid "%(count)s file(s) uploaded."
+msgstr "%(count)s archivo(s) subido(s)."
+
+#: storage/views.py:206
+msgid "File deleted."
+msgstr "Archivo eliminado."
+
+#: storage/views.py:210
+msgid "Bucket updated."
+msgstr "Bucket actualizado."
+
+#: storage/views.py:213
+msgid "Type the bucket name to confirm."
+msgstr "Escribe el nombre del bucket para confirmar."
+
+#: storage/views.py:215
+msgid "Bucket deleted."
+msgstr "Bucket eliminado."
+
+#: storage/views.py:246
+#, python-format
+msgid "Signed link valid for 1 hour: %(url)s"
+msgstr "Enlace firmado válido durante 1 hora: %(url)s"
+
+#: templates/analytics/_bars.html:11 templates/analytics/_bars.html:15
+msgid "Unknown"
+msgstr "Desconocido"
+
+#: templates/analytics/_bars.html:25
+msgid "No data for this period."
+msgstr "Sin datos en este periodo."
+
+#: templates/analytics/_dashboard.html:8
+#: templates/analytics/_dashboard.html:41
+#: templates/analytics/_dashboard.html:49
+msgid "Visitors"
+msgstr "Visitantes"
+
+#: templates/analytics/_dashboard.html:8
+#: templates/analytics/_dashboard.html:21
+#: templates/analytics/_dashboard.html:43
+msgid "Sessions"
+msgstr "Sesiones"
+
+#: templates/analytics/_dashboard.html:8
+#: templates/analytics/_dashboard.html:21
+#: templates/analytics/_dashboard.html:38
+#: templates/analytics/_dashboard.html:47
+msgid "Pageviews"
+msgstr "Páginas vistas"
+
+#: templates/analytics/_dashboard.html:8
+msgid "Pages / session"
+msgstr "Páginas / sesión"
+
+#: templates/analytics/_dashboard.html:8
+msgid "Bounce rate"
+msgstr "Tasa de rebote"
+
+#: templates/analytics/_dashboard.html:21 templates/base.html:32
+#: templates/base.html:53 templates/core/users.html:3
 #: templates/core/users.html:16 templates/projects/overview.html:10
 msgid "Users"
 msgstr "Usuarios"
 
-#: templates/base.html:31
-msgid "Toggle light/dark mode"
-msgstr "Cambiar modo claro/oscuro"
+#: templates/analytics/_dashboard.html:22
+#, python-format
+msgid "Last %(days)s days, daily"
+msgstr "Últimos %(days)s días, por día"
 
-#: templates/base.html:36 templates/base.html:44
-#: templates/projects/dashboard.html:29 templates/projects/dashboard.html:60
-#: templates/projects/new.html:3
+#: templates/analytics/_dashboard.html:24
+msgid "Daily chart"
+msgstr "Gráfico diario"
+
+#: templates/analytics/_dashboard.html:26
+msgid "Show as table"
+msgstr "Ver como tabla"
+
+#: templates/analytics/_dashboard.html:28
+msgid "Day"
+msgstr "Día"
+
+#: templates/analytics/_dashboard.html:28
+msgid "Value"
+msgstr "Valor"
+
+#: templates/analytics/_dashboard.html:38
+msgid "By project"
+msgstr "Por proyecto"
+
+#: templates/analytics/_dashboard.html:41
+msgid "By countries"
+msgstr "Por países"
+
+#: templates/analytics/_dashboard.html:43
+msgid "By mediums"
+msgstr "Por medios"
+
+#: templates/analytics/_dashboard.html:45
+msgid "By sources"
+msgstr "Por fuentes"
+
+#: templates/analytics/_dashboard.html:47
+msgid "Top pages"
+msgstr "Páginas principales"
+
+#: templates/analytics/_dashboard.html:49
+msgid "By devices"
+msgstr "Por dispositivos"
+
+#: templates/analytics/_dashboard.html:51
+msgid "By browsers"
+msgstr "Por navegadores"
+
+#: templates/analytics/_dashboard.html:53
+msgid "By operating systems"
+msgstr "Por sistemas operativos"
+
+#: templates/analytics/_dashboard.html:56
+msgid ""
+"Days are in UTC. Visitors are counted once per day: to protect privacy, the "
+"anonymous visitor id changes every day."
+msgstr ""
+"Los días están en UTC. Los visitantes se cuentan una vez por día: para "
+"proteger la privacidad, el identificador anónimo cambia cada día."
+
+#: templates/analytics/_delta.html:7
+#, python-format
+msgid "vs previous %(days)s days"
+msgstr "vs. %(days)s días anteriores"
+
+#: templates/analytics/_periods.html:2 templates/analytics/overview.html:13
+msgid "Period"
+msgstr "Periodo"
+
+#: templates/analytics/_periods.html:4 templates/analytics/overview.html:15
+#, python-format
+msgid "%(days)s days"
+msgstr "%(days)s días"
+
+#: templates/analytics/_setup.html:5 templates/base.html:52
+#: templates/core/account.html:3 templates/core/account.html:6
+#: templates/projects/auth.html:83 templates/projects/base_project.html:22
+#: templates/projects/dashboard.html:11 templates/projects/portal.html:20
+#: templates/storage/bucket.html:62
+msgid "Settings"
+msgstr "Configuración"
+
+#: templates/analytics/_setup.html:9
+msgid "Enable analytics"
+msgstr "Activar analítica"
+
+#: templates/analytics/_setup.html:9
+msgid "Accept page views from the tracking script."
+msgstr "Aceptar visitas del script de seguimiento."
+
+#: templates/analytics/_setup.html:12
+msgid "Allowed domains"
+msgstr "Dominios permitidos"
+
+#: templates/analytics/_setup.html:12 templates/projects/new.html:21
+#: templates/projects/new.html:40 templates/projects/table_new.html:21
+msgid "optional"
+msgstr "opcional"
+
+#: templates/analytics/_setup.html:14
+msgid ""
+"Only count visits from these domains (subdomains included). Empty: any "
+"domain."
+msgstr ""
+"Solo cuenta visitas de estos dominios (incluidos los subdominios). Vacío: "
+"cualquier dominio."
+
+#: templates/analytics/_setup.html:16 templates/core/users.html:64
+#: templates/core/users.html:78 templates/portal/form.html:18
+#: templates/projects/auth.html:93 templates/projects/portal.html:60
+#: templates/projects/settings.html:19
+#: templates/projects/table_structure.html:82 templates/storage/bucket.html:66
+#: templates/storage/dashboard.html:17
+msgid "Save"
+msgstr "Guardar"
+
+#: templates/analytics/_setup.html:22
+msgid "Tracking script"
+msgstr "Script de seguimiento"
+
+#: templates/analytics/_setup.html:24
+msgid ""
+"Paste it in the <code>&lt;head&gt;</code> of every page of your website:"
+msgstr ""
+"Pégalo en el <code>&lt;head&gt;</code> de todas las páginas de tu web:"
+
+#: templates/analytics/_setup.html:27
+msgid "Copy"
+msgstr "Copiar"
+
+#: templates/analytics/_setup.html:29
+msgid ""
+"No cookies and no personal data: your visitors don't need to accept a cookie"
+" banner for it. It also counts navigation in single-page apps (React, Vue…)."
+msgstr ""
+"Sin cookies ni datos personales: tus visitantes no necesitan aceptar un "
+"aviso de cookies por él. También cuenta la navegación en apps de una sola "
+"página (React, Vue…)."
+
+#: templates/analytics/overview.html:3 templates/analytics/overview.html:7
+#: templates/base.html:28 templates/base.html:48
+#: templates/projects/base_project.html:18
+msgid "Analytics"
+msgstr "Analítica"
+
+#: templates/analytics/overview.html:19 templates/core/users.html:21
+#: templates/projects/dashboard.html:37 templates/projects/dashboard.html:48
+msgid "Projects"
+msgstr "Proyectos"
+
+#: templates/analytics/overview.html:22
+msgid "off"
+msgstr "desactivada"
+
+#: templates/analytics/overview.html:24
+msgid "Showing all projects"
+msgstr "Mostrando todos los proyectos"
+
+#: templates/analytics/overview.html:29 templates/projects/dashboard.html:21
+msgid "You don't have any projects yet."
+msgstr "Todavía no tienes proyectos."
+
+#: templates/analytics/overview.html:30 templates/base.html:40
+#: templates/base.html:49 templates/projects/dashboard.html:49
+#: templates/projects/dashboard.html:80 templates/projects/new.html:3
 msgid "New project"
 msgstr "Nuevo proyecto"
 
-#: templates/base.html:40
+#: templates/analytics/project.html:6 templates/core/_api_reference.html:64
+msgid "Web analytics"
+msgstr "Analítica web"
+
+#: templates/analytics/project.html:12
+msgid "Setup"
+msgstr "Configuración"
+
+#: templates/analytics/project.html:16
+msgid ""
+"No visits yet in this period. Add the script to your website and open a page"
+" to see the first data."
+msgstr ""
+"Aún no hay visitas en este periodo. Agrega el script a tu web y abre una "
+"página para ver los primeros datos."
+
+#: templates/analytics/project.html:20
+msgid "Analytics is disabled"
+msgstr "La analítica está desactivada"
+
+#: templates/analytics/project.html:21
+msgid ""
+"Enable it to get a tracking script for your website and see visitors, "
+"sessions, pageviews, countries, sources and devices."
+msgstr ""
+"Actívala para obtener un script de seguimiento para tu web y ver visitantes,"
+" sesiones, páginas vistas, países, fuentes y dispositivos."
+
+#: templates/base.html:12
+msgid "Copied!"
+msgstr "¡Copiado!"
+
+#: templates/base.html:12 templates/projects/_keys.html:21
+msgid "Show"
+msgstr "Mostrar"
+
+#: templates/base.html:12
+msgid "Hide"
+msgstr "Ocultar"
+
+#: templates/base.html:22
+msgid "Search projects…"
+msgstr "Buscar proyectos…"
+
+#: templates/base.html:26 templates/base.html:46
+msgid "Home"
+msgstr "Inicio"
+
+#: templates/base.html:27 templates/base.html:47
+#: templates/projects/dashboard.html:3
+msgid "Dashboard"
+msgstr "Dashboard"
+
+#: templates/base.html:29
+msgid "Docs"
+msgstr "Docs"
+
+#: templates/base.html:30 templates/base.html:88 templates/blog/detail.html:7
+#: templates/blog/index.html:3 templates/blog/index.html:7
+msgid "Blog"
+msgstr "Blog"
+
+#: templates/base.html:31 templates/base.html:86
+#: templates/core/changelog.html:3 templates/core/changelog.html:6
+msgid "Versions"
+msgstr "Versiones"
+
+#: templates/base.html:35 templates/portal/base.html:11
+msgid "Toggle light/dark mode"
+msgstr "Cambiar modo claro/oscuro"
+
+#: templates/base.html:44
 #, python-format
 msgid "Signed in as <strong>%(username)s</strong>"
 msgstr "Conectado como <strong>%(username)s</strong>"
 
-#: templates/base.html:45 templates/base.html:80 templates/core/docs.html:3
+#: templates/base.html:50 templates/base.html:87 templates/core/docs.html:3
 #: templates/core/docs.html:6
 msgid "Documentation"
 msgstr "Documentación"
 
-#: templates/base.html:47 templates/core/account.html:3
-#: templates/core/account.html:14 templates/projects/auth.html:83
-#: templates/projects/base_project.html:19
-#: templates/projects/dashboard.html:11
-msgid "Settings"
-msgstr "Configuración"
-
-#: templates/base.html:51
+#: templates/base.html:56 templates/portal/base.html:18
 msgid "Sign out"
 msgstr "Cerrar sesión"
 
-#: templates/base.html:56 templates/core/home.html:14
+#: templates/base.html:61 templates/core/home.html:14
+#: templates/portal/base.html:20 templates/portal/home.html:11
+#: templates/portal/login.html:19 templates/portal/login.html:23
 #: templates/registration/login.html:3 templates/registration/login.html:22
 #: templates/registration/signup.html:20
 msgid "Sign in"
 msgstr "Iniciar sesión"
 
-#: templates/base.html:57 templates/registration/signup.html:3
+#: templates/base.html:62 templates/registration/signup.html:3
 msgid "Sign up"
 msgstr "Crear cuenta"
 
-#: templates/base.html:82 templates/base.html:89 templates/core/cookies.html:3
+#: templates/base.html:89 templates/base.html:96 templates/core/cookies.html:3
 msgid "Cookie policy"
 msgstr "Política de cookies"
 
-#: templates/base.html:84
+#: templates/base.html:91
 msgid "Contact"
 msgstr "Contacto"
 
-#: templates/base.html:87
+#: templates/base.html:94
 msgid "Cookie consent"
 msgstr "Consentimiento de cookies"
 
-#: templates/base.html:88
+#: templates/base.html:95
 msgid ""
 "We use cookies that are essential for signing in and keeping the site "
 "secure, plus one to remember your language. We don't use advertising or "
@@ -641,19 +1185,16 @@ msgstr ""
 "una para recordar tu idioma. No usamos cookies de publicidad ni de "
 "seguimiento."
 
-#: templates/base.html:91
-#| msgid "Access"
+#: templates/base.html:98
 msgid "Accept"
 msgstr "Aceptar"
 
-#: templates/base.html:92
+#: templates/base.html:99
 msgid "Only essential"
 msgstr "Solo esenciales"
 
 #: templates/blog/_card.html:6 templates/blog/detail.html:11
 #, python-format
-#| msgid "%(counter)s row"
-#| msgid_plural "%(counter)s rows"
 msgid "%(counter)s min read"
 msgid_plural "%(counter)s min read"
 msgstr[0] "%(counter)s min de lectura"
@@ -675,11 +1216,13 @@ msgstr "Novedades"
 msgid "This article is not available in your language yet."
 msgstr "Este artículo aún no está disponible en tu idioma."
 
-#: templates/blog/detail.html:22 templates/projects/table_data.html:65
+#: templates/blog/detail.html:22 templates/portal/table.html:38
+#: templates/projects/table_data.html:65
 msgid "Previous"
 msgstr "Anterior"
 
-#: templates/blog/detail.html:23 templates/projects/table_data.html:67
+#: templates/blog/detail.html:23 templates/portal/table.html:40
+#: templates/projects/table_data.html:67
 msgid "Next"
 msgstr "Siguiente"
 
@@ -759,21 +1302,24 @@ msgstr ""
 "class=\"inline\">token</code>; envíalo además en <code "
 "class=\"inline\">Authorization: Bearer &lt;token&gt;</code>."
 
-#: templates/core/_api_reference.html:12
-#: templates/projects/base_project.html:16 templates/projects/overview.html:8
+#: templates/core/_api_reference.html:12 templates/portal/base.html:28
+#: templates/projects/base_project.html:16
+#: templates/projects/dashboard.html:37 templates/projects/overview.html:8
 #: templates/projects/tables.html:6
 msgid "Tables"
 msgstr "Tablas"
 
 #: templates/core/_api_reference.html:14 templates/core/_api_reference.html:31
+#: templates/core/_api_reference.html:51
 msgid "Method"
 msgstr "Método"
 
 #: templates/core/_api_reference.html:14 templates/core/_api_reference.html:31
+#: templates/core/_api_reference.html:51
 msgid "Path"
 msgstr "Ruta"
 
-#: templates/core/_api_reference.html:14
+#: templates/core/_api_reference.html:14 templates/core/_api_reference.html:51
 msgid "Action"
 msgstr "Acción"
 
@@ -855,7 +1401,7 @@ msgstr "Regla"
 msgid "Read"
 msgstr "Leer"
 
-#: templates/core/_api_reference.html:40 templates/core/_api_reference.html:62
+#: templates/core/_api_reference.html:40 templates/core/_api_reference.html:86
 msgid "Write"
 msgstr "Escribir"
 
@@ -896,10 +1442,88 @@ msgid "Private"
 msgstr "Privada"
 
 #: templates/core/_api_reference.html:48
+msgid "File storage"
+msgstr "Almacenamiento de archivos"
+
+#: templates/core/_api_reference.html:49
+msgid ""
+"Enable it in the project's <strong>Storage</strong> tab and create buckets. "
+"Public buckets give every file a direct URL; private ones serve files only "
+"to the uploader, with the service key, or through a signed URL that expires."
+msgstr ""
+"Actívalo en la pestaña <strong>Almacenamiento</strong> del proyecto y crea "
+"buckets. Los buckets públicos dan a cada archivo una URL directa; los "
+"privados solo sirven los archivos a quien los subió, con la service key o "
+"mediante una URL firmada que caduca."
+
+#: templates/core/_api_reference.html:52
+msgid "List buckets"
+msgstr "Lista los buckets"
+
+#: templates/core/_api_reference.html:53
+msgid "List files"
+msgstr "Lista los archivos"
+
+#: templates/core/_api_reference.html:54
+msgid ""
+"Upload (multipart field <code>file</code>; <code>?upsert=true</code> "
+"replaces)"
+msgstr ""
+"Sube un archivo (campo multipart <code>file</code>; "
+"<code>?upsert=true</code> reemplaza)"
+
+#: templates/core/_api_reference.html:55
+msgid "Delete a file"
+msgstr "Elimina un archivo"
+
+#: templates/core/_api_reference.html:56
+msgid "Signed URL: <code>{\"expires_in\": 3600}</code>"
+msgstr "URL firmada: <code>{\"expires_in\": 3600}</code>"
+
+#: templates/core/_api_reference.html:57
+msgid "Download (<code>?token=</code> for signed URLs)"
+msgstr "Descarga (<code>?token=</code> para URLs firmadas)"
+
+#: templates/core/_api_reference.html:65
+msgid ""
+"Enable it in the project's <strong>Analytics</strong> tab and add this tag "
+"to the <code>&lt;head&gt;</code> of your website. It sets no cookies and "
+"stores no IP addresses."
+msgstr ""
+"Actívala en la pestaña <strong>Analítica</strong> del proyecto y agrega esta"
+" etiqueta al <code>&lt;head&gt;</code> de tu web. No usa cookies ni guarda "
+"direcciones IP."
+
+#: templates/core/_api_reference.html:67
+msgid ""
+"Campaigns: add <code>utm_source</code>, <code>utm_medium</code> and "
+"<code>utm_campaign</code> to your links."
+msgstr ""
+"Campañas: agrega <code>utm_source</code>, <code>utm_medium</code> y "
+"<code>utm_campaign</code> a tus enlaces."
+
+#: templates/core/_api_reference.html:69
+#: templates/projects/base_project.html:20 templates/projects/portal.html:6
+msgid "Portal"
+msgstr "Portal"
+
+#: templates/core/_api_reference.html:70
+msgid ""
+"The project's <strong>Portal</strong> tab publishes a standalone app at "
+"<code>/app/&lt;username&gt;/&lt;address&gt;/</code>. The project's users "
+"sign in there and view or edit the tables you choose, without writing any "
+"frontend code."
+msgstr ""
+"La pestaña <strong>Portal</strong> del proyecto publica una app "
+"independiente en <code>/app/&lt;usuario&gt;/&lt;dirección&gt;/</code>. Los "
+"usuarios del proyecto inician sesión ahí y ven o editan las tablas que "
+"elijas, sin escribir código de frontend."
+
+#: templates/core/_api_reference.html:72
 msgid "JavaScript SDK"
 msgstr "SDK de JavaScript"
 
-#: templates/core/_api_reference.html:49
+#: templates/core/_api_reference.html:73
 msgid ""
 "A single file, no dependencies or build step. Import it straight from your "
 "server:"
@@ -907,15 +1531,15 @@ msgstr ""
 "Un único archivo, sin dependencias ni build. Impórtalo directamente desde tu"
 " servidor:"
 
-#: templates/core/_api_reference.html:54
+#: templates/core/_api_reference.html:78
 msgid "Chainable queries"
 msgstr "Consultas encadenables"
 
-#: templates/core/_api_reference.html:67
+#: templates/core/_api_reference.html:91
 msgid "Login (the token is stored in localStorage and sent automatically)"
 msgstr "Login (el token se guarda en localStorage y se envía solo)"
 
-#: templates/core/_api_reference.html:72
+#: templates/core/_api_reference.html:96
 msgid ""
 "Every call returns <code class=\"inline\">{ data, error }</code>: it never "
 "throws on API errors."
@@ -923,7 +1547,7 @@ msgstr ""
 "Cada llamada devuelve <code class=\"inline\">{ data, error }</code>: nunca "
 "lanza excepciones por errores de la API."
 
-#: templates/core/_api_reference.html:73
+#: templates/core/_api_reference.html:97
 msgid ""
 "API error messages follow the browser language (<code "
 "class=\"inline\">Accept-Language</code> header)."
@@ -931,48 +1555,86 @@ msgstr ""
 "Los mensajes de error de la API siguen el idioma del navegador (cabecera "
 "<code class=\"inline\">Accept-Language</code>)."
 
+#: templates/core/_file_picker.html:3 templates/core/_file_picker.html:7
+msgid "No file chosen"
+msgstr "Ningún archivo seleccionado"
+
+#: templates/core/_file_picker.html:4
+#, python-brace-format
+#| msgid "%(counter)s file"
+#| msgid_plural "%(counter)s files"
+msgid "{count} files"
+msgstr "{count} archivos"
+
+#: templates/core/_file_picker.html:6
+msgid "Choose files"
+msgstr "Elegir archivos"
+
+#: templates/core/_file_picker.html:6
+msgid "Choose file"
+msgstr "Elegir archivo"
+
 #: templates/core/_language_menu.html:3 templates/core/_language_menu.html:5
-#: templates/core/account.html:20
+#: templates/core/account.html:34
 msgid "Language"
 msgstr "Idioma"
 
-#: templates/core/account.html:28
+#: templates/core/account.html:9
+msgid "Profile picture"
+msgstr "Foto de perfil"
+
+#: templates/core/account.html:19 templates/storage/bucket.html:21
+msgid "Upload"
+msgstr "Subir"
+
+#: templates/core/account.html:21
+msgid "PNG, JPG, WebP or GIF, up to 5 MB. It is cropped to a square."
+msgstr "PNG, JPG, WebP o GIF, hasta 5 MB. Se recorta en forma cuadrada."
+
+#: templates/core/account.html:24
+msgid "Remove picture"
+msgstr "Quitar foto"
+
+#: templates/core/account.html:42
 msgid "Save language"
 msgstr "Guardar idioma"
 
-#: templates/core/account.html:33
+#: templates/core/account.html:47
 msgid "Appearance"
 msgstr "Apariencia"
 
-#: templates/core/account.html:35
+#: templates/core/account.html:49
 msgid "System"
 msgstr "Sistema"
 
-#: templates/core/account.html:36
+#: templates/core/account.html:50
 msgid "Light"
 msgstr "Claro"
 
-#: templates/core/account.html:37
+#: templates/core/account.html:51
 msgid "Dark"
 msgstr "Oscuro"
 
-#: templates/core/account.html:38
+#: templates/core/account.html:52
 msgid "Saved in this browser."
 msgstr "Se guarda en este navegador."
 
-#: templates/core/account.html:44
+#: templates/core/account.html:58
 msgid "Two-step authentication"
 msgstr "Autenticación en dos pasos"
 
-#: templates/core/account.html:45 templates/core/users.html:32
+#: templates/core/account.html:59 templates/core/users.html:32
+#: templates/projects/base_project.html:18
+#: templates/projects/base_project.html:19
+#: templates/projects/base_project.html:20
 msgid "enabled"
 msgstr "activada"
 
-#: templates/core/account.html:45
+#: templates/core/account.html:59
 msgid "disabled"
 msgstr "desactivada"
 
-#: templates/core/account.html:49
+#: templates/core/account.html:63
 #, python-format
 msgid ""
 "When you sign in we ask for a code from your authenticator app. You have "
@@ -987,19 +1649,19 @@ msgstr[1] ""
 "Al iniciar sesión te pedimos un código de tu app de autenticación. Te quedan"
 " %(counter)s códigos de recuperación."
 
-#: templates/core/account.html:53
+#: templates/core/account.html:67
 msgid "Confirm with your password"
 msgstr "Confirma con tu contraseña"
 
-#: templates/core/account.html:57
+#: templates/core/account.html:71
 msgid "New recovery codes"
 msgstr "Nuevos códigos de recuperación"
 
-#: templates/core/account.html:58
+#: templates/core/account.html:72
 msgid "Disable"
 msgstr "Desactivar"
 
-#: templates/core/account.html:62
+#: templates/core/account.html:76
 msgid ""
 "Protect your account: besides your password, ask for a code from an "
 "authenticator app on your phone."
@@ -1007,22 +1669,48 @@ msgstr ""
 "Protege tu cuenta: además de la contraseña, pide un código de una app de "
 "autenticación en tu teléfono."
 
-#: templates/core/account.html:63 templates/core/two_factor_setup.html:3
+#: templates/core/account.html:77 templates/core/two_factor_setup.html:3
 #: templates/core/two_factor_setup.html:6
 msgid "Enable two-step authentication"
 msgstr "Activar autenticación en dos pasos"
 
-#: templates/core/account.html:70
+#: templates/core/account.html:84
 msgid "Change password"
 msgstr "Cambiar contraseña"
 
-#: templates/core/account.html:72
+#: templates/core/account.html:86
 msgid "You will stay signed in on this browser after the change."
 msgstr "Seguirás con la sesión iniciada en este navegador después del cambio."
 
-#: templates/core/account.html:81
+#: templates/core/account.html:95
 msgid "Update password"
 msgstr "Actualizar contraseña"
+
+#: templates/core/changelog.html:7
+#, python-format
+msgid ""
+"What's new in falcondatabase. You are using version "
+"<strong>%(app_version)s</strong>."
+msgstr ""
+"Novedades de falcondatabase. Estás usando la versión "
+"<strong>%(app_version)s</strong>."
+
+#: templates/core/changelog.html:14
+msgid "Latest"
+msgstr "Actual"
+
+#: templates/core/changelog.html:19 templates/portal/table.html:6
+#: templates/projects/dashboard.html:14
+msgid "New"
+msgstr "Nuevo"
+
+#: templates/core/changelog.html:19
+msgid "Improved"
+msgstr "Mejorado"
+
+#: templates/core/changelog.html:19
+msgid "Fixed"
+msgstr "Corregido"
 
 #: templates/core/docs.html:7
 msgid ""
@@ -1258,7 +1946,6 @@ msgstr "Volver a configuración"
 
 #: templates/core/users.html:9
 #, python-format
-#| msgid "Signed in as <strong>%(username)s</strong>"
 msgid "New temporary password for <strong>%(username)s</strong>:"
 msgstr "Nueva contraseña temporal de <strong>%(username)s</strong>:"
 
@@ -1271,7 +1958,7 @@ msgstr ""
 "Configuración. Sus sesiones abiertas se cerraron."
 
 #: templates/core/users.html:17 templates/projects/auth.html:8
-#: templates/projects/dashboard.html:44
+#: templates/projects/dashboard.html:64
 #, python-format
 msgid "%(counter)s user"
 msgid_plural "%(counter)s users"
@@ -1281,10 +1968,6 @@ msgstr[1] "%(counter)s usuarios"
 #: templates/core/users.html:21
 msgid "User"
 msgstr "Usuario"
-
-#: templates/core/users.html:21 templates/projects/dashboard.html:28
-msgid "Projects"
-msgstr "Proyectos"
 
 #: templates/core/users.html:21
 msgid "Joined"
@@ -1320,7 +2003,6 @@ msgstr ""
 "funcionar."
 
 #: templates/core/users.html:44
-#| msgid "Change password"
 msgid "Reset password"
 msgstr "Restablecer contraseña"
 
@@ -1336,24 +2018,140 @@ msgstr "Permitir que se registren nuevos usuarios"
 msgid "If you disable it, only you can create accounts from this page."
 msgstr "Si lo desactivas, solo tú puedes crear cuentas desde esta página."
 
-#: templates/core/users.html:64 templates/projects/auth.html:93
-#: templates/projects/settings.html:19
-#: templates/projects/table_structure.html:82
-msgid "Save"
-msgstr "Guardar"
+#: templates/core/users.html:70
+msgid "Site analytics"
+msgstr "Analítica del sitio"
 
-#: templates/core/users.html:70 templates/core/users.html:80
+#: templates/core/users.html:74
+msgid "Measure visits to this site"
+msgstr "Medir las visitas a este sitio"
+
+#: templates/core/users.html:75
+msgid ""
+"Home, blog, docs, versions and sign-in pages. No cookies; dashboards and "
+"portals are never measured."
+msgstr ""
+"Inicio, blog, documentación, versiones y páginas de acceso. Sin cookies; los"
+" dashboards y portales nunca se miden."
+
+#: templates/core/users.html:79
+msgid "View site analytics →"
+msgstr "Ver la analítica del sitio →"
+
+#: templates/core/users.html:86 templates/core/users.html:96
 #: templates/projects/auth.html:60
 msgid "Create user"
 msgstr "Crear usuario"
 
-#: templates/core/users.html:79
+#: templates/core/users.html:95
 msgid ""
 "The user will be able to sign in to the dashboard and create their own "
 "projects. They won't have admin permissions."
 msgstr ""
 "El usuario podrá entrar al dashboard y crear sus propios proyectos. No "
 "tendrá permisos de admin."
+
+#: templates/portal/base.html:34 templates/portal/home.html:17
+msgid "No tables are shared in this portal yet."
+msgstr "Aún no hay tablas compartidas en este portal."
+
+#: templates/portal/detail.html:5 templates/portal/form.html:5
+#, python-format
+msgid "Record %(id)s"
+msgstr "Registro %(id)s"
+
+#: templates/portal/form.html:5
+msgid "New record"
+msgstr "Nuevo registro"
+
+#: templates/portal/form.html:14 templates/projects/row_edit.html:29
+msgid "This table has no editable columns."
+msgstr "Esta tabla no tiene columnas editables."
+
+#: templates/portal/form.html:17 templates/projects/new.html:25
+#: templates/projects/row_edit.html:32 templates/projects/table_new.html:61
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: templates/portal/form.html:22
+msgid "Delete this record?"
+msgstr "¿Eliminar este registro?"
+
+#: templates/portal/form.html:23 templates/projects/auth.html:31
+#: templates/projects/settings.html:52 templates/projects/table_data.html:56
+#: templates/storage/bucket.html:47
+msgid "Delete"
+msgstr "Eliminar"
+
+#: templates/portal/login.html:6
+#, python-format
+msgid "Create your account in %(name)s"
+msgstr "Crea tu cuenta en %(name)s"
+
+#: templates/portal/login.html:6
+#, python-format
+msgid "Sign in to %(name)s"
+msgstr "Inicia sesión en %(name)s"
+
+#: templates/portal/login.html:19 templates/registration/signup.html:18
+msgid "Create account"
+msgstr "Crear cuenta"
+
+#: templates/portal/login.html:23 templates/registration/signup.html:20
+msgid "Already have an account?"
+msgstr "¿Ya tienes cuenta?"
+
+#: templates/portal/login.html:24
+msgid "New here?"
+msgstr "¿Eres nuevo?"
+
+#: templates/portal/login.html:24 templates/registration/login.html:25
+msgid "Create an account"
+msgstr "Crea una cuenta"
+
+#: templates/portal/login.html:27
+msgid "Continue without signing in"
+msgstr "Continuar sin iniciar sesión"
+
+#: templates/portal/table.html:11
+msgid "Search…"
+msgstr "Buscar…"
+
+#: templates/portal/table.html:13
+msgid "Search"
+msgstr "Buscar"
+
+#: templates/portal/table.html:14
+msgid "Clear"
+msgstr "Limpiar"
+
+#: templates/portal/table.html:15
+#, python-format
+msgid "%(counter)s record"
+msgid_plural "%(counter)s records"
+msgstr[0] "%(counter)s registro"
+msgstr[1] "%(counter)s registros"
+
+#: templates/portal/table.html:31 templates/projects/table_data.html:53
+msgid "Edit"
+msgstr "Editar"
+
+#: templates/portal/table.html:31 templates/projects/dashboard.html:69
+msgid "Open"
+msgstr "Abrir"
+
+#: templates/portal/table.html:39 templates/projects/table_data.html:66
+#, python-format
+msgid "Rows %(start)s–%(end)s of %(total)s"
+msgstr "Filas %(start)s–%(end)s de %(total)s"
+
+#: templates/portal/table.html:43 templates/projects/dashboard.html:74
+msgid "No results"
+msgstr "Sin resultados"
+
+#: templates/portal/table.html:43
+msgid "No records yet"
+msgstr "Aún no hay registros"
 
 #: templates/projects/_keys.html:3
 msgid "Project URL"
@@ -1435,11 +2233,6 @@ msgstr "Activar"
 msgid "Delete %(email)s?"
 msgstr "¿Eliminar a %(email)s?"
 
-#: templates/projects/auth.html:31 templates/projects/settings.html:41
-#: templates/projects/table_data.html:56
-msgid "Delete"
-msgstr "Eliminar"
-
 #: templates/projects/auth.html:39
 msgid "No users yet"
 msgstr "Aún no hay usuarios"
@@ -1490,6 +2283,7 @@ msgid "no login"
 msgstr "sin login"
 
 #: templates/projects/base_project.html:15
+#: templates/projects/dashboard.html:29
 msgid "Overview"
 msgstr "Resumen"
 
@@ -1497,57 +2291,80 @@ msgstr "Resumen"
 msgid "Authentication"
 msgstr "Autenticación"
 
+#: templates/projects/base_project.html:19
+#: templates/projects/dashboard.html:37 templates/storage/dashboard.html:6
+msgid "Storage"
+msgstr "Almacenamiento"
+
 #: templates/projects/dashboard.html:13
 msgid "Your projects"
 msgstr "Tus proyectos"
 
-#: templates/projects/dashboard.html:14
-msgid "New"
-msgstr "Nuevo"
+#: templates/projects/dashboard.html:30
+#, python-format
+msgid "Changes compare the last %(days)s days with the %(days)s before"
+msgstr ""
+"Los cambios comparan los últimos %(days)s días con los %(days)s anteriores"
 
-#: templates/projects/dashboard.html:21
-msgid "You don't have any projects yet."
-msgstr "Todavía no tienes proyectos."
+#: templates/projects/dashboard.html:37 templates/projects/tables.html:12
+msgid "Rows"
+msgstr "Filas"
 
-#: templates/projects/dashboard.html:28
+#: templates/projects/dashboard.html:37
+msgid "App users"
+msgstr "Usuarios de apps"
+
+#: templates/projects/dashboard.html:37
+msgid "New users (30 d)"
+msgstr "Usuarios nuevos (30 d)"
+
+#: templates/projects/dashboard.html:37
+msgid "Active users (30 d)"
+msgstr "Usuarios activos (30 d)"
+
+#: templates/projects/dashboard.html:37
+msgid "Visitors (30 d)"
+msgstr "Visitantes (30 d)"
+
+#: templates/projects/dashboard.html:37
+msgid "Pageviews (30 d)"
+msgstr "Páginas vistas (30 d)"
+
+#: templates/projects/dashboard.html:37
+msgid "Bounce rate (30 d)"
+msgstr "Tasa de rebote (30 d)"
+
+#: templates/projects/dashboard.html:48
 #, python-format
 msgid "Results for “%(query)s”"
 msgstr "Resultados para «%(query)s»"
 
-#: templates/projects/dashboard.html:41
+#: templates/projects/dashboard.html:61
 msgid "No description"
 msgstr "Sin descripción"
 
-#: templates/projects/dashboard.html:43 templates/projects/overview.html:21
+#: templates/projects/dashboard.html:63 templates/projects/overview.html:21
 #, python-format
 msgid "%(counter)s table"
 msgid_plural "%(counter)s tables"
 msgstr[0] "%(counter)s tabla"
 msgstr[1] "%(counter)s tablas"
 
-#: templates/projects/dashboard.html:46
+#: templates/projects/dashboard.html:66
 #, python-format
 msgid "Updated %(since)s ago"
 msgstr "Actualizado hace %(since)s"
 
-#: templates/projects/dashboard.html:49
-msgid "Open"
-msgstr "Abrir"
-
-#: templates/projects/dashboard.html:54
-msgid "No results"
-msgstr "Sin resultados"
-
-#: templates/projects/dashboard.html:54
+#: templates/projects/dashboard.html:74
 #, python-format
 msgid "No project matches “%(query)s”."
 msgstr "Ningún proyecto coincide con «%(query)s»."
 
-#: templates/projects/dashboard.html:58
+#: templates/projects/dashboard.html:78
 msgid "Create your first project"
 msgstr "Crea tu primer proyecto"
 
-#: templates/projects/dashboard.html:59
+#: templates/projects/dashboard.html:79
 msgid "A project groups your tables, users and API keys."
 msgstr "Un proyecto agrupa tus tablas, usuarios y claves de API."
 
@@ -1563,7 +2380,7 @@ msgstr ""
 "Un proyecto tiene su propia base de datos (esquema de PostgreSQL), sus "
 "tablas, sus usuarios y sus claves de API."
 
-#: templates/projects/new.html:12
+#: templates/projects/new.html:12 templates/projects/new.html:40
 msgid "Project name"
 msgstr "Nombre del proyecto"
 
@@ -1571,18 +2388,34 @@ msgstr "Nombre del proyecto"
 msgid "Short, memorable names are best."
 msgstr "Los nombres cortos y fáciles de recordar son los mejores."
 
-#: templates/projects/new.html:21 templates/projects/table_new.html:21
-msgid "optional"
-msgstr "opcional"
-
-#: templates/projects/new.html:25 templates/projects/row_edit.html:32
-#: templates/projects/table_new.html:61
-msgid "Cancel"
-msgstr "Cancelar"
-
 #: templates/projects/new.html:26
 msgid "Create project"
 msgstr "Crear proyecto"
+
+#: templates/projects/new.html:32
+msgid "Or import a project from JSON"
+msgstr "O importa un proyecto desde JSON"
+
+#: templates/projects/new.html:34
+msgid ""
+"Use a file exported from the Settings tab of a project. Tables, columns and "
+"rules are recreated; rows too, if the file includes them."
+msgstr ""
+"Usa un archivo exportado desde la pestaña Configuración de un proyecto. Se "
+"recrean las tablas, columnas y reglas; también las filas, si el archivo las "
+"incluye."
+
+#: templates/projects/new.html:36
+msgid "JSON file"
+msgstr "Archivo JSON"
+
+#: templates/projects/new.html:41
+msgid "Same as in the file"
+msgstr "El mismo del archivo"
+
+#: templates/projects/new.html:43
+msgid "Import project"
+msgstr "Importar proyecto"
 
 #: templates/projects/overview.html:12
 msgid "Login"
@@ -1663,14 +2496,75 @@ msgstr[1] "%(counter)s usuarios registrados"
 msgid "Created on %(date)s"
 msgstr "Creado el %(date)s"
 
+#: templates/projects/portal.html:7
+msgid ""
+"Turn this project into a standalone app: its users sign in at its own "
+"address and view or edit the tables you choose, with forms generated "
+"automatically."
+msgstr ""
+"Convierte este proyecto en una app independiente: sus usuarios inician "
+"sesión en su propia dirección y ven o editan las tablas que elijas, con "
+"formularios generados automáticamente."
+
+#: templates/projects/portal.html:12
+msgid "Your portal is live at"
+msgstr "Tu portal está publicado en"
+
+#: templates/projects/portal.html:24
+msgid "Enable portal"
+msgstr "Activar portal"
+
+#: templates/projects/portal.html:27
+msgid "Address"
+msgstr "Dirección"
+
+#: templates/projects/portal.html:31
+msgid "Lowercase letters, numbers and hyphens, e.g. project1."
+msgstr "Minúsculas, números y guiones, por ejemplo proyecto1."
+
+#: templates/projects/portal.html:35
+msgid "Public portal"
+msgstr "Portal público"
+
+#: templates/projects/portal.html:36
+msgid ""
+"Anyone can view the tables without signing in. Editing always requires "
+"signing in, and Owner tables always require it."
+msgstr ""
+"Cualquiera puede ver las tablas sin iniciar sesión. Editar siempre requiere "
+"iniciar sesión, y las tablas de tipo Dueño también."
+
+#: templates/projects/portal.html:42
+msgid "Tables in the portal"
+msgstr "Tablas en el portal"
+
+#: templates/projects/portal.html:51
+msgid "This project has no tables yet."
+msgstr "Este proyecto aún no tiene tablas."
+
+#: templates/projects/portal.html:56
+#, python-format
+msgid ""
+"People sign in to the portal with the users of the Authentication tab "
+"(%(counter)s user now)."
+msgid_plural ""
+"People sign in to the portal with the users of the Authentication tab "
+"(%(counter)s users now)."
+msgstr[0] ""
+"Las personas entran al portal con los usuarios de la pestaña Autenticación "
+"(ahora %(counter)s usuario)."
+msgstr[1] ""
+"Las personas entran al portal con los usuarios de la pestaña Autenticación "
+"(ahora %(counter)s usuarios)."
+
+#: templates/projects/portal.html:57
+msgid "Manage users"
+msgstr "Gestionar usuarios"
+
 #: templates/projects/row_edit.html:10
 #, python-format
 msgid "row %(id)s"
 msgstr "fila %(id)s"
-
-#: templates/projects/row_edit.html:29
-msgid "This table has no editable columns."
-msgstr "Esta tabla no tiene columnas editables."
 
 #: templates/projects/row_edit.html:33
 msgid "Save changes"
@@ -1686,36 +2580,58 @@ msgid "The project URL (<code class=\"inline\">%(path)s</code>) does not change.
 msgstr "La URL del proyecto (<code class=\"inline\">%(path)s</code>) no cambia."
 
 #: templates/projects/settings.html:29
-#: templates/projects/table_structure.html:89
+msgid "Export"
+msgstr "Exportar"
+
+#: templates/projects/settings.html:31
+msgid ""
+"Download the project as a JSON file: settings, tables, columns, defaults and"
+" access rules. Import it later to create a copy, here or on another server. "
+"The users of your app are not exported."
+msgstr ""
+"Descarga el proyecto como archivo JSON: configuración, tablas, columnas, "
+"valores por defecto y reglas de acceso. Impórtalo después para crear una "
+"copia, aquí o en otro servidor. Los usuarios de tu app no se exportan."
+
+#: templates/projects/settings.html:33
+msgid "Export structure"
+msgstr "Exportar estructura"
+
+#: templates/projects/settings.html:34
+msgid "Export structure and data"
+msgstr "Exportar estructura y datos"
+
+#: templates/projects/settings.html:40
+#: templates/projects/table_structure.html:89 templates/storage/bucket.html:71
 msgid "Danger zone"
 msgstr "Zona de peligro"
 
-#: templates/projects/settings.html:31
+#: templates/projects/settings.html:42
 msgid "Regenerate API keys"
 msgstr "Regenerar API keys"
 
-#: templates/projects/settings.html:31
+#: templates/projects/settings.html:42
 msgid "The current keys will stop working immediately."
 msgstr "Las claves actuales dejarán de funcionar inmediatamente."
 
-#: templates/projects/settings.html:32
+#: templates/projects/settings.html:43
 msgid "Apps using the current keys will stop working. Continue?"
 msgstr ""
 "Las apps que usan las claves actuales dejarán de funcionar. ¿Continuar?"
 
-#: templates/projects/settings.html:34
+#: templates/projects/settings.html:45
 msgid "Regenerate"
 msgstr "Regenerar"
 
-#: templates/projects/settings.html:37
+#: templates/projects/settings.html:48
 msgid "All tables, data and users will be deleted. Continue?"
 msgstr "Se borrarán todas las tablas, datos y usuarios. ¿Continuar?"
 
-#: templates/projects/settings.html:39
+#: templates/projects/settings.html:50
 msgid "Delete project"
 msgstr "Eliminar proyecto"
 
-#: templates/projects/settings.html:39
+#: templates/projects/settings.html:50
 #, python-format
 msgid ""
 "Deletes the <code>%(schema)s</code> schema with all its tables, data and "
@@ -1834,19 +2750,10 @@ msgstr ""
 msgid "Save row"
 msgstr "Guardar fila"
 
-#: templates/projects/table_data.html:53
-msgid "Edit"
-msgstr "Editar"
-
 #: templates/projects/table_data.html:54
 #, python-format
 msgid "Delete row %(id)s?"
 msgstr "¿Eliminar la fila %(id)s?"
-
-#: templates/projects/table_data.html:66
-#, python-format
-msgid "Rows %(start)s–%(end)s of %(total)s"
-msgstr "Filas %(start)s–%(end)s de %(total)s"
 
 #: templates/projects/table_data.html:72
 msgid "The table is empty"
@@ -1971,7 +2878,7 @@ msgstr ""
 msgid "This deletes the table and all its data. Continue?"
 msgstr "Esta acción borra la tabla y todos sus datos. ¿Continuar?"
 
-#: templates/projects/table_structure.html:91
+#: templates/projects/table_structure.html:91 templates/storage/bucket.html:73
 #, python-format
 msgid "Type <strong>%(name)s</strong> to confirm:"
 msgstr "Escribe <strong>%(name)s</strong> para confirmar:"
@@ -1984,11 +2891,7 @@ msgstr "Eliminar tabla"
 msgid "Access"
 msgstr "Acceso"
 
-#: templates/projects/tables.html:12
-msgid "Rows"
-msgstr "Filas"
-
-#: templates/projects/tables.html:12
+#: templates/projects/tables.html:12 templates/storage/bucket.html:29
 msgid "Updated"
 msgstr "Actualizada"
 
@@ -2030,10 +2933,6 @@ msgstr "Usuario o email"
 msgid "New to falcondatabase?"
 msgstr "¿Nuevo en falcondatabase?"
 
-#: templates/registration/login.html:25
-msgid "Create an account"
-msgstr "Crea una cuenta"
-
 #: templates/registration/login.html:27
 #, python-format
 msgid ""
@@ -2072,10 +2971,145 @@ msgstr "Volver a iniciar sesión"
 msgid "Create your account"
 msgstr "Crea tu cuenta"
 
-#: templates/registration/signup.html:18
-msgid "Create account"
-msgstr "Crear cuenta"
+#: templates/storage/bucket.html:7
+msgid "storage"
+msgstr "almacenamiento"
 
-#: templates/registration/signup.html:20
-msgid "Already have an account?"
-msgstr "¿Ya tienes cuenta?"
+#: templates/storage/bucket.html:20
+msgid "into folder (optional)"
+msgstr "en la carpeta (opcional)"
+
+#: templates/storage/bucket.html:22
+msgid "Files with the same name are replaced."
+msgstr "Los archivos con el mismo nombre se reemplazan."
+
+#: templates/storage/bucket.html:29
+msgid "Size"
+msgstr "Tamaño"
+
+#: templates/storage/bucket.html:33
+msgid "folder"
+msgstr "carpeta"
+
+#: templates/storage/bucket.html:42
+msgid "Copy public URL"
+msgstr "Copiar URL pública"
+
+#: templates/storage/bucket.html:43
+msgid "Create a link valid for 1 hour"
+msgstr "Crear un enlace válido durante 1 hora"
+
+#: templates/storage/bucket.html:43
+msgid "Link"
+msgstr "Enlace"
+
+#: templates/storage/bucket.html:44
+msgid "Download"
+msgstr "Descargar"
+
+#: templates/storage/bucket.html:45
+#, python-format
+msgid "Delete %(name)s?"
+msgstr "¿Eliminar %(name)s?"
+
+#: templates/storage/bucket.html:55
+msgid "This folder is empty"
+msgstr "Esta carpeta está vacía"
+
+#: templates/storage/bucket.html:55
+msgid "Upload files with the form above or from your app."
+msgstr "Sube archivos con el formulario de arriba o desde tu app."
+
+#: templates/storage/bucket.html:65
+msgid "Public bucket"
+msgstr "Bucket público"
+
+#: templates/storage/bucket.html:65
+msgid "Anyone with a file URL can download it."
+msgstr "Cualquiera con la URL de un archivo puede descargarlo."
+
+#: templates/storage/bucket.html:69
+msgid "This deletes the bucket and all its files. Continue?"
+msgstr "Esto elimina el bucket y todos sus archivos. ¿Continuar?"
+
+#: templates/storage/bucket.html:75
+msgid "Delete bucket"
+msgstr "Eliminar bucket"
+
+#: templates/storage/dashboard.html:7
+msgid ""
+"Store files for your app in buckets: images, documents, backups… Public "
+"buckets give every file a direct URL; private ones need a signed link or the"
+" service key."
+msgstr ""
+"Guarda archivos para tu app en buckets: imágenes, documentos, copias de "
+"seguridad… Los buckets públicos dan a cada archivo una URL directa; los "
+"privados necesitan un enlace firmado o la service key."
+
+#: templates/storage/dashboard.html:15
+msgid "Enable storage"
+msgstr "Activar almacenamiento"
+
+#: templates/storage/dashboard.html:15
+msgid "Accept uploads and downloads through the API and public links."
+msgstr "Aceptar subidas y descargas por la API y enlaces públicos."
+
+#: templates/storage/dashboard.html:22 templates/storage/dashboard.html:30
+msgid "Buckets"
+msgstr "Buckets"
+
+#: templates/storage/dashboard.html:23
+msgid "Used"
+msgstr "Usado"
+
+#: templates/storage/dashboard.html:26
+msgid "Max file size"
+msgstr "Tamaño máximo de archivo"
+
+#: templates/storage/dashboard.html:35
+#, python-format
+msgid "%(counter)s file"
+msgid_plural "%(counter)s files"
+msgstr[0] "%(counter)s archivo"
+msgstr[1] "%(counter)s archivos"
+
+#: templates/storage/dashboard.html:38
+msgid "No buckets yet"
+msgstr "Aún no hay buckets"
+
+#: templates/storage/dashboard.html:38
+msgid "Create one to start uploading files."
+msgstr "Crea uno para empezar a subir archivos."
+
+#: templates/storage/dashboard.html:44
+msgid "New bucket"
+msgstr "Nuevo bucket"
+
+#: templates/storage/dashboard.html:47
+msgid "e.g. avatars"
+msgstr "ej: avatares"
+
+#: templates/storage/dashboard.html:48
+msgid "Public (anyone with the URL can download)"
+msgstr "Público (cualquiera con la URL puede descargar)"
+
+#: templates/storage/dashboard.html:49
+msgid "Create bucket"
+msgstr "Crear bucket"
+
+#: templates/storage/dashboard.html:51
+msgid "Lowercase letters, numbers and hyphens."
+msgstr "Minúsculas, números y guiones."
+
+#: templates/storage/dashboard.html:56
+msgid "Use it from your app"
+msgstr "Úsalo desde tu app"
+
+#: templates/storage/dashboard.html:66
+msgid ""
+"Uploads need a signed-in user of your app or the service key. Users can only"
+" see, share and delete the files they uploaded to private buckets."
+msgstr ""
+"Para subir se necesita un usuario de tu app con sesión o la service key. En "
+"los buckets privados, cada usuario solo ve, comparte y elimina los archivos "
+"que subió."

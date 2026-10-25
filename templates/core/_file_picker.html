@@ -1,0 +1,8 @@
+{% load i18n falcon %}{# Expects: name, accept (optional), multiple (optional), input_id (optional) #}
+<label class="file-picker" data-file-picker
+       data-none="{% translate 'No file chosen' %}"
+       data-many="{% translate '{count} files' %}">
+  <input type="file" name="{{ name }}" {% if input_id %}id="{{ input_id }}"{% endif %} {% if accept %}accept="{{ accept }}"{% endif %} {% if multiple %}multiple{% endif %} required>
+  <span class="btn btn-sm">{% icon 'upload' 14 %} {% if multiple %}{% translate "Choose files" %}{% else %}{% translate "Choose file" %}{% endif %}</span>
+  <span class="file-picker-name muted small">{% translate "No file chosen" %}</span>
+</label>

@@ -21,9 +21,9 @@ from django.views.decorators.http import require_POST
 
 from blog import posts as blog_posts
 
-from . import totp
+from . import avatars, changelog, totp
 from .forms import SignupForm
-from .models import SiteSettings, TwoFactor
+from .models import Avatar, SiteSettings, TwoFactor
 
 # Session keys of the two-step login and of the 2FA setup.
 PENDING_LOGIN = "falcondb_2fa_pending"
@@ -35,6 +35,47 @@ VERIFY_MAX_TRIES = 5
 def home(request):
     latest_posts = blog_posts.posts_for(get_language())[:3]
     return render(request, "core/home.html", {"latest_posts": latest_posts})
+
+
+EXTENSION_DIR = settings.BASE_DIR / "extension"
+
+
+def extension_page(request):
+    return render(request, "core/extension.html")
+
+
+def extension_zip(request):
+    """The Chrome extension, pre-configured for this server (URL and host permission)."""
+    import io
+    import json
+    import zipfile
+    from urllib.parse import urlsplit
+
+    server = request.build_absolute_uri("/").rstrip("/")
+    parts = urlsplit(server)
+    buffer = io.BytesIO()
+    with zipfile.ZipFile(buffer, "w", zipfile.ZIP_DEFLATED) as archive:
+        for path in sorted(EXTENSION_DIR.rglob("*")):
+            if path.is_dir() or path.name.startswith("."):
+                continue
+            name = path.relative_to(EXTENSION_DIR).as_posix()
+            if name == "config.js":
+                content = f"// Pre-configured for {server}\nexport const DEFAULT_SERVER = {json.dumps(server)};\n"
+            elif name == "manifest.json":
+                manifest = json.loads(path.read_text(encoding="utf-8"))
+                manifest["host_permissions"] = [f"{parts.scheme}://{parts.hostname}/*"]
+                content = json.dumps(manifest, indent=2)
+            else:
+                archive.write(path, f"falcondatabase-extension/{name}")
+                continue
+            archive.writestr(f"falcondatabase-extension/{name}", content)
+    response = HttpResponse(buffer.getvalue(), content_type="application/zip")
+    response["Content-Disposition"] = 'attachment; filename="falcondatabase-extension.zip"'
+    return response
+
+
+def changelog_page(request):
+    return render(request, "core/changelog.html", {"releases": changelog.releases(get_language())})
 
 
 def cookies(request):
@@ -110,8 +151,26 @@ def login_verify(request):
 
 @login_required
 def account(request):
-    """Profile settings: language, theme, password and two-step authentication."""
+    """Profile settings: picture, language, theme, password and two-step authentication."""
+    action = request.POST.get("action")
+    if action == "avatar":
+        try:
+            if "avatar" not in request.FILES:
+                raise avatars.AvatarError(_("Choose an image."))
+            avatars.save(request.user, request.FILES["avatar"])
+        except avatars.AvatarError as exc:
+            messages.error(request, str(exc))
+        else:
+            messages.success(request, _("Profile picture updated."))
+        return redirect("account")
+    if action == "avatar_delete":
+        Avatar.objects.filter(user=request.user).delete()
+        messages.success(request, _("Profile picture removed."))
+        return redirect("account")
+
     form = PasswordChangeForm(request.user, request.POST or None)
+    # Django autofocuses this field, which scrolls the settings page to the bottom.
+    form.fields["old_password"].widget.attrs.pop("autofocus", None)
     if request.method == "POST" and form.is_valid():
         user = form.save()
         # Keep the current session valid after the password hash changes.
@@ -119,7 +178,9 @@ def account(request):
         messages.success(request, _("Your password was changed."))
         return redirect("account")
     two_factor = TwoFactor.objects.filter(user=request.user).first()
-    return render(request, "core/account.html", {"form": form, "two_factor": two_factor})
+    return render(request, "core/account.html", {
+        "form": form, "two_factor": two_factor, "has_avatar": Avatar.objects.filter(user=request.user).exists(),
+    })
 
 
 def qr_svg(data):
@@ -194,6 +255,22 @@ def users(request):
             site.save()
             messages.success(request, _("Sign up enabled.") if site.allow_signup else _("Sign up disabled."))
             return redirect("users")
+        elif action == "site_analytics":
+            enable = bool(request.POST.get("enabled"))
+            project = site.analytics_project
+            if enable and project is None:
+                from projects import services
+
+                project = services.create_project(request.user, "falcondatabase site",
+                                                  _("Visits to the public pages of this site"))
+                site.analytics_project = project
+                site.save(update_fields=["analytics_project"])
+            if project is not None:
+                project.analytics_enabled = enable
+                project.analytics_domains = request.get_host().split(":")[0] if enable else project.analytics_domains
+                project.save(update_fields=["analytics_enabled", "analytics_domains", "updated_at"])
+            messages.success(request, _("Site analytics enabled.") if enable else _("Site analytics disabled."))
+            return redirect("users")
         elif action == "reset_2fa":
             user = get_object_or_404(get_user_model(), pk=request.POST.get("user"))
             TwoFactor.objects.filter(user=user).delete()
@@ -213,6 +290,15 @@ def users(request):
     })
 
 
+@login_required
+def avatar_image(request, user_id):
+    avatar = get_object_or_404(Avatar, user_id=user_id)
+    response = HttpResponse(bytes(avatar.image), content_type="image/webp")
+    # The URL carries ?v=<timestamp>, so a new picture gets a new URL.
+    response["Cache-Control"] = "private, max-age=31536000, immutable"
+    return response
+
+
 def healthz(request):
     """Liveness check for Docker and load balancers: the app answers and the database is reachable."""
     try:
@@ -220,7 +306,7 @@ def healthz(request):
             cursor.execute("SELECT 1")
     except Exception:
         return JsonResponse({"status": "error", "database": "unreachable"}, status=503)
-    return JsonResponse({"status": "ok"})
+    return JsonResponse({"status": "ok", "version": changelog.VERSION})
 
 
 @cache_control(public=True, max_age=300)

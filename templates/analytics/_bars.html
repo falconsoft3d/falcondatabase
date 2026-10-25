@@ -1,0 +1,27 @@
+{% load i18n falcon analytics_tags %}{# Expects: title, rows, key, kind, metric #}
+<section class="box breakdown">
+  <div class="box-header"><strong class="grow">{{ title }}</strong><span class="muted small">{{ metric }}</span></div>
+  {% if rows %}
+    <ol class="bar-list">
+      {% for row in rows %}
+        {% with value=row|get_item:key %}
+          <li>
+            <div class="bar-label">
+              <span class="bar-name">
+                {% if kind == "country" %}{% if value %}<span aria-hidden="true">{{ value|flag }}</span> <span data-country-code="{{ value }}">{{ value }}</span>{% else %}{% translate "Unknown" %}{% endif %}
+                {% elif kind == "medium" %}{{ value|medium_label }}
+                {% elif kind == "device" %}{{ value|device_label }}
+                {% elif kind == "page" %}<span class="mono" title="{{ row.hostname }}{{ row.path }}">{% if show_host %}<span class="muted">{{ row.hostname }}</span>{% endif %}{{ row.path }}</span>
+                {% else %}{{ value|default:_("Unknown") }}{% endif %}
+              </span>
+              <span class="bar-value">{{ row.value|compact }} <span class="muted">· {{ row.share }}%</span></span>
+            </div>
+            <div class="bar-track" aria-hidden="true"><span class="bar-fill" style="width:{{ row.width }}%"></span></div>
+          </li>
+        {% endwith %}
+      {% endfor %}
+    </ol>
+  {% else %}
+    <p class="muted small box-body">{% translate "No data for this period." %}</p>
+  {% endif %}
+</section>

@@ -25,6 +25,17 @@
     <div class="box-body">{% include "projects/_keys.html" %}</div>
   </div>
 
+  <div class="box">
+    <div class="box-header">{% icon 'refresh' %} <strong>{% translate "Export" %}</strong></div>
+    <div class="box-body">
+      <p class="muted">{% translate "Download the project as a JSON file: settings, tables, columns, defaults and access rules. Import it later to create a copy, here or on another server. The users of your app are not exported." %}</p>
+      <div class="row" style="flex-wrap:wrap">
+        <a class="btn" href="{% url 'projects:export' project.owner.username project.slug %}">{% icon 'code' %} {% translate "Export structure" %}</a>
+        <a class="btn" href="{% url 'projects:export' project.owner.username project.slug %}?data=1">{% icon 'database' %} {% translate "Export structure and data" %}</a>
+      </div>
+    </div>
+  </div>
+
   <div class="box box-danger">
     <div class="box-header box-header-danger"><strong>{% translate "Danger zone" %}</strong></div>
     <div class="box-row">

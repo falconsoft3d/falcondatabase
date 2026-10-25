@@ -25,7 +25,7 @@ from django.utils import timezone
 from django.utils.translation import gettext as _
 from django.views.decorators.csrf import csrf_exempt
 
-from projects import schema
+from projects import activity, schema
 from projects.models import Project, ProjectUser
 
 from .auth import ApiError, access_filters, issue_token, resolve_client, visible_to
@@ -75,6 +75,13 @@ def endpoint(*methods):
         return wrapper
 
     return decorator
+
+
+def actor_name(client):
+    """Who made an API change, for the project's activity list."""
+    if client.role == "user":
+        return client.user.email
+    return "API (service key)" if client.is_service else "API"
 
 
 def read_json(request):
@@ -182,6 +189,7 @@ def table_rows(request, project, client, table_name):
             item[schema.OWNER_COLUMN] = client.user.pk
     with transaction.atomic():
         created = [schema.insert_row(project.schema, table.name, item, columns) for item in items]
+    activity.record(project, "rows_inserted", actor=actor_name(client), target=table.name, count=len(created))
     return respond({"data": created if many else created[0]}, 201)
 
 
@@ -195,11 +203,14 @@ def table_row(request, project, client, table_name, row_id):
     elif request.method == "DELETE":
         if not schema.delete_row(project.schema, table.name, row_id, access_filters(table, client, "write")):
             raise ApiError(_("Row not found."), 404)
+        activity.record(project, "row_deleted", actor=actor_name(client), target=table.name)
         return respond({"data": {"id": row_id}})
     else:
         extra = access_filters(table, client, "write")
         values = clean_values(read_json(request), client)
         row = schema.update_row(project.schema, table.name, row_id, values, filters=extra)
+        if row is not None:
+            activity.record(project, "row_updated", actor=actor_name(client), target=table.name)
 
     if row is None:
         raise ApiError(_("Row not found."), 404)

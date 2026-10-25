@@ -224,7 +224,8 @@ class SiteTests(TestCase):
         self.assertContains(response, ">Home</a>")
 
     def test_healthz(self):
-        self.assertEqual(self.client.get("/healthz").json(), {"status": "ok"})
+        from core.changelog import VERSION
+        self.assertEqual(self.client.get("/healthz").json(), {"status": "ok", "version": VERSION})
 
     def test_ensureadmin(self):
         make_user("old-admin", is_superuser=True)
@@ -236,3 +237,135 @@ class SiteTests(TestCase):
         admins = list(get_user_model().objects.filter(is_superuser=True).values_list("username", flat=True))
         self.assertEqual(admins, ["marlon"])
         self.assertTrue(get_user_model().objects.get(username="marlon").check_password("secret-pass-123"))
+
+
+class AvatarTests(TestCase):
+    def setUp(self):
+        self.user = make_user("ana")
+        self.client.force_login(self.user)
+
+    def image_file(self, fmt="PNG", size=(600, 400)):
+        from io import BytesIO
+
+        from django.core.files.uploadedfile import SimpleUploadedFile
+        from PIL import Image
+
+        buffer = BytesIO()
+        Image.new("RGB", size, (237, 99, 125)).save(buffer, fmt)
+        return SimpleUploadedFile(f"me.{fmt.lower()}", buffer.getvalue(), content_type=f"image/{fmt.lower()}")
+
+    def test_upload_resize_serve_and_remove(self):
+        from io import BytesIO
+
+        from PIL import Image
+
+        self.client.post(reverse("account"), {"action": "avatar", "avatar": self.image_file()})
+        response = self.client.get(reverse("avatar", args=[self.user.pk]))
+        self.assertEqual(response["Content-Type"], "image/webp")
+        self.assertEqual(Image.open(BytesIO(response.content)).size, (256, 256))
+        self.assertContains(self.client.get(reverse("dashboard")), f'src="/avatars/{self.user.pk}/?v=')
+
+        self.client.post(reverse("account"), {"action": "avatar_delete"})
+        self.assertEqual(self.client.get(reverse("avatar", args=[self.user.pk])).status_code, 404)
+
+    def test_rejects_non_images(self):
+        from django.core.files.uploadedfile import SimpleUploadedFile
+
+        fake = SimpleUploadedFile("x.png", b"not an image", content_type="image/png")
+        response = self.client.post(reverse("account"), {"action": "avatar", "avatar": fake}, follow=True)
+        self.assertContains(response, "flash-error")
+        self.assertEqual(self.client.get(reverse("avatar", args=[self.user.pk])).status_code, 404)
+
+    def test_requires_login(self):
+        self.client.logout()
+        self.assertEqual(self.client.get(reverse("avatar", args=[self.user.pk])).status_code, 302)
+
+
+class ChangelogTests(TestCase):
+    def test_versions_page_and_footer(self):
+        from core.changelog import RELEASES, VERSION
+
+        self.assertEqual(VERSION, RELEASES[0]["version"])
+        response = self.client.get(reverse("changelog"), headers={"Accept-Language": "en"})
+        self.assertContains(response, f"v{VERSION}")
+        for release in RELEASES:
+            self.assertContains(response, release["title"]["en"])
+        spanish = self.client.get(reverse("changelog"), headers={"Accept-Language": "es"})
+        self.assertContains(spanish, RELEASES[0]["title"]["es"])
+        self.assertContains(self.client.get(reverse("home")), f'v{VERSION}</a>')
+
+    def test_every_release_is_bilingual(self):
+        from core.changelog import RELEASES
+
+        for release in RELEASES:
+            self.assertTrue(release["title"]["en"] and release["title"]["es"])
+            for kind, en, es in release["changes"]:
+                self.assertIn(kind, ("added", "improved", "fixed"))
+                self.assertTrue(en and es)
+
+
+class AccountApiTests(TestCase):
+    def setUp(self):
+        self.user = make_user("ana")
+
+    def token(self, **extra):
+        body = {"username": "ana", "password": "pass12345", **extra}
+        return self.client.post(reverse("account_token"), body, content_type="application/json")
+
+    def auth(self, token):
+        return {"Authorization": f"Bearer {token}"}
+
+    def test_token_and_analytics(self):
+        from projects import services
+
+        self.assertEqual(self.client.post(reverse("account_token"), {"username": "ana", "password": "x"},
+                                          content_type="application/json").status_code, 401)
+        response = self.token()
+        self.assertEqual(response.status_code, 200)
+        token = response.json()["token"]
+        self.assertEqual(response.json()["user"]["username"], "ana")
+
+        services.create_project(self.user, "Shop")
+        other = make_user("bob")
+        services.create_project(other, "Secret")
+        data = self.client.get(reverse("account_analytics") + "?days=7", headers=self.auth(token)).json()
+        self.assertEqual([p["name"] for p in data["projects"]], ["Shop"])
+        self.assertEqual(len(data["report"]["series"]), 7)
+        self.assertIn("today", data)
+
+        self.assertEqual(self.client.get(reverse("account_me")).status_code, 401)
+        self.assertEqual(self.client.get(reverse("account_me"), headers=self.auth("bad")).status_code, 401)
+
+    def test_password_change_revokes_token(self):
+        token = self.token().json()["token"]
+        self.assertEqual(self.client.get(reverse("account_me"), headers=self.auth(token)).status_code, 200)
+        self.user.set_password("new-pass-987")
+        self.user.save()
+        self.assertEqual(self.client.get(reverse("account_me"), headers=self.auth(token)).status_code, 401)
+
+    def test_two_factor_required(self):
+        device = TwoFactor.objects.create(user=self.user, secret=totp.generate_secret())
+        response = self.token()
+        self.assertEqual(response.status_code, 401)
+        self.assertTrue(response.json()["two_factor_required"])
+        self.assertEqual(self.token(code="000000").status_code, 401)
+        code = totp._code(device.secret, totp.current_counter())
+        self.assertEqual(self.token(code=code).status_code, 200)
+
+    def test_extension_download_is_preconfigured(self):
+        import io
+        import json
+        import zipfile
+
+        self.assertContains(self.client.get(reverse("extension")), reverse("extension_zip"))
+        response = self.client.get(reverse("extension_zip"))
+        archive = zipfile.ZipFile(io.BytesIO(response.content))
+        names = archive.namelist()
+        self.assertIn("falcondatabase-extension/manifest.json", names)
+        self.assertIn("falcondatabase-extension/icons/icon-128.png", names)
+        manifest = json.loads(archive.read("falcondatabase-extension/manifest.json"))
+        self.assertEqual(manifest["manifest_version"], 3)
+        self.assertEqual(manifest["host_permissions"], ["http://testserver/*"])
+        config = archive.read("falcondatabase-extension/config.js").decode()
+        self.assertIn('DEFAULT_SERVER = "http://testserver"', config)
+        self.assertContains(self.client.get(reverse("home")), reverse("extension"))

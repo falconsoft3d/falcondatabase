@@ -1,0 +1,59 @@
+{% load i18n static falcon analytics_tags %}{# Expects: report, periods, query_prefix #}
+<div class="analytics" data-lang="{{ LANGUAGE_CODE }}">
+  <div class="kpi-row">
+    {% for kpi in report.kpis %}
+      <div class="stat kpi">
+        <div>
+          <div class="stat-label">
+            {% if kpi.key == "visitors" %}{% translate "Visitors" %}{% elif kpi.key == "sessions" %}{% translate "Sessions" %}{% elif kpi.key == "pageviews" %}{% translate "Pageviews" %}{% elif kpi.key == "views_per_session" %}{% translate "Pages / session" %}{% else %}{% translate "Bounce rate" %}{% endif %}
+          </div>
+          <div class="stat-value">{% if kpi.key == "bounce_rate" %}{% if kpi.value is None %}—{% else %}{{ kpi.value }}%{% endif %}{% else %}{{ kpi.value|compact }}{% endif %}</div>
+          {% include "analytics/_delta.html" with item=kpi days=report.days %}
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+  <div class="chart-grid">
+    {% for metric in "sessions visitors pageviews"|split %}
+      <figure class="box chart-card" data-area-chart="{{ metric }}">
+        <figcaption class="box-header">
+          <strong class="grow">{% if metric == "sessions" %}{% translate "Sessions" %}{% elif metric == "visitors" %}{% translate "Users" %}{% else %}{% translate "Pageviews" %}{% endif %}</strong>
+          <span class="muted small">{% blocktranslate with days=report.days %}Last {{ days }} days, daily{% endblocktranslate %}</span>
+        </figcaption>
+        <div class="chart-plot" role="img" aria-label="{% translate 'Daily chart' %}"></div>
+        <details class="chart-table">
+          <summary class="small">{% translate "Show as table" %}</summary>
+          <table class="list small">
+            <thead><tr><th>{% translate "Day" %}</th><th>{% translate "Value" %}</th></tr></thead>
+            <tbody>{% for point in report.series %}<tr><td>{{ point.date }}</td><td class="num">{{ point|get_item:metric }}</td></tr>{% endfor %}</tbody>
+          </table>
+        </details>
+      </figure>
+    {% endfor %}
+  </div>
+
+  <div class="breakdown-grid">
+    {% if report.projects is not None %}
+      {% translate "By project" as t %}{% translate "Pageviews" as m %}
+      {% include "analytics/_bars.html" with title=t rows=report.projects key="project__name" kind="text" metric=m %}
+    {% endif %}
+    {% translate "By countries" as t %}{% translate "Visitors" as m %}
+    {% include "analytics/_bars.html" with title=t rows=report.countries key="country" kind="country" metric=m %}
+    {% translate "By mediums" as t %}{% translate "Sessions" as m %}
+    {% include "analytics/_bars.html" with title=t rows=report.mediums key="medium" kind="medium" metric=m %}
+    {% translate "By sources" as t %}
+    {% include "analytics/_bars.html" with title=t rows=report.sources key="source" kind="text" metric=m %}
+    {% translate "Top pages" as t %}{% translate "Pageviews" as m %}
+    {% include "analytics/_bars.html" with title=t rows=report.pages key="path" kind="page" metric=m %}
+    {% translate "By devices" as t %}{% translate "Visitors" as m %}
+    {% include "analytics/_bars.html" with title=t rows=report.devices key="device" kind="device" metric=m %}
+    {% translate "By browsers" as t %}
+    {% include "analytics/_bars.html" with title=t rows=report.browsers key="browser" kind="text" metric=m %}
+    {% translate "By operating systems" as t %}
+    {% include "analytics/_bars.html" with title=t rows=report.systems key="os" kind="text" metric=m %}
+  </div>
+  <p class="muted small">{% translate "Days are in UTC. Visitors are counted once per day: to protect privacy, the anonymous visitor id changes every day." %}</p>
+</div>
+{{ report.series|json_script:"analytics-series" }}
+<script src="{% static 'js/analytics.js' %}" defer></script>

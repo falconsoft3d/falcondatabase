@@ -3,7 +3,7 @@ from django.http import HttpResponse
 
 ALLOWED_HEADERS = "apikey, authorization, content-type, x-api-key"
 ALLOWED_METHODS = "GET, POST, PATCH, PUT, DELETE, OPTIONS"
-CORS_PATHS = ("/api/", "/sdk/")
+CORS_PATHS = ("/api/", "/sdk/", "/a.js", "/storage/")
 
 
 class CorsMiddleware:

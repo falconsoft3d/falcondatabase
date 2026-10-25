@@ -25,8 +25,11 @@ def create_project(owner, name, description=""):
 
 @transaction.atomic
 def delete_project(project):
+    from storage.files import delete_project_files
+
     schema.drop_schema(project.schema)
     project.delete()
+    transaction.on_commit(lambda: delete_project_files(project))
 
 
 @transaction.atomic

@@ -1,0 +1,27 @@
+{% extends "projects/base_project.html" %}
+{% load i18n falcon %}
+{% block content %}
+<div class="container stack">
+  <div class="row" style="flex-wrap:wrap">
+    <h2 class="grow" style="margin:0">{% translate "Web analytics" %}</h2>
+    {% if project.analytics_enabled %}{% include "analytics/_periods.html" with extra_query="" %}{% endif %}
+  </div>
+
+  {% if project.analytics_enabled and report.totals.pageviews %}
+    {% include "analytics/_dashboard.html" %}
+    <h3 style="margin-top:32px">{% translate "Setup" %}</h3>
+    {% include "analytics/_setup.html" %}
+  {% else %}
+    {% if project.analytics_enabled %}
+      <div class="flash flash-info">{% icon 'zap' %} <span>{% translate "No visits yet in this period. Add the script to your website and open a page to see the first data." %}</span></div>
+    {% else %}
+      <div class="box blankslate">
+        {% icon 'chart' 32 %}
+        <h3>{% translate "Analytics is disabled" %}</h3>
+        <p class="muted">{% translate "Enable it to get a tracking script for your website and see visitors, sessions, pageviews, countries, sources and devices." %}</p>
+      </div>
+    {% endif %}
+    {% include "analytics/_setup.html" %}
+  {% endif %}
+</div>
+{% endblock %}

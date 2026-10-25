@@ -32,6 +32,8 @@ services:
         condition: service_healthy
     ports:
       - "${FALCONDB_BIND:-0.0.0.0}:${FALCONDB_PORT:-8000}:8000"
+    volumes:
+      - storage:/app/media
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/healthz', timeout=5)"]
       interval: 15s
@@ -41,3 +43,4 @@ services:
 
 volumes:
   pgdata:
+  storage:

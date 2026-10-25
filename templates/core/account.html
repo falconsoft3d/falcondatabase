@@ -3,15 +3,29 @@
 {% block title %}{% translate "Settings" %} · falcondatabase{% endblock %}
 {% block content %}
 <div class="container-sm stack">
-  <div class="row">
-    <span class="avatar">{{ user|initial }}</span>
-    <div class="grow">
-      <strong>{{ user.username }}</strong>
-      {% if user.is_superuser %}<span class="label label-done">admin</span>{% endif %}
-      <div class="muted small">{{ user.email }}</div>
+  <h1>{% translate "Settings" %}</h1>
+
+  <div class="box">
+    <div class="box-header">{% icon 'users' %} <strong>{% translate "Profile picture" %}</strong></div>
+    <div class="box-body avatar-editor">
+      {% avatar user 88 %}
+      <div class="grow">
+        <strong>{{ user.username }}</strong>
+        {% if user.is_superuser %}<span class="label label-done">admin</span>{% endif %}
+        <div class="muted small" style="margin-bottom:12px">{{ user.email }}</div>
+        <form method="post" enctype="multipart/form-data" class="row" style="flex-wrap:wrap">
+          {% csrf_token %}<input type="hidden" name="action" value="avatar">
+          {% include "core/_file_picker.html" with name="avatar" accept="image/png,image/jpeg,image/webp,image/gif" %}
+          <button class="btn btn-primary btn-sm" type="submit">{% translate "Upload" %}</button>
+        </form>
+        <p class="help">{% translate "PNG, JPG, WebP or GIF, up to 5 MB. It is cropped to a square." %}</p>
+        {% if has_avatar %}
+          <form method="post" style="margin-top:8px">{% csrf_token %}<input type="hidden" name="action" value="avatar_delete">
+            <button class="btn btn-sm btn-danger" type="submit">{% translate "Remove picture" %}</button></form>
+        {% endif %}
+      </div>
     </div>
   </div>
-  <h1>{% translate "Settings" %}</h1>
 
   <div class="layout-two">
     <form action="{% url 'set_language' %}" method="post" class="box">

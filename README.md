@@ -1,153 +1,328 @@
 # falcondatabase
 
-Alternativa simple a Supabase/Firebase, con estilo GitHub, hecha con **Django + PostgreSQL**.
+A simple, self-hosted alternative to Firebase and Supabase with a GitHub-style interface, built with **Django** and **PostgreSQL**.
 
-Crea proyectos, agrégales tablas reales de PostgreSQL y login de usuarios, y consulta todo desde cualquier frontend con una API REST o con el SDK de JavaScript.
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/screenshots/home-dark.png">
+  <img alt="falcondatabase home page" src="docs/screenshots/home-light.png">
+</picture>
 
-## Funcionalidades
+Create projects, add real PostgreSQL tables and user login to them, and query everything from any frontend through a REST API or a tiny JavaScript SDK.
 
-- **Home** pública y **dashboard** por usuario (`/dashboard/`).
-- **Proyectos** en `/<usuario>/<proyecto>/`. Cada uno tiene su propio esquema de PostgreSQL (`proj_<ref>`), una URL de API y dos claves (`anon` y `service`).
-- **Tablas**: creación con columnas tipadas (`text`, `integer`, `bigint`, `decimal`, `float`, `boolean`, `date`, `datetime`, `json`, `uuid`), editor de datos (insertar, editar, borrar, ordenar, paginar), agregar o quitar columnas.
-- **Login para tus apps**: registro e inicio de sesión con email y contraseña por proyecto, gestión de usuarios desde el dashboard.
-- **Reglas de acceso por tabla**: pública, lectura pública, solo usuarios con login, por dueño (`owner_id` automático) o privada.
-- **API REST** con filtros (`eq`, `gt`, `ilike`, `in`…), orden, paginación y CORS.
-- **SDK JavaScript** sin dependencias en `/sdk/falcondb.js`.
-- **Español e inglés**: selector de idioma en la cabecera (también en la home) y en el perfil (`/settings/`). Los errores de la API siguen la cabecera `Accept-Language`.
-- **Modo claro y oscuro**: sigue al sistema por defecto; se cambia con el botón de la cabecera o en el perfil.
-- **Autenticación en dos pasos (TOTP)** para entrar al dashboard, compatible con Google Authenticator, Authy, 1Password… Incluye 8 códigos de recuperación de un solo uso.
-- **Admin único**: ve todos los usuarios en `/users/`, crea cuentas, desactiva el registro público y puede quitar el 2FA a un usuario que perdió su teléfono.
+- **Install on a server:** `./install.sh` (Docker, step by step). See **[DEPLOY.md](DEPLOY.md)**.
+- **Tutorials:** the built-in blog at `/blog/` has 15 articles in English and Spanish.
 
-## Puesta en marcha
+## Features
 
-Requisitos: Python 3.12+ y PostgreSQL 14+.
+**For app builders**
+
+- **Projects** at `/<username>/<project>/`, each with its own PostgreSQL schema (`proj_<ref>`), API URL and two keys: `anon` (browser) and `service` (server).
+- **Real tables** with typed columns (`text`, `integer`, `bigint`, `decimal`, `float`, `boolean`, `date`, `datetime`, `json`, `uuid`), defaults (`now()`, `uuid()`), required and unique constraints.
+- **Data editor**: insert, edit, delete, sort and paginate rows; add or remove columns.
+- **Login for your apps**: email/password sign up and sign in per project, user management in the dashboard.
+- **Access rules per table**: public, public read, signed-in users, owner (automatic `owner_id`) or private.
+- **REST API** with filters (`eq`, `gt`, `ilike`, `in`, `is`…), ordering, pagination and CORS.
+- **JavaScript SDK** with no dependencies, served at `/sdk/falcondb.js`.
+- **Web analytics** per project: enable it in the project's **Analytics** tab and paste one `<script>` tag on your website. It uses no cookies. You get charts for sessions, users and pageviews, plus breakdowns by country, medium, source, page, device, browser and OS. A combined page at `/analytics/` covers all your projects or a selection.
+- **Export / import**: download a project as JSON (structure, optionally with data) and import it as a new project, on the same or another server.
+- **Portal**: turn a project into a standalone app at `/app/<username>/<address>/`. The project's users sign in there and view or edit the tables you choose, with forms and search generated automatically.
+- **File storage**: public and private buckets per project, a file browser in the dashboard, uploads from your app, and signed links that expire. A simple alternative to S3.
+
+**Platform**
+
+- **English and Spanish** interface. Switch it from the header (also on the home page) or from your profile. API error messages follow `Accept-Language`.
+- **Light and dark mode**, following the system by default.
+- **Two-step authentication (TOTP)** for dashboard accounts, with 8 single-use recovery codes.
+- **A single admin** who sees every user at `/users/`, creates accounts, resets passwords and 2FA, and can turn public sign up off.
+- **Blog** with tutorials, guides and news (Markdown files, bilingual).
+- **Cookie notice** and cookie policy page (`/cookies/`). Only essential and preference cookies are used.
+- **Dashboard KPIs**: ten headline numbers (projects, tables, rows, storage, app users, new and active users, visitors, pageviews, bounce rate).
+- **Profile picture**, resized and stored in the database.
+- **Versions page** (`/changelog/`) with the release history. The current version is shown in the footer and returned by `/healthz`.
+
+## Screenshots
+
+| | |
+|---|---|
+| **Dashboard** with the ten key indicators<br><img alt="Dashboard" src="docs/screenshots/dashboard.png"> | **Data editor** of a table<br><img alt="Table data editor" src="docs/screenshots/table.png"> |
+| **Web analytics** of a project<br><img alt="Web analytics" src="docs/screenshots/analytics.png"> | **Portal**: the project as a standalone app<br><img alt="Project portal" src="docs/screenshots/portal.png"> |
+| **Storage**: buckets and files<br><img alt="File storage" src="docs/screenshots/storage.png"> | **Home** in dark mode<br><img alt="Home page in dark mode" src="docs/screenshots/home-dark.png"> |
+
+Screenshots are stored in `docs/screenshots/`.
+
+## Quick start with Docker
+
+On a Linux server or your computer with Docker installed:
+
+```bash
+git clone https://github.com/falconsoft3d/falcondatabase.git
+cd falcondatabase
+./install.sh
+```
+
+The installer checks the requirements, asks a few questions (domain, HTTPS, port, language, admin account), generates `.env` with random secrets, builds the image, starts PostgreSQL and the app, and creates your admin account.
+
+[DEPLOY.md](DEPLOY.md) covers HTTPS, updates, backups and troubleshooting.
+
+## Local development
+
+Requirements: Python 3.12+, PostgreSQL 14+ and GNU gettext (for translations).
 
 ```bash
 python3 -m venv .venv
 .venv/bin/pip install -r requirements.txt
-cp .env.example .env            # ajusta las credenciales de PostgreSQL
+cp .env.example .env                         # adjust the PostgreSQL settings
 
-# Opcional: levantar PostgreSQL con Docker (coincide con .env.example)
-docker compose up -d
+# Optional: a PostgreSQL server in Docker that matches .env.example
+docker compose -f docker-compose.dev.yml up -d
 
 .venv/bin/python manage.py migrate
-.venv/bin/python manage.py compilemessages --ignore=.venv   # traducciones (requiere GNU gettext)
+.venv/bin/python manage.py compilemessages --ignore=.venv
 .venv/bin/python manage.py runserver
 ```
 
-Abre http://localhost:8000, crea una cuenta y luego tu primer proyecto.
-
-Para nombrar al administrador (siempre hay uno solo; el comando se lo quita a los demás):
+Open http://localhost:8000, create an account, then make it the admin:
 
 ```bash
-.venv/bin/python manage.py setadmin <usuario>
+.venv/bin/python manage.py setadmin <username>
 ```
 
-Si cambias textos de la interfaz, regenera y traduce el catálogo:
+There is always exactly one admin: `setadmin` removes admin rights from everyone else.
+
+To try the analytics charts without a real website, fill a project with sample visits:
 
 ```bash
-.venv/bin/python manage.py makemessages -l es --no-wrap --ignore=.venv
-# edita locale/es/LC_MESSAGES/django.po y luego:
-.venv/bin/python manage.py compilemessages --ignore=.venv
+.venv/bin/python manage.py seed_analytics <username>/<project-slug> --days 30
 ```
 
-Tests (crean una base de datos temporal de PostgreSQL):
+### Tests
+
+The tests create a temporary PostgreSQL database:
 
 ```bash
 .venv/bin/python manage.py test
 ```
 
-## Uso desde un frontend
+### Translations
+
+Interface strings are written in English and translated in `locale/es/LC_MESSAGES/django.po`. After changing texts:
+
+```bash
+.venv/bin/python manage.py makemessages -l es --no-wrap --ignore=.venv
+# translate the new entries in locale/es/LC_MESSAGES/django.po, then:
+.venv/bin/python manage.py compilemessages --ignore=.venv
+```
+
+### Release notes
+
+Every change gets an entry in `core/changelog.py` (newest first, English and Spanish). The first entry sets the version shown in the footer, on `/changelog/` and in `/healthz`.
+
+### Blog articles
+
+Each article is two Markdown files in `blog/posts/`: `<slug>.en.md` and `<slug>.es.md`. They start with a small front matter block:
+
+```markdown
+---
+title: "Tutorial: my new article"
+date: 2026-11-01
+category: tutorial          # tutorial, guide or news
+summary: One sentence shown in the listing.
+tags: api, javascript
+---
+Article body in Markdown. %BASE_URL% is replaced with the server URL.
+```
+
+New files show up automatically. A test checks that every article exists in both languages.
+
+## Web analytics
+
+1. Open a project → **Analytics** → check **Enable analytics** → **Save**.
+2. Paste the snippet in the `<head>` of your website:
+
+   ```html
+   <script defer data-project="PROJECT_REF" src="https://your-server/a.js"></script>
+   ```
+
+The script (~1 KB) sends one page view per page load and per client-side navigation (React, Vue…). Privacy by design:
+
+- No cookies or local storage.
+- No IP addresses are stored. A visitor is an HMAC of (day, project, IP, user agent) that changes every day, so visitors are counted once per day.
+- Sessions group page views less than 30 minutes apart. Source and medium come from UTM parameters or the referrer (direct, organic search, social, referral…).
+- The country comes from a CDN header (`CF-IPCountry`) if present, otherwise from the browser time zone, otherwise from `Accept-Language`.
+- Bots are ignored. You can restrict which domains may send data.
+
+Behind a reverse proxy, set `FALCONDB_TRUST_PROXY=true` so the visitor IP is read from `X-Forwarded-For`. It defaults to the value of `USE_HTTPS`.
+
+**Site analytics.** The admin can also measure visits to falcondatabase's own public pages (home, blog, docs, versions, sign in and sign up): **Users** → **Site analytics** → **Measure visits to this site**. This creates a project called "falcondatabase site" owned by the admin, whose charts appear in `/analytics/`. Dashboards and portals are never measured.
+
+## Portal
+
+Open a project → **Portal**, check **Enable portal**, choose an address (e.g. `project1`) and decide, per table, **Hidden**, **View only** or **View and edit**. The app is then at:
+
+```
+https://your-server/app/<username>/project1/
+```
+
+- People sign in with the users of the project's **Authentication** tab (and can sign up if **Allow public sign up** is on).
+- **Public portal**: anyone can view the "View only" tables without signing in. Creating, editing and deleting always require signing in.
+- Tables with the **Owner** access rule only show each user their own rows, and new rows are assigned to them.
+- The portal session is separate from dashboard accounts.
+
+## File storage
+
+Open a project → **Storage**, enable it and create buckets. In a **public** bucket every file has a direct URL; in a **private** bucket, files are served only with the service key, to the user who uploaded them, or through a **signed URL** that expires.
 
 ```js
-import { createClient } from "http://localhost:8000/sdk/falcondb.js"
+const bucket = db.storage.from("avatars")
+await bucket.upload("users/ana.png", file, { upsert: true })   // signed-in user or service key
+const { data } = await bucket.list("users")
+const url = bucket.getPublicUrl("users/ana.png")                // public buckets
+const { data: link } = await bucket.createSignedUrl("users/ana.png", 3600)
+await bucket.remove("users/ana.png")
+```
 
-const db = createClient("http://localhost:8000", "PROJECT_REF", "ANON_KEY")
+| Method | Path | Action |
+|---|---|---|
+| GET | `/api/v1/<ref>/storage` | List buckets |
+| GET | `/api/v1/<ref>/storage/<bucket>?prefix=` | List files |
+| POST / PUT | `/api/v1/<ref>/storage/<bucket>/<path>` | Upload (multipart field `file`; PUT or `?upsert=true` replaces) |
+| DELETE | `/api/v1/<ref>/storage/<bucket>/<path>` | Delete |
+| POST | `/api/v1/<ref>/storage/sign/<bucket>/<path>` | Signed URL (`{"expires_in": seconds}`) |
+| GET | `/storage/v1/<ref>/<bucket>/<path>` | Download (`?token=` for signed URLs, `?download=1` to force a download) |
 
-// Leer con filtros
-const { data, count, error } = await db.from("productos")
-  .select("id,nombre,precio")
-  .gte("precio", 10)
-  .order("precio", { desc: true })
+Files are stored on disk under random names (the paths you choose are only metadata). They are served with `Content-Security-Policy: sandbox` and `nosniff`, and HTML/SVG/JS are always downloaded, never rendered. Limits: `FALCONDB_STORAGE_MAX_FILE_MB` per file and `FALCONDB_STORAGE_QUOTA_MB` per project.
+
+## Export and import
+
+- **Export:** project → **Settings** → **Export structure** or **Export structure and data**. The JSON contains the project settings, every table with its columns, defaults, constraints, access rule and portal mode, the bucket definitions, and the rows if requested. App users and stored files are never exported.
+- **Import:** **New project** → **Or import a project from JSON**. Everything is created in one transaction: if anything fails, nothing is created. Row ids are kept and new ids continue after them.
+
+## Using it from a frontend
+
+```js
+import { createClient } from "https://your-server/sdk/falcondb.js"
+
+const db = createClient("https://your-server", "PROJECT_REF", "ANON_KEY")
+
+// Read with filters
+const { data, count, error } = await db.from("products")
+  .select("id,name,price")
+  .gte("price", 10)
+  .order("price", { desc: true })
   .limit(20)
 
-// Escribir
-await db.from("productos").insert({ nombre: "Café", precio: 2.5 })
-await db.from("productos").update(7, { precio: 3 })
-await db.from("productos").delete(7)
+// Write
+await db.from("products").insert({ name: "Coffee", price: 2.5 })
+await db.from("products").update(7, { price: 3 })
+await db.from("products").delete(7)
 
-// Login de usuarios de tu app
+// Sign in the users of your app
 await db.auth.signUp({ email, password })
 await db.auth.signIn({ email, password })
 const { user } = await db.auth.getUser()
 db.auth.signOut()
 ```
 
-Sin SDK:
+Without the SDK:
 
 ```bash
-curl "http://localhost:8000/api/v1/PROJECT_REF/tables/productos?precio=gte.10&order=precio.desc" \
+curl "https://your-server/api/v1/PROJECT_REF/tables/products?price=gte.10&order=price.desc" \
   -H "apikey: ANON_KEY"
 ```
 
-### Endpoints
+### API endpoints
 
-| Método | Ruta | Acción |
+| Method | Path | Action |
 |---|---|---|
-| GET | `/api/v1/<ref>` | Tablas y columnas visibles |
-| GET | `/api/v1/<ref>/tables/<tabla>` | Lista filas → `{data, count}` |
-| POST | `/api/v1/<ref>/tables/<tabla>` | Inserta un objeto o una lista |
-| GET / PATCH / DELETE | `/api/v1/<ref>/tables/<tabla>/<id>` | Una fila |
-| POST | `/api/v1/<ref>/auth/signup` | Registro → `{user, token}` |
-| POST | `/api/v1/<ref>/auth/login` | Login → `{user, token}` |
-| GET / PATCH | `/api/v1/<ref>/auth/user` | Usuario actual (requiere token) |
+| GET | `/api/v1/<ref>` | Visible tables and columns |
+| GET | `/api/v1/<ref>/tables/<table>` | List rows → `{data, count}` |
+| POST | `/api/v1/<ref>/tables/<table>` | Insert an object or a list (one transaction) |
+| GET / PATCH / DELETE | `/api/v1/<ref>/tables/<table>/<id>` | One row |
+| POST | `/api/v1/<ref>/auth/signup` | Sign up → `{user, token}` |
+| POST | `/api/v1/<ref>/auth/login` | Sign in → `{user, token}` |
+| GET / PATCH | `/api/v1/<ref>/auth/user` | Current user (requires the token) |
 
-Cabeceras: `apikey: <anon|service key>` siempre, y `Authorization: Bearer <token>` para actuar como usuario con sesión.
-Filtros: `columna=operador.valor` con `eq`, `neq`, `gt`, `gte`, `lt`, `lte`, `like`, `ilike`, `is` (`null`/`true`/`false`) e `in` (`in.(a,b)`). Además: `select`, `order`, `limit`, `offset`.
+Headers: always `apikey: <anon or service key>`, plus `Authorization: Bearer <token>` to act as a signed-in user.
+Filters: `column=operator.value` with `eq`, `neq`, `gt`, `gte`, `lt`, `lte`, `like`, `ilike`, `is` (`null`/`true`/`false`) and `in` (`in.(a,b)`). Also `select`, `order`, `limit` and `offset`.
 
-## Arquitectura
+### Access rules
+
+| Rule | Read | Write |
+|---|---|---|
+| Public | anyone | anyone |
+| Public read | anyone | signed-in users |
+| Signed-in users | signed-in users | signed-in users |
+| Owner | own rows only | own rows only (`owner_id` set automatically) |
+| Private | service key | service key |
+
+## Project structure
 
 ```
-config/      settings y URLs
-core/        home, docs, registro/login, 2FA (totp.py), perfil, admin de usuarios, SDK
-locale/      traducción al español (django.po)
-projects/    modelos (Project, ProjectTable, ProjectUser), dashboard
-  schema.py    motor que crea y consulta las tablas reales (psycopg.sql)
-  services.py  operaciones que tocan modelos + DDL en una misma transacción
-api/         API REST, claves/tokens, reglas de acceso y CORS
-templates/   vistas estilo GitHub
-static/      CSS, JS del dashboard y SDK (falcondb.js)
+config/        settings and URLs
+core/          home, docs, sign up/login, 2FA (totp.py), profile, admin users page, cookies, SDK view
+  management/commands/   setadmin, ensureadmin
+projects/      models (Project, ProjectTable, ProjectUser) and the dashboard
+  schema.py      engine that creates and queries the real tables (psycopg.sql)
+  services.py    operations that change models + DDL in one transaction
+  transfer.py    JSON export / import
+  kpis.py        dashboard indicators
+api/           REST API, keys/tokens, access rules and CORS
+analytics/     web analytics: tracking (tracking.py), aggregations (stats.py), dashboards, seed_analytics
+portal/        standalone per-project apps at /app/<username>/<address>/
+storage/       buckets and files (files.py), API, public/signed downloads, file browser
+blog/          Markdown blog (posts/<slug>.<lang>.md)
+locale/        Spanish translation (django.po)
+templates/     GitHub-style pages
+static/        CSS (light/dark tokens), dashboard JS and the SDK (falcondb.js)
+docker/        entrypoint and Caddyfile
+install.sh     step-by-step Docker installer
 ```
 
-- Las tablas de cada proyecto viven en su propio esquema de PostgreSQL; los metadatos (nombre, regla de acceso) en `ProjectTable`. Las columnas se leen directamente del catálogo de PostgreSQL.
-- Los nombres de tablas y columnas se validan (`^[a-z_][a-z0-9_]{0,62}$`) y se componen con `psycopg.sql.Identifier`; los valores siempre van como parámetros.
-- Los tokens de usuario son firmas de Django (`django.core.signing`) ligadas al proyecto, con caducidad configurable (`FALCONDB_TOKEN_MAX_AGE`).
+How it works:
 
-## Configuración (.env)
+- Each project's tables live in their own PostgreSQL schema. The metadata (name, access rule) is stored in `ProjectTable`, and columns are read straight from the PostgreSQL catalog.
+- Table and column names are validated (`^[a-z_][a-z0-9_]{0,62}$`) and composed with `psycopg.sql.Identifier`. Values are always sent as query parameters.
+- App user tokens are Django signatures (`django.core.signing`) bound to the project, with a configurable lifetime.
+- Two-step authentication implements RFC 6238 (TOTP) with the standard library. The QR code is generated with `segno`.
+- Charts are plain SVG drawn by `static/js/analytics.js` (no chart library). Their colors were validated for contrast and color-vision deficiency in both themes.
 
-| Variable | Por defecto | Descripción |
+## Configuration
+
+All settings are environment variables, read from `.env`.
+
+| Variable | Default | Description |
 |---|---|---|
-| `SECRET_KEY` | `dev-insecure-change-me` | Clave de Django. **Cámbiala en producción.** |
-| `DEBUG` | `true` | |
-| `ALLOWED_HOSTS` | `localhost,127.0.0.1` | |
-| `POSTGRES_DB` / `USER` / `PASSWORD` / `HOST` / `PORT` | `falcondatabase` / – / – / `localhost` / `5432` | |
-| `FALCONDB_CORS_ORIGINS` | `*` | Orígenes que pueden llamar a la API desde el navegador |
-| `FALCONDB_TOKEN_MAX_AGE` | `604800` | Duración de los tokens de usuario (segundos) |
-| `FALCONDB_MAX_PAGE_SIZE` | `1000` | Máximo de filas por petición |
-| `FALCONDB_CONTACT_NAME` / `FALCONDB_CONTACT_EMAIL` | Marlon Falcon Hernández / mfalconsoft@gmail.com | Contacto que aparece en el pie de página |
+| `SECRET_KEY` | `dev-insecure-change-me` | Django secret. The app refuses to start with the default when `DEBUG=false`. |
+| `DEBUG` | `true` | Set `false` in production. |
+| `ALLOWED_HOSTS` | `localhost,127.0.0.1` | Comma separated host names. |
+| `CSRF_TRUSTED_ORIGINS` | – | e.g. `https://db.example.com` |
+| `USE_HTTPS` | `false` | `true` behind an HTTPS proxy: secure cookies and `X-Forwarded-Proto`. |
+| `POSTGRES_DB` / `USER` / `PASSWORD` / `HOST` / `PORT` | `falcondatabase` / – / – / `localhost` / `5432` | Database connection. |
+| `FALCONDB_LANGUAGE` | `es` | Default interface language (`es` or `en`). |
+| `FALCONDB_CORS_ORIGINS` | `*` | Origins allowed to call the API from a browser. |
+| `FALCONDB_TOKEN_MAX_AGE` | `604800` | Lifetime of app user tokens (seconds). |
+| `FALCONDB_MAX_PAGE_SIZE` | `1000` | Maximum rows per request. |
+| `FALCONDB_TRUST_PROXY` | value of `USE_HTTPS` | Read the visitor IP for analytics from `X-Forwarded-For`. |
+| `FALCONDB_STORAGE_ROOT` | `media/storage` | Where uploaded files are written. |
+| `FALCONDB_STORAGE_MAX_FILE_MB` | `50` | Maximum size of one uploaded file. |
+| `FALCONDB_STORAGE_QUOTA_MB` | `1024` | Maximum storage per project. |
+| `FALCONDB_CONTACT_NAME` / `FALCONDB_CONTACT_EMAIL` | Marlon Falcon Hernández / mfalconsoft@gmail.com | Contact in the footer and cookie policy. |
+| `LOG_LEVEL` | `INFO` | Log level (logs go to the console). |
 
-## Paleta de colores
+Docker-only variables (`FALCONDB_PORT`, `FALCONDB_BIND`, `FALCONDB_DOMAIN`, `WEB_CONCURRENCY`) are described in [DEPLOY.md](DEPLOY.md).
 
-| Color | Uso |
+## Color palette
+
+| Color | Use |
 |---|---|
-| `#ED637D` | Marca, pestaña activa, avatar |
-| `#66D7D1` | Botones principales y enlaces (en modo claro los enlaces usan `#117a74` para que el texto tenga suficiente contraste) |
-| `#FFF87F` | Avisos y resaltados |
-| `#F4F1BB` | Mensajes informativos en modo claro |
-| `#EAF2E3` | Cabecera y superficies en modo claro |
+| `#ED637D` | Brand, active tab, avatar |
+| `#66D7D1` | Primary buttons and links. In light mode, link text uses `#117a74` for enough contrast. Chart marks use the validated steps `#1f9e97` (light) and `#2fa9a3` (dark). |
+| `#FFF87F` | Notices and highlights |
+| `#F4F1BB` | Informative messages in light mode |
+| `#EAF2E3` | Header and surfaces in light mode |
 
-Todos los colores están definidos como variables en `static/css/app.css`.
+Every color is a CSS variable in `static/css/app.css`, defined once per theme.
 
-## Contacto
+## Contact
 
 Marlon Falcon Hernández — [mfalconsoft@gmail.com](mailto:mfalconsoft@gmail.com)

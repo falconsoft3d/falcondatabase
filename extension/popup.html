@@ -1,0 +1,47 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <header class="top">
+    <img src="icons/icon-32.png" width="22" height="22" alt="">
+    <strong>falcondatabase</strong>
+    <span class="grow"></span>
+    <span id="who" class="muted small"></span>
+    <button id="sign-out" class="link small" hidden data-i18n="signOut"></button>
+  </header>
+
+  <form id="login" hidden>
+    <h1 data-i18n="signInTitle"></h1>
+    <p id="login-error" class="error" hidden></p>
+    <label><span data-i18n="server"></span><input id="server" type="url" placeholder="https://db.example.com" required></label>
+    <label><span data-i18n="username"></span><input id="username" autocomplete="username" required></label>
+    <label><span data-i18n="password"></span><input id="password" type="password" autocomplete="current-password" required></label>
+    <label id="code-field" hidden><span data-i18n="code"></span><input id="code" inputmode="numeric" autocomplete="one-time-code"></label>
+    <button class="primary" type="submit" data-i18n="signIn"></button>
+  </form>
+
+  <main id="stats" hidden>
+    <div class="filters">
+      <select id="project" aria-label="Project"></select>
+      <select id="days" aria-label="Period"></select>
+    </div>
+    <p id="status" class="muted small"></p>
+    <div id="kpis" class="kpis"></div>
+    <section class="card">
+      <div class="card-title"><span data-i18n="dailyPageviews"></span><span id="readout" class="muted small"></span></div>
+      <svg id="chart" class="chart" height="110" role="img"></svg>
+    </section>
+    <section class="card"><div class="card-title" data-i18n="topPages"></div><ol id="pages" class="bars"></ol></section>
+    <section class="card"><div class="card-title" data-i18n="topSources"></div><ol id="sources" class="bars"></ol></section>
+    <section class="card"><div class="card-title" data-i18n="topCountries"></div><ol id="countries" class="bars"></ol></section>
+    <footer class="bottom">
+      <span id="today" class="muted small"></span>
+      <a id="open" target="_blank" rel="noopener" data-i18n="openAnalytics"></a>
+    </footer>
+  </main>
+  <script type="module" src="popup.js"></script>
+</body>
+</html>

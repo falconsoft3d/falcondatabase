@@ -1,0 +1,45 @@
+{% extends "portal/base.html" %}
+{% load i18n falcon %}
+{% block portal %}
+<div class="row" style="margin-bottom:12px;flex-wrap:wrap">
+  <h1 class="grow" style="margin:0">{{ table.name }}</h1>
+  {% if editable %}<a class="btn btn-primary" href="{% url 'portal:row_new' project.owner.username project.portal_slug table.name %}">{% icon 'plus' %} {% translate "New" %}</a>{% endif %}
+</div>
+{% if table.description %}<p class="muted">{{ table.description }}</p>{% endif %}
+
+<form method="get" class="row" style="margin-bottom:16px">
+  <input type="search" name="q" value="{{ query }}" placeholder="{% translate 'Search…' %}" style="max-width:320px">
+  <input type="hidden" name="order" value="{{ order }}">
+  <button class="btn" type="submit">{% icon 'search' 14 %} {% translate "Search" %}</button>
+  {% if query %}<a href="?order={{ order }}" class="small">{% translate "Clear" %}</a>{% endif %}
+  <span class="muted small grow" style="text-align:right">{% blocktranslate count counter=total %}{{ counter }} record{% plural %}{{ counter }} records{% endblocktranslate %}</span>
+</form>
+
+{% if rows %}
+  <div class="grid-wrap">
+    <table class="grid portal-grid">
+      <thead><tr>
+        {% for column in columns %}
+          <th><a href="?q={{ query|urlencode }}&order={% if order_name == column.name and not descending %}-{% endif %}{{ column.name }}">{{ column.name }}{% if order_name == column.name %} {% if descending %}↓{% else %}↑{% endif %}{% endif %}</a></th>
+        {% endfor %}
+        <th></th>
+      </tr></thead>
+      <tbody>
+        {% for row in rows %}
+          <tr>
+            {% for column in columns %}<td class="{% if column.name == 'id' %}num{% endif %}">{{ row|get_item:column.name|cell }}</td>{% endfor %}
+            <td class="actions nowrap"><a class="btn btn-xs" href="{% url 'portal:row' project.owner.username project.portal_slug table.name row.id %}">{% if editable %}{% icon 'edit' 12 %} {% translate "Edit" %}{% else %}{% translate "Open" %}{% endif %}</a></td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <div class="pagination">
+    {% if page.has_previous %}<a class="btn btn-sm" href="?q={{ query|urlencode }}&order={{ order }}&page={{ page.previous_page_number }}">← {% translate "Previous" %}</a>{% endif %}
+    <span class="muted small">{% blocktranslate with start=page.start_index end=page.end_index %}Rows {{ start }}–{{ end }} of {{ total }}{% endblocktranslate %}</span>
+    {% if page.has_next %}<a class="btn btn-sm" href="?q={{ query|urlencode }}&order={{ order }}&page={{ page.next_page_number }}">{% translate "Next" %} →</a>{% endif %}
+  </div>
+{% else %}
+  <div class="box blankslate">{% icon 'rows' 28 %}<h3>{% if query %}{% translate "No results" %}{% else %}{% translate "No records yet" %}{% endif %}</h3></div>
+{% endif %}
+{% endblock %}

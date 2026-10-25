@@ -1,0 +1,80 @@
+{% extends "projects/base_project.html" %}
+{% load i18n falcon %}
+{% block content %}
+<div class="container stack">
+  <div class="row" style="flex-wrap:wrap">
+    <div class="breadcrumb grow">
+      <a href="{% url 'projects:storage' project.owner.username project.slug %}">{% translate "storage" %}</a>
+      <span class="muted">/</span>
+      <a href="{% url 'projects:bucket' project.owner.username project.slug bucket.name %}">{{ bucket.name }}</a>
+      {% for name, path in crumbs %}<span class="muted">/</span><a href="?prefix={{ path|urlencode }}">{{ name }}</a>{% endfor %}
+      {% if bucket.public %}<span class="label label-success">{% translate "public" %}</span>{% else %}<span class="label">{% translate "private" %}</span>{% endif %}
+    </div>
+  </div>
+
+  <form method="post" enctype="multipart/form-data" class="box">
+    {% csrf_token %}<input type="hidden" name="action" value="upload"><input type="hidden" name="prefix" value="{{ prefix }}">
+    <div class="box-body row" style="flex-wrap:wrap;gap:12px">
+      {% icon 'upload' %}
+      {% include "core/_file_picker.html" with name="files" multiple=True %}
+      <input type="text" name="folder" placeholder="{% translate 'into folder (optional)' %}" style="max-width:220px">
+      <button class="btn btn-primary" type="submit">{% translate "Upload" %}</button>
+      <span class="muted small">{% translate "Files with the same name are replaced." %}</span>
+    </div>
+  </form>
+
+  <div class="box">
+    {% if folders or items %}
+      <table class="list">
+        <thead><tr><th>{% translate "Name" %}</th><th>{% translate "Type" %}</th><th>{% translate "Size" %}</th><th>{% translate "Updated" %}</th><th></th></tr></thead>
+        <tbody>
+          {% for name, size in folders %}
+            <tr><td><a class="row" href="?prefix={{ prefix|add:name|urlencode }}">{% icon 'folder' 16 %} <strong>{{ name }}/</strong></a></td>
+              <td class="muted small">{% translate "folder" %}</td><td class="muted small">{{ size|filesizeformat }}</td><td></td><td></td></tr>
+          {% endfor %}
+          {% for f in items %}
+            <tr>
+              <td><a class="row" href="{% url 'projects:bucket_file' project.owner.username project.slug bucket.name f.pk %}" target="_blank" rel="noopener">{% icon 'file' 16 %} {{ f.name }}</a></td>
+              <td class="muted small mono">{{ f.content_type }}</td>
+              <td class="muted small">{{ f.size|filesizeformat }}</td>
+              <td class="muted small">{{ f.updated_at|date:"d M Y H:i" }}</td>
+              <td class="nowrap" style="text-align:right">
+                {% if f.url %}<button type="button" class="btn btn-xs" data-copy-text="{{ f.url }}" title="{% translate 'Copy public URL' %}">{% icon 'link' 12 %} URL</button>
+                {% else %}<a class="btn btn-xs" href="{% url 'projects:bucket_file_sign' project.owner.username project.slug bucket.name f.pk %}" title="{% translate 'Create a link valid for 1 hour' %}">{% icon 'link' 12 %} {% translate "Link" %}</a>{% endif %}
+                <a class="btn btn-xs btn-invisible" href="{% url 'projects:bucket_file' project.owner.username project.slug bucket.name f.pk %}?download=1" title="{% translate 'Download' %}">{% icon 'download' 14 %}</a>
+                <form method="post" style="display:inline" data-confirm="{% blocktranslate with name=f.name %}Delete {{ name }}?{% endblocktranslate %}">
+                  {% csrf_token %}<input type="hidden" name="action" value="delete_file"><input type="hidden" name="file" value="{{ f.pk }}"><input type="hidden" name="prefix" value="{{ prefix }}">
+                  <button class="btn btn-xs btn-invisible" type="submit" title="{% translate 'Delete' %}">{% icon 'trash' 14 %}</button>
+                </form>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <div class="blankslate">{% icon 'file' 28 %}<h3>{% translate "This folder is empty" %}</h3><p class="muted">{% translate "Upload files with the form above or from your app." %}</p></div>
+    {% endif %}
+  </div>
+
+  <div class="layout-two">
+    <form method="post" class="box">
+      {% csrf_token %}<input type="hidden" name="action" value="settings">
+      <div class="box-header">{% icon 'gear' %} <strong>{% translate "Settings" %}</strong></div>
+      <div class="box-body">
+        <label class="checkbox" style="margin-bottom:12px"><input type="checkbox" name="public" {% if bucket.public %}checked{% endif %}>
+          <span><strong>{% translate "Public bucket" %}</strong><span class="muted small">{% translate "Anyone with a file URL can download it." %}</span></span></label>
+        <button class="btn" type="submit">{% translate "Save" %}</button>
+      </div>
+    </form>
+    <form method="post" class="box box-danger" data-confirm="{% translate 'This deletes the bucket and all its files. Continue?' %}">
+      {% csrf_token %}<input type="hidden" name="action" value="delete_bucket">
+      <div class="box-header box-header-danger"><strong>{% translate "Danger zone" %}</strong></div>
+      <div class="box-body">
+        <label for="confirm-bucket" style="font-weight:400">{% blocktranslate with name=bucket.name %}Type <strong>{{ name }}</strong> to confirm:{% endblocktranslate %}</label>
+        <input type="text" id="confirm-bucket" name="confirm" autocomplete="off" style="margin-bottom:12px">
+        <button class="btn btn-danger" type="submit">{% icon 'trash' %} {% translate "Delete bucket" %}</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

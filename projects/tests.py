@@ -163,3 +163,113 @@ class DashboardTests(TestCase):
         other = get_user_model().objects.create_user("bob", "bob@example.com", "pass12345")
         self.client.force_login(other)
         self.assertEqual(self.client.get(project.get_absolute_url()).status_code, 404)
+
+
+class TransferTests(TestCase):
+    def setUp(self):
+        from .models import ProjectUser
+
+        self.user = get_user_model().objects.create_user("ana", "ana@example.com", "pass12345")
+        self.project = services.create_project(self.user, "Shop", "My shop")
+        self.project.auth_enabled = True
+        self.project.save()
+        table = services.create_table(self.project, "products", [
+            {"name": "name", "type_": "text", "required": True, "unique": True},
+            {"name": "price", "type_": "decimal", "default": "0"},
+            {"name": "note", "type_": "text", "default": "it's new"},
+            {"name": "added", "type_": "datetime", "default": "now()"},
+            {"name": "code", "type_": "uuid", "default": "uuid()"},
+            {"name": "meta", "type_": "json"},
+        ], access=ProjectTable.OWNER, description="Catalog")
+        app_user = ProjectUser.objects.create(project=self.project, email="u@x.com", password="x")
+        schema.insert_row(self.project.schema, "products", {"name": "Tea", "price": "2.5", "meta": {"a": [1]},
+                                                             "owner_id": app_user.pk})
+        schema.insert_row(self.project.schema, "products", {"name": "Coffee"})
+        schema.delete_row(self.project.schema, "products", 1)
+        schema.insert_row(self.project.schema, "products", {"name": "Cake"})
+        self.table = table
+
+    def export(self, data):
+        import json
+
+        response = self.client.get(self.project.url("export") + ("?data=1" if data else ""))
+        self.assertIn("attachment;", response["Content-Disposition"])
+        return json.loads(response.content)
+
+    def test_export_structure(self):
+        self.client.force_login(self.user)
+        exported = self.export(data=False)
+        self.assertEqual((exported["format"], exported["version"]), ("falcondatabase", 1))
+        self.assertEqual(exported["project"]["name"], "Shop")
+        table = exported["tables"][0]
+        self.assertNotIn("rows", table)
+        self.assertEqual(table["access"], "owner")
+        columns = {c["name"]: c for c in table["columns"]}
+        self.assertNotIn("owner_id", columns)
+        self.assertEqual(columns["name"]["required"], True)
+        self.assertEqual(columns["name"]["unique"], True)
+        self.assertEqual(columns["price"]["default"], "0")
+        self.assertEqual(columns["note"]["default"], "it's new")
+        self.assertEqual(columns["added"]["default"], "now()")
+        self.assertEqual(columns["code"]["default"], "uuid()")
+
+    def test_round_trip_with_data(self):
+        from django.core.files.uploadedfile import SimpleUploadedFile
+        import json
+
+        self.client.force_login(self.user)
+        exported = self.export(data=True)
+        self.assertEqual([r["name"] for r in exported["tables"][0]["rows"]], ["Coffee", "Cake"])
+        upload = SimpleUploadedFile("shop.json", json.dumps(exported).encode(), content_type="application/json")
+        response = self.client.post(reverse("project_import"), {"file": upload, "name": "Shop copy"})
+        copy = self.user.projects.get(name="Shop copy")
+        self.assertRedirects(response, copy.get_absolute_url())
+        self.assertTrue(copy.auth_enabled)
+        imported = copy.tables.get(name="products")
+        self.assertEqual((imported.access, imported.description), ("owner", "Catalog"))
+        rows, total = schema.select_rows(copy.schema, "products", imported.columns())
+        self.assertEqual(total, 2)
+        self.assertEqual([r["id"] for r in rows], [2, 3])  # ids preserved
+        new_row = schema.insert_row(copy.schema, "products", {"name": "Pie"})
+        self.assertEqual(new_row["id"], 4)  # identity continues after the imported ids
+        self.assertEqual(new_row["note"], "it's new")
+        self.assertIsNotNone(new_row["code"])
+
+    def test_invalid_files_roll_back(self):
+        from django.core.files.uploadedfile import SimpleUploadedFile
+        import json
+
+        self.client.force_login(self.user)
+        before = self.user.projects.count()
+        cases = [b"not json", json.dumps({"format": "other"}).encode(),
+                 json.dumps({"format": "falcondatabase", "version": 1, "project": {"name": "X"},
+                             "tables": [{"name": "ok", "columns": []}, {"name": "Bad Name", "columns": []}]}).encode()]
+        for content in cases:
+            upload = SimpleUploadedFile("x.json", content, content_type="application/json")
+            response = self.client.post(reverse("project_import"), {"file": upload})
+            self.assertRedirects(response, reverse("project_new"))
+        self.assertEqual(self.user.projects.count(), before)
+
+    def test_only_owner_exports(self):
+        other = get_user_model().objects.create_user("bob", "bob@example.com", "pass12345")
+        self.client.force_login(other)
+        self.assertEqual(self.client.get(self.project.url("export")).status_code, 404)
+
+
+class KpiTests(TestCase):
+    def test_dashboard_kpis(self):
+        from .kpis import account_kpis
+
+        user = get_user_model().objects.create_user("ana", "ana@example.com", "pass12345")
+        project = services.create_project(user, "Shop")
+        services.create_table(project, "t", [{"name": "n", "type_": "text"}])
+        for i in range(3):
+            schema.insert_row(project.schema, "t", {"n": str(i)})
+        kpis = {k["key"]: k for k in account_kpis(user)}
+        self.assertEqual(len(kpis), 10)
+        self.assertEqual((kpis["projects"]["value"], kpis["tables"]["value"], kpis["rows"]["value"]), (1, 1, 3))
+        self.assertGreater(kpis["storage"]["value"], 0)
+        self.assertTrue(kpis["visitors"]["compare"])
+        self.client.force_login(user)
+        response = self.client.get(reverse("dashboard"))
+        self.assertEqual(len(response.context["kpis"]), 10)

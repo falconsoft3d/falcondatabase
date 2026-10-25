@@ -7,6 +7,7 @@
  *   const { data, count, error } = await db.from("todos").select().eq("done", false).order("id", { desc: true })
  *   await db.from("todos").insert({ title: "Hola" })
  *   await db.auth.signIn({ email, password })
+ *   await db.storage.from("avatars").upload("me.png", file)
  *
  * Every call resolves to `{ data, error, ... }` and never throws on API errors.
  */
@@ -168,13 +169,88 @@ class AuthClient {
   }
 }
 
+class StorageBucket {
+  constructor(client, bucket) {
+    this.client = client;
+    this.bucket = bucket;
+  }
+
+  path(path) {
+    return String(path).split("/").map(encodeURIComponent).join("/");
+  }
+
+  // Upload a File/Blob. Needs a signed-in user or the service key.
+  upload(path, file, { upsert = false } = {}) {
+    const form = new FormData();
+    form.append("file", file);
+    const query = upsert ? "?upsert=true" : "";
+    return this.client.request("POST", `/storage/${this.bucket}/${this.path(path)}${query}`, form);
+  }
+
+  list(prefix = "") {
+    const query = prefix ? `?prefix=${encodeURIComponent(prefix)}` : "";
+    return this.client.request("GET", `/storage/${this.bucket}${query}`);
+  }
+
+  remove(path) {
+    return this.client.request("DELETE", `/storage/${this.bucket}/${this.path(path)}`);
+  }
+
+  // Direct URL of a file in a public bucket.
+  getPublicUrl(path) {
+    return `${this.client.origin}/storage/v1/${this.client.ref}/${this.bucket}/${this.path(path)}`;
+  }
+
+  // Temporary URL for a file in a private bucket (default: 1 hour).
+  async createSignedUrl(path, expiresIn = 3600) {
+    const result = await this.client.request("POST", `/storage/sign/${this.bucket}/${this.path(path)}`, { expires_in: expiresIn });
+    return { ...result, data: result.data ? result.data.signed_url : null };
+  }
+
+  // Download as a Blob (works for private files of the signed-in user).
+  async download(path) {
+    try {
+      const response = await fetch(this.getPublicUrl(path), { headers: this.client.headers() });
+      if (!response.ok) {
+        const payload = await response.json().catch(() => ({}));
+        return { data: null, error: { message: payload.error || response.statusText, status: response.status } };
+      }
+      return { data: await response.blob(), error: null };
+    } catch (err) {
+      return { data: null, error: { message: err.message, status: 0 } };
+    }
+  }
+}
+
+class StorageClient {
+  constructor(client) {
+    this.client = client;
+  }
+
+  from(bucket) {
+    return new StorageBucket(this.client, bucket);
+  }
+
+  listBuckets() {
+    return this.client.request("GET", "/storage");
+  }
+}
+
 export class FalconClient {
   constructor(url, ref, apiKey) {
     if (!url || !ref || !apiKey) throw new Error("createClient(url, ref, apiKey): missing arguments");
-    this.baseUrl = `${url.replace(/\/+$/, "")}/api/v1/${ref}`;
+    this.origin = url.replace(/\/+$/, "");
+    this.baseUrl = `${this.origin}/api/v1/${ref}`;
     this.ref = ref;
     this.apiKey = apiKey;
     this.auth = new AuthClient(this);
+    this.storage = new StorageClient(this);
+  }
+
+  headers() {
+    const headers = { apikey: this.apiKey };
+    if (this.auth && this.auth.token) headers.Authorization = `Bearer ${this.auth.token}`;
+    return headers;
   }
 
   from(table) {
@@ -187,14 +263,14 @@ export class FalconClient {
   }
 
   async request(method, path, body) {
-    const headers = { apikey: this.apiKey };
-    if (this.auth && this.auth.token) headers.Authorization = `Bearer ${this.auth.token}`;
-    if (body !== undefined) headers["Content-Type"] = "application/json";
+    const headers = this.headers();
+    const isForm = typeof FormData !== "undefined" && body instanceof FormData;
+    if (body !== undefined && !isForm) headers["Content-Type"] = "application/json";
     try {
       const response = await fetch(this.baseUrl + path, {
         method,
         headers,
-        body: body === undefined ? undefined : JSON.stringify(body),
+        body: body === undefined ? undefined : isForm ? body : JSON.stringify(body),
       });
       const payload = await response.json().catch(() => ({}));
       if (!response.ok) {

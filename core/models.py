@@ -12,14 +12,22 @@ class SiteSettings(models.Model):
     """Singleton with the settings the admin controls from the dashboard."""
 
     allow_signup = models.BooleanField(_("allow sign up"), default=True)
+    # Project (owned by the admin) that receives the visits to this site's public pages.
+    analytics_project = models.OneToOneField("projects.Project", on_delete=models.SET_NULL, null=True, blank=True,
+                                             related_name="+")
 
     def __str__(self):
         return "falcondatabase"
 
     @classmethod
     def load(cls):
-        obj, _created = cls.objects.get_or_create(pk=1)
+        obj, _created = cls.objects.select_related("analytics_project").get_or_create(pk=1)
         return obj
+
+    @property
+    def tracker_ref(self):
+        project = self.analytics_project
+        return project.ref if project and project.analytics_enabled else None
 
 
 def hash_recovery_code(code):
@@ -60,3 +68,20 @@ class TwoFactor(models.Model):
         codes = [f"{secrets.token_hex(3)}-{secrets.token_hex(3)}" for _ in range(self.RECOVERY_CODES)]
         self.recovery_codes = [hash_recovery_code(code) for code in codes]
         return codes
+
+
+class Avatar(models.Model):
+    """Profile picture, stored resized in the database (so backups include it)."""
+
+    SIZE = 256
+
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="avatar")
+    image = models.BinaryField()
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"avatar {self.user}"
+
+    @property
+    def version(self):
+        return int(self.updated_at.timestamp())

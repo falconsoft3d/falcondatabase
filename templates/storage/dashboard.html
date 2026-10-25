@@ -1,0 +1,70 @@
+{% extends "projects/base_project.html" %}
+{% load i18n falcon %}
+{% block content %}
+<div class="container-md stack">
+  <div>
+    <h2>{% translate "Storage" %}</h2>
+    <p class="muted">{% translate "Store files for your app in buckets: images, documents, backups… Public buckets give every file a direct URL; private ones need a signed link or the service key." %}</p>
+  </div>
+
+  <form method="post" class="box">
+    {% csrf_token %}<input type="hidden" name="action" value="settings">
+    <div class="box-body row" style="flex-wrap:wrap;gap:16px">
+      <label class="checkbox grow" style="margin:0">
+        <input type="checkbox" name="storage_enabled" {% if project.storage_enabled %}checked{% endif %}>
+        <span><strong>{% translate "Enable storage" %}</strong><span class="muted small">{% translate "Accept uploads and downloads through the API and public links." %}</span></span>
+      </label>
+      <button class="btn" type="submit">{% translate "Save" %}</button>
+    </div>
+  </form>
+
+  <div class="stats">
+    <div class="stat"><div class="stat-icon">{% icon 'folder' 18 %}</div><div><div class="stat-label">{% translate "Buckets" %}</div><div class="stat-value">{{ buckets|length }}</div></div></div>
+    <div class="stat"><div class="stat-icon">{% icon 'database' 18 %}</div><div class="grow"><div class="stat-label">{% translate "Used" %}</div>
+      <div class="stat-value">{{ used|filesizeformat }} <span class="muted small">/ {{ quota|filesizeformat }}</span></div>
+      <div class="meter" aria-hidden="true"><span style="width:{% widthratio used quota 100 %}%"></span></div></div></div>
+    <div class="stat"><div class="stat-icon">{% icon 'upload' 18 %}</div><div><div class="stat-label">{% translate "Max file size" %}</div><div class="stat-value">{{ max_file_mb }} MB</div></div></div>
+  </div>
+
+  <div class="box">
+    <div class="box-header">{% icon 'folder' %} <strong class="grow">{% translate "Buckets" %}</strong></div>
+    {% for bucket in buckets %}
+      <a class="box-row" href="{% url 'projects:bucket' project.owner.username project.slug bucket.name %}" style="color:var(--fg)">
+        {% icon 'folder' 16 %} <strong class="grow">{{ bucket.name }}</strong>
+        {% if bucket.public %}<span class="label label-success">{% translate "public" %}</span>{% else %}<span class="label">{% translate "private" %}</span>{% endif %}
+        <span class="muted small nowrap" style="width:160px;text-align:right">{% blocktranslate count counter=bucket.count %}{{ counter }} file{% plural %}{{ counter }} files{% endblocktranslate %} · {{ bucket.bytes|filesizeformat }}</span>
+      </a>
+    {% empty %}
+      <div class="blankslate">{% icon 'folder' 28 %}<h3>{% translate "No buckets yet" %}</h3><p class="muted">{% translate "Create one to start uploading files." %}</p></div>
+    {% endfor %}
+  </div>
+
+  <form method="post" class="box">
+    {% csrf_token %}<input type="hidden" name="action" value="create_bucket">
+    <div class="box-header">{% icon 'plus' %} <strong>{% translate "New bucket" %}</strong></div>
+    <div class="box-body">
+      <div class="row" style="flex-wrap:wrap;gap:16px">
+        <input type="text" name="name" required placeholder="{% translate 'e.g. avatars' %}" style="max-width:260px" data-identifier>
+        <label class="checkbox" style="margin:0"><input type="checkbox" name="public"> <span>{% translate "Public (anyone with the URL can download)" %}</span></label>
+        <button class="btn btn-primary" type="submit">{% translate "Create bucket" %}</button>
+      </div>
+      <p class="help">{% translate "Lowercase letters, numbers and hyphens." %}</p>
+    </div>
+  </form>
+
+  <details class="box">
+    <summary class="box-header" style="cursor:pointer">{% icon 'code' %} <strong>{% translate "Use it from your app" %}</strong></summary>
+    <div class="box-body markdown">
+<pre class="code"><span class="k">const</span> db = <span class="f">createClient</span>(<span class="s">"{{ base_url }}"</span>, <span class="s">"{{ project.ref }}"</span>, <span class="s">"{{ project.anon_key }}"</span>)
+<span class="k">const</span> bucket = db.storage.<span class="f">from</span>(<span class="s">"avatars"</span>)
+
+<span class="k">await</span> bucket.<span class="f">upload</span>(<span class="s">"users/ana.png"</span>, fileInput.files[<span class="s">0</span>], { upsert: <span class="k">true</span> })
+<span class="k">const</span> { data } = <span class="k">await</span> bucket.<span class="f">list</span>(<span class="s">"users"</span>)
+<span class="k">const</span> url = bucket.<span class="f">getPublicUrl</span>(<span class="s">"users/ana.png"</span>)                 <span class="c">// public buckets</span>
+<span class="k">const</span> { data: link } = <span class="k">await</span> bucket.<span class="f">createSignedUrl</span>(<span class="s">"users/ana.png"</span>, <span class="s">3600</span>) <span class="c">// private buckets</span>
+<span class="k">await</span> bucket.<span class="f">remove</span>(<span class="s">"users/ana.png"</span>)</pre>
+      <p class="small muted" style="margin:0">{% translate "Uploads need a signed-in user of your app or the service key. Users can only see, share and delete the files they uploaded to private buckets." %}</p>
+    </div>
+  </details>
+</div>
+{% endblock %}

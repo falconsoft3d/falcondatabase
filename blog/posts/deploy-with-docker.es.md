@@ -46,7 +46,7 @@ Recorre seis pasos:
 
     Todo se guarda en `.env` con valores aleatorios para `SECRET_KEY` y la contraseña de la base de datos.
 3. **Construcción de la imagen** — Python, dependencias, traducciones y archivos estáticos.
-4. **Arranque de los contenedores** — `db` (PostgreSQL 16), `web` (Gunicorn) y, con HTTPS, `caddy`.
+4. **Arranque de los contenedores** — `db` (PostgreSQL 16), `web` (Gunicorn, con un volumen `storage` para los archivos subidos) y, con HTTPS, `caddy`.
 5. **Espera a la aplicación** — las migraciones se aplican solas y el script consulta `/healthz`.
 6. **Cuenta de administrador** — crea tu usuario admin y lo deja como único administrador.
 
@@ -94,10 +94,20 @@ mkdir -p backups
 docker compose exec -T db pg_dump -U falcon falcondatabase | gzip > backups/falcondatabase-$(date +%F).sql.gz
 ```
 
-Restaurar una copia:
+Los archivos subidos (Almacenamiento) viven en el volumen `storage`. Respáldalos también:
 
 ```bash
-gunzip -c backups/falcondatabase-2026-10-25.sql.gz | docker compose exec -T db psql -U falcon falcondatabase
+docker compose run --rm -v "$PWD/backups:/backups" --entrypoint tar web czf /backups/storage-$(date +%F).tar.gz -C /app/media storage
+```
+
+Restaurar una copia en una base de datos vacía:
+
+```bash
+docker compose stop web
+docker compose exec -T db dropdb -U falcon falcondatabase
+docker compose exec -T db createdb -U falcon falcondatabase
+gunzip -c backups/falcondatabase-2026-10-25.sql.gz | docker compose exec -T db psql -q -U falcon falcondatabase
+docker compose start web
 ```
 
 ## Instalaciones desatendidas

@@ -46,7 +46,7 @@ It goes through six steps:
 
     Everything is saved in `.env` with random values for `SECRET_KEY` and the database password.
 3. **Building the image** — Python, dependencies, translations and static files.
-4. **Starting the containers** — `db` (PostgreSQL 16), `web` (Gunicorn) and, with HTTPS, `caddy`.
+4. **Starting the containers** — `db` (PostgreSQL 16), `web` (Gunicorn, with a `storage` volume for uploaded files) and, with HTTPS, `caddy`.
 5. **Waiting for the application** — migrations run automatically and the script polls `/healthz`.
 6. **Administrator account** — creates your admin user and makes it the only admin.
 
@@ -94,10 +94,20 @@ mkdir -p backups
 docker compose exec -T db pg_dump -U falcon falcondatabase | gzip > backups/falcondatabase-$(date +%F).sql.gz
 ```
 
-Restore a backup:
+Uploaded files (Storage) live in the `storage` volume. Back them up too:
 
 ```bash
-gunzip -c backups/falcondatabase-2026-10-25.sql.gz | docker compose exec -T db psql -U falcon falcondatabase
+docker compose run --rm -v "$PWD/backups:/backups" --entrypoint tar web czf /backups/storage-$(date +%F).tar.gz -C /app/media storage
+```
+
+Restore a backup into an empty database:
+
+```bash
+docker compose stop web
+docker compose exec -T db dropdb -U falcon falcondatabase
+docker compose exec -T db createdb -U falcon falcondatabase
+gunzip -c backups/falcondatabase-2026-10-25.sql.gz | docker compose exec -T db psql -q -U falcon falcondatabase
+docker compose start web
 ```
 
 ## Unattended installs

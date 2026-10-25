@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load i18n falcon %}
+{% block title %}{% translate "Analytics" %} · falcondatabase{% endblock %}
+{% block content %}
+<div class="container stack">
+  <div class="row" style="flex-wrap:wrap">
+    <h1 class="grow" style="margin:0">{% translate "Analytics" %}</h1>
+  </div>
+
+  {% if projects %}
+    <form method="get" class="filter-row" data-auto-submit>
+      <input type="hidden" name="days" value="{{ report.days }}">
+      <nav class="subnav" aria-label="{% translate 'Period' %}">
+        {% for days in periods %}
+          <button type="submit" name="days" value="{{ days }}" class="{% if days == report.days %}selected{% endif %}">{% blocktranslate %}{{ days }} days{% endblocktranslate %}</button>
+        {% endfor %}
+      </nav>
+      <fieldset class="project-chips">
+        <legend class="small muted">{% translate "Projects" %}</legend>
+        {% for project in projects %}
+          <label class="chip"><input type="checkbox" name="p" value="{{ project.ref }}" {% if project.ref in chosen %}checked{% endif %}>
+            {{ project.name }}{% if project.owner != user %} <span class="muted small">· {{ project.owner.username }}</span>{% endif %}{% if not project.analytics_enabled %} <span class="muted small">({% translate "off" %})</span>{% endif %}</label>
+        {% endfor %}
+        <span class="small muted">{% if all_selected %}{% translate "Showing all projects" %}{% endif %}</span>
+      </fieldset>
+    </form>
+    {% include "analytics/_dashboard.html" with show_host=True %}
+  {% else %}
+    <div class="box blankslate">{% icon 'database' 32 %}<h3>{% translate "You don't have any projects yet." %}</h3>
+      <a class="btn btn-primary" href="{% url 'project_new' %}">{% translate "New project" %}</a></div>
+  {% endif %}
+</div>
+{% endblock %}

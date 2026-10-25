@@ -1,0 +1,33 @@
+{% load i18n falcon %}
+<div class="layout-two">
+  <form method="post" class="box">
+    {% csrf_token %}
+    <div class="box-header">{% icon 'gear' %} <strong>{% translate "Settings" %}</strong></div>
+    <div class="box-body">
+      <label class="checkbox" style="margin-bottom:16px">
+        <input type="checkbox" name="analytics_enabled" {% if project.analytics_enabled %}checked{% endif %}>
+        <span><strong>{% translate "Enable analytics" %}</strong><span class="muted small">{% translate "Accept page views from the tracking script." %}</span></span>
+      </label>
+      <div class="field">
+        <label for="id_domains">{% translate "Allowed domains" %} <span class="muted">({% translate "optional" %})</span></label>
+        <input type="text" id="id_domains" name="analytics_domains" value="{{ project.analytics_domains }}" placeholder="example.com, shop.example.com">
+        <span class="help">{% translate "Only count visits from these domains (subdomains included). Empty: any domain." %}</span>
+      </div>
+      <button class="btn" type="submit">{% translate "Save" %}</button>
+    </div>
+  </form>
+
+  {% if project.analytics_enabled %}
+    <div class="box">
+      <div class="box-header">{% icon 'code' %} <strong>{% translate "Tracking script" %}</strong></div>
+      <div class="box-body">
+        <p class="small muted">{% blocktranslate %}Paste it in the <code>&lt;head&gt;</code> of every page of your website:{% endblocktranslate %}</p>
+        <div class="key-field" style="align-items:flex-start">
+          <textarea id="tracking-snippet" readonly rows="2">&lt;script defer data-project="{{ project.ref }}" src="{{ base_url }}/a.js"&gt;&lt;/script&gt;</textarea>
+          <button type="button" class="btn" data-copy="#tracking-snippet" title="{% translate 'Copy' %}">{% icon 'copy' %}</button>
+        </div>
+        <p class="small muted" style="margin:12px 0 0">{% translate "No cookies and no personal data: your visitors don't need to accept a cookie banner for it. It also counts navigation in single-page apps (React, Vue…)." %}</p>
+      </div>
+    </div>
+  {% endif %}
+</div>

@@ -22,7 +22,7 @@
         <tbody>
           {% for u in users %}
             <tr>
-              <td><span class="row"><span class="avatar sm">{{ u|initial }}</span> <strong>{{ u.username }}</strong>
+              <td><span class="row">{% avatar u 20 %} <strong>{{ u.username }}</strong>
                 {% if u.is_superuser %}<span class="label label-done">admin</span>{% endif %}
                 {% if not u.is_active %}<span class="label">{% translate "deactivated" %}</span>{% endif %}</span></td>
               <td class="muted">{{ u.email }}</td>
@@ -62,6 +62,22 @@
             <span class="muted small">{% translate "If you disable it, only you can create accounts from this page." %}</span></span>
         </label>
         <button class="btn btn-block" type="submit">{% translate "Save" %}</button>
+      </div>
+    </form>
+
+    <form method="post" class="box">
+      {% csrf_token %}<input type="hidden" name="action" value="site_analytics">
+      <div class="box-header">{% icon 'chart' %} <strong>{% translate "Site analytics" %}</strong></div>
+      <div class="box-body">
+        <label class="checkbox" style="margin-bottom:12px">
+          <input type="checkbox" name="enabled" {% if site.tracker_ref %}checked{% endif %}>
+          <span><strong>{% translate "Measure visits to this site" %}</strong>
+            <span class="muted small">{% translate "Home, blog, docs, versions and sign-in pages. No cookies; dashboards and portals are never measured." %}</span></span>
+        </label>
+        <div class="row" style="flex-wrap:wrap">
+          <button class="btn" type="submit">{% translate "Save" %}</button>
+          {% if site.analytics_project %}<a href="{% url 'analytics' %}?p={{ site.analytics_project.ref }}">{% translate "View site analytics →" %}</a>{% endif %}
+        </div>
       </div>
     </form>
 

@@ -1,0 +1,13 @@
+{% extends "portal/base.html" %}
+{% load i18n falcon %}
+{% block portal %}
+<p><a href="{% url 'portal:table' project.owner.username project.portal_slug table.name %}">← {{ table.name }}</a></p>
+<h1>{% blocktranslate with id=row.id %}Record {{ id }}{% endblocktranslate %}</h1>
+<div class="box">
+  {% for column, value in fields %}
+    <div class="box-row" style="align-items:flex-start"><strong class="mono small" style="width:180px;flex:none">{{ column.name }}</strong>
+      <span class="grow" style="white-space:pre-wrap">{{ row|get_item:column.name|cell }}</span></div>
+  {% endfor %}
+  <div class="box-row muted small"><span style="width:180px;flex:none">created_at</span><span>{{ row.created_at|date:"d M Y H:i" }}</span></div>
+</div>
+{% endblock %}

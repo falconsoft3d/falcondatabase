@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load i18n static falcon %}
+{% block title %}{% translate "Chrome extension" %} · falcondatabase{% endblock %}
+{% block content %}
+<div class="container-md stack">
+  <div class="layout-two" style="align-items:center;gap:32px">
+    <div>
+      <span class="label label-accent" style="margin-bottom:12px">{% icon 'chart' 12 %} {% translate "Chrome extension" %}</span>
+      <h1 style="font-size:32px">{% translate "Your statistics, one click away" %}</h1>
+      <p class="muted" style="font-size:16px">{% translate "Sign in once and see the visitors, sessions and pageviews of your projects from the browser toolbar, with today's visits right on the icon." %}</p>
+      <div class="row" style="flex-wrap:wrap;margin-top:16px">
+        <a class="btn btn-primary" href="{% url 'extension_zip' %}" download>{% icon 'download' %} {% translate "Download the extension" %}</a>
+        <span class="muted small">{% blocktranslate %}Pre-configured for this server · Chrome, Edge, Brave and other Chromium browsers{% endblocktranslate %}</span>
+      </div>
+    </div>
+    <img src="{% static 'img/extension-popup.png' %}" alt="{% translate 'The extension popup' %}" class="extension-shot" width="380">
+  </div>
+
+  <div class="features" style="margin-top:16px">
+    <div class="feature"><div class="stat-icon">{% icon 'chart' 20 %}</div><h3>{% translate "Key indicators" %}</h3>
+      <p class="muted">{% translate "Visitors, sessions, pageviews and bounce rate, compared with the previous period." %}</p></div>
+    <div class="feature"><div class="stat-icon">{% icon 'globe' 20 %}</div><h3>{% translate "Where visits come from" %}</h3>
+      <p class="muted">{% translate "Top pages, sources and countries, for all your projects or just one." %}</p></div>
+    <div class="feature"><div class="stat-icon">{% icon 'shield' 20 %}</div><h3>{% translate "Secure sign-in" %}</h3>
+      <p class="muted">{% translate "Uses your account, with two-step authentication if you enabled it. Changing your password signs the extension out." %}</p></div>
+  </div>
+
+  <div class="box">
+    <div class="box-header">{% icon 'book' %} <strong>{% translate "How to install it" %}</strong></div>
+    <div class="box-body">
+      <ol class="steps">
+        <li><h3>{% translate "Download and unzip" %}</h3><p class="muted">{% blocktranslate %}Download the zip above and unzip it. You get a <code class="inline">falcondatabase-extension</code> folder.{% endblocktranslate %}</p></li>
+        <li><h3>{% translate "Open the extensions page" %}</h3><p class="muted">{% blocktranslate %}Type <code class="inline">chrome://extensions</code> in the address bar.{% endblocktranslate %}</p></li>
+        <li><h3>{% translate "Turn on developer mode" %}</h3><p class="muted">{% translate "Use the switch in the top right corner." %}</p></li>
+        <li><h3>{% translate "Load the folder" %}</h3><p class="muted">{% blocktranslate %}Click <strong>Load unpacked</strong> and choose the <code class="inline">falcondatabase-extension</code> folder. Pin it from the puzzle icon so it stays visible.{% endblocktranslate %}</p></li>
+        <li><h3>{% translate "Sign in" %}</h3><p class="muted">{% translate "Click the icon and sign in with your falcondatabase username and password." %}</p></li>
+      </ol>
+      <p class="help" style="margin:0">{% translate "Chrome only installs extensions directly from the Chrome Web Store; until it is published there, it is installed this way. Updates: download the zip again and click the reload button of the extension." %}</p>
+    </div>
+  </div>
+</div>
+{% endblock %}

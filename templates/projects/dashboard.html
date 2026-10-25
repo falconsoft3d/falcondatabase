@@ -1,11 +1,11 @@
 {% extends "base.html" %}
-{% load i18n falcon %}
+{% load i18n falcon analytics_tags %}
 {% block title %}{% translate "Dashboard" %} · falcondatabase{% endblock %}
 {% block content %}
 <div class="container layout-sidebar">
   <aside class="sidebar">
     <div class="row" style="margin-bottom:8px">
-      <span class="avatar">{{ user|initial }}</span>
+      {% avatar user 32 %}
       <strong>{{ user.username }}</strong>
     </div>
     <a class="btn btn-sm btn-block" href="{% url 'account' %}" style="margin-bottom:16px">{% icon 'gear' 14 %} {% translate "Settings" %}</a>
@@ -24,7 +24,27 @@
   </aside>
 
   <section>
-    <div class="row" style="margin-bottom:16px">
+    {% if not query %}
+      <div class="row" style="margin-bottom:12px">
+        <h2 class="grow" style="margin:0">{% translate "Overview" %}</h2>
+        <span class="muted small">{% blocktranslate with days=kpi_days %}Changes compare the last {{ days }} days with the {{ days }} before{% endblocktranslate %}</span>
+      </div>
+      <div class="kpi-row kpi-row-10">
+        {% for item in kpis %}
+          <div class="stat kpi">
+            <div>
+              <div class="stat-label">
+                {% if item.key == "projects" %}{% translate "Projects" %}{% elif item.key == "tables" %}{% translate "Tables" %}{% elif item.key == "rows" %}{% translate "Rows" %}{% elif item.key == "storage" %}{% translate "Storage" %}{% elif item.key == "app_users" %}{% translate "App users" %}{% elif item.key == "new_users" %}{% translate "New users (30 d)" %}{% elif item.key == "active_users" %}{% translate "Active users (30 d)" %}{% elif item.key == "visitors" %}{% translate "Visitors (30 d)" %}{% elif item.key == "pageviews" %}{% translate "Pageviews (30 d)" %}{% else %}{% translate "Bounce rate (30 d)" %}{% endif %}
+              </div>
+              <div class="stat-value">{% if item.kind == "bytes" %}{{ item.value|filesizeformat }}{% elif item.kind == "percent" %}{% if item.value is None %}—{% else %}{{ item.value }}%{% endif %}{% else %}{{ item.value|compact }}{% endif %}</div>
+              {% if item.compare %}{% include "analytics/_delta.html" with days=kpi_days %}{% endif %}
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <div class="row" style="margin:24px 0 16px">
       <h2 class="grow" style="margin:0">{% if query %}{% blocktranslate %}Results for “{{ query }}”{% endblocktranslate %}{% else %}{% translate "Projects" %}{% endif %}</h2>
       <a class="btn btn-primary" href="{% url 'project_new' %}">{% icon 'plus' %} {% translate "New project" %}</a>
     </div>

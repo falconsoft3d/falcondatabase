@@ -2,6 +2,7 @@ import datetime
 import json
 
 from django import template
+from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 
@@ -34,6 +35,12 @@ ICONS = {
     "search": '<circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/>',
     "refresh": '<path d="M21 12a9 9 0 0 1-15.5 6.2L3 16M3 12a9 9 0 0 1 15.5-6.2L21 8M21 3v5h-5M3 21v-5h5"/>',
     "arrow-left": '<path d="M19 12H5M12 19l-7-7 7-7"/>',
+    "folder": '<path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/>',
+    "file": '<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8Z"/><path d="M14 3v5h5"/>',
+    "upload": '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/>',
+    "download": '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>',
+    "link": '<path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/>',
+    "chart": '<path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 6-7"/>',
     "sun": '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
     "moon": '<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/>',
     "github": '<path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.9a3.4 3.4 0 0 0-.9-2.6c3.1-.4 6.4-1.5 6.4-7a5.4 5.4 0 0 0-1.5-3.8 5 5 0 0 0-.1-3.8s-1.2-.4-3.9 1.5a13.4 13.4 0 0 0-7 0C6.3 1.6 5.1 2 5.1 2a5 5 0 0 0-.1 3.8A5.4 5.4 0 0 0 3.5 9.6c0 5.4 3.3 6.6 6.4 7a3.4 3.4 0 0 0-.9 2.6V22"/>',
@@ -49,6 +56,25 @@ def icon(name, size=16, cls=""):
         size,
         size,
         mark_safe(ICONS.get(name, "")),
+    )
+
+
+@register.simple_tag
+def avatar(user, size=32):
+    """Profile picture, or the user's initial on a colored circle."""
+    if not hasattr(user, "_avatar_version"):
+        from core.models import Avatar
+
+        updated = Avatar.objects.filter(user_id=user.pk).values_list("updated_at", flat=True).first()
+        user._avatar_version = int(updated.timestamp()) if updated else None
+    if user._avatar_version:
+        return format_html(
+            '<img class="avatar" src="{}?v={}" width="{}" height="{}" alt="{}" style="width:{}px;height:{}px">',
+            reverse("avatar", args=[user.pk]), user._avatar_version, size, size, user.get_username(), size, size,
+        )
+    return format_html(
+        '<span class="avatar" style="width:{}px;height:{}px;font-size:{}px" aria-hidden="true">{}</span>',
+        size, size, max(10, int(size * 0.45)), initial(user),
     )
 
 

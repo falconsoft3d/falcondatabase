@@ -9,7 +9,7 @@ from django.utils.translation import gettext_lazy as _
 # collide with the ``/<username>/<project>/`` routes.
 RESERVED_USERNAMES = {
     "admin", "api", "static", "media", "login", "logout", "signup", "dashboard",
-    "new", "docs", "settings", "about", "help", "sdk", "users", "i18n", "blog", "healthz",
+    "new", "docs", "settings", "about", "help", "sdk", "users", "i18n", "blog", "healthz", "analytics", "cookies", "a.js", "changelog", "avatars", "app", "extension",
 }
 USERNAME_RE = re.compile(r"^[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,37}[a-zA-Z0-9])?$")
 

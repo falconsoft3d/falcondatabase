@@ -289,10 +289,19 @@ def _where(filters, columns_by_name):
     return sql.SQL(" WHERE ") + sql.SQL(" AND ").join(clauses), params
 
 
-def select_rows(schema, table, columns, filters=(), order=None, limit=50, offset=0, fields=None):
-    """Return ``(rows, total_count)``."""
+def select_rows(schema, table, columns, filters=(), order=None, limit=50, offset=0, fields=None, search=None):
+    """Return ``(rows, total_count)``.
+
+    ``search`` keeps rows where any non-system column contains the text (case-insensitive).
+    """
     by_name = {c.name: c for c in columns}
     where, params = _where(filters, by_name)
+    searchable = [c.name for c in columns if not c.is_system]
+    if search and searchable:
+        matches = sql.SQL(" OR ").join(sql.SQL("{}::text ILIKE %s").format(sql.Identifier(n)) for n in searchable)
+        pattern = "%" + search.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_") + "%"
+        where = (where + sql.SQL(" AND ") if filters else sql.SQL(" WHERE ")) + sql.SQL("({})").format(matches)
+        params = params + [pattern] * len(searchable)
     if fields:
         missing = [f for f in fields if f not in by_name]
         if missing:
@@ -321,6 +330,28 @@ def get_row(schema, table, row_id, filters=()):
     columns = get_columns(schema, table)
     rows, _total = select_rows(schema, table, columns, [("id", "eq", row_id), *filters], limit=1)
     return rows[0] if rows else None
+
+
+def sync_identity(schema, table):
+    """After inserting explicit ids, make the next generated id follow the largest one."""
+    ident = _table_ident(schema, table)
+    _execute(
+        sql.SQL("SELECT setval(pg_get_serial_sequence({}, 'id'), coalesce(max(id), 0) + 1, false) FROM {}").format(
+            sql.Literal(f'"{schema}"."{table}"'), ident
+        )
+    )
+
+
+def storage_bytes(schemas):
+    """Total disk size of the tables (with indexes and TOAST) in the given schemas."""
+    if not schemas:
+        return 0
+    rows = _execute(
+        "SELECT coalesce(sum(pg_total_relation_size(c.oid)), 0) AS size FROM pg_class c "
+        "JOIN pg_namespace n ON n.oid = c.relnamespace WHERE c.relkind = 'r' AND n.nspname = ANY(%s)",
+        [list(schemas)],
+    )
+    return int(rows[0]["size"])
 
 
 def count_rows(schema, table):

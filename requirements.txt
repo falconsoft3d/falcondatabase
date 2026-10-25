@@ -5,3 +5,4 @@ segno>=1.6
 Markdown>=3.6
 gunicorn>=23.0
 whitenoise>=6.7
+Pillow>=11.0

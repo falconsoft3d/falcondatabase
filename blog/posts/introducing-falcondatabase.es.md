@@ -24,8 +24,11 @@ Firebase y Supabase son excelentes, pero a veces quieres algo que puedas leer de
 | Resumen | URL, claves y un ejemplo de inicio rápido |
 | Tablas | Crear tablas, editar filas, agregar o quitar columnas |
 | Autenticación | Activar el login y gestionar los usuarios de tu app |
+| Analítica | Analítica web sin cookies para tus sitios |
+| Almacenamiento | Buckets para imágenes, documentos y otros archivos |
+| Portal | Publicar el proyecto como una app lista para sus usuarios |
 | API | Referencia completa con tus claves reales |
-| Configuración | Renombrar, regenerar claves o eliminar el proyecto |
+| Configuración | Renombrar, exportar, regenerar claves o eliminar el proyecto |
 
 Tu cuenta también puede protegerse con **autenticación en dos pasos**, y toda la interfaz está disponible en **español e inglés**, en modo claro y oscuro.
 

@@ -1,0 +1,29 @@
+{% extends "portal/base.html" %}
+{% load i18n falcon %}
+{% block content %}
+<div class="auth-page">
+  <div class="brand-mark">{% icon 'database' 26 %}</div>
+  <h1>{% if mode == "signup" %}{% blocktranslate with name=project.name %}Create your account in {{ name }}{% endblocktranslate %}{% else %}{% blocktranslate with name=project.name %}Sign in to {{ name }}{% endblocktranslate %}{% endif %}</h1>
+  {% if error %}<div class="flash flash-error">{% icon 'x' %} {{ error }}</div>{% endif %}
+  <form method="post" class="box box-body surface">
+    {% csrf_token %}
+    <input type="hidden" name="next" value="{{ next }}">
+    <div class="field">
+      <label for="id_email">{% translate "Email" %}</label>
+      <input type="email" name="email" id="id_email" required autofocus value="{{ request.POST.email|default:'' }}">
+    </div>
+    <div class="field">
+      <label for="id_password">{% translate "Password" %}</label>
+      <input type="password" name="password" id="id_password" required {% if mode == "signup" %}minlength="6"{% endif %}>
+    </div>
+    <button class="btn btn-primary btn-block" type="submit">{% if mode == "signup" %}{% translate "Create account" %}{% else %}{% translate "Sign in" %}{% endif %}</button>
+  </form>
+  {% if project.allow_signup %}
+    <div class="auth-callout">
+      {% if mode == "signup" %}{% translate "Already have an account?" %} <a href="{% url 'portal:login' project.owner.username project.portal_slug %}">{% translate "Sign in" %}</a>
+      {% else %}{% translate "New here?" %} <a href="{% url 'portal:signup' project.owner.username project.portal_slug %}">{% translate "Create an account" %}</a>{% endif %}
+    </div>
+  {% endif %}
+  {% if project.portal_public %}<p class="small" style="text-align:center;margin-top:16px"><a href="{% url 'portal:home' project.owner.username project.portal_slug %}">{% translate "Continue without signing in" %}</a></p>{% endif %}
+</div>
+{% endblock %}

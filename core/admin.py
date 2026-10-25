@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import SiteSettings, TwoFactor
+from .models import Avatar, SiteSettings, TwoFactor
 
 
 @admin.register(SiteSettings)

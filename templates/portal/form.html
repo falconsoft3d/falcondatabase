@@ -1,0 +1,26 @@
+{% extends "portal/base.html" %}
+{% load i18n falcon %}
+{% block portal %}
+<p><a href="{% url 'portal:table' project.owner.username project.portal_slug table.name %}">← {{ table.name }}</a></p>
+<h1>{% if row %}{% blocktranslate with id=row.id %}Record {{ id }}{% endblocktranslate %}{% else %}{% translate "New record" %}{% endif %}</h1>
+<form method="post" class="box box-body portal-form">
+  {% csrf_token %}
+  {% for column, value in fields %}
+    <div class="field">
+      <label for="f-{{ column.name }}" class="{% if not column.nullable and not column.default %}required{% endif %}">{{ column.name }}</label>
+      {% include "projects/_row_input.html" %}
+    </div>
+  {% empty %}
+    <p class="muted">{% translate "This table has no editable columns." %}</p>
+  {% endfor %}
+  <div class="form-actions">
+    <a class="btn" href="{% url 'portal:table' project.owner.username project.portal_slug table.name %}">{% translate "Cancel" %}</a>
+    <button class="btn btn-primary" type="submit">{% translate "Save" %}</button>
+  </div>
+</form>
+{% if row %}
+  <form method="post" action="{% url 'portal:row_delete' project.owner.username project.portal_slug table.name row.id %}" style="margin-top:16px" data-confirm="{% translate 'Delete this record?' %}">
+    {% csrf_token %}<button class="btn btn-danger btn-sm" type="submit">{% icon 'trash' 14 %} {% translate "Delete" %}</button>
+  </form>
+{% endif %}
+{% endblock %}

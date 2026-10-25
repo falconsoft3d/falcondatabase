@@ -26,5 +26,22 @@
       <button class="btn btn-primary" type="submit">{% translate "Create project" %}</button>
     </div>
   </form>
+
+  <form method="post" action="{% url 'project_import' %}" enctype="multipart/form-data" class="box" style="margin-top:32px">
+    {% csrf_token %}
+    <div class="box-header">{% icon 'refresh' %} <strong>{% translate "Or import a project from JSON" %}</strong></div>
+    <div class="box-body">
+      <p class="muted small">{% translate "Use a file exported from the Settings tab of a project. Tables, columns and rules are recreated; rows too, if the file includes them." %}</p>
+      <div class="field">
+        <label for="id_import_file" class="required">{% translate "JSON file" %}</label>
+        {% include "core/_file_picker.html" with name="file" accept=".json,application/json" input_id="id_import_file" %}
+      </div>
+      <div class="field">
+        <label for="id_import_name">{% translate "Project name" %} <span class="muted">({% translate "optional" %})</span></label>
+        <input type="text" id="id_import_name" name="name" maxlength="100" placeholder="{% translate 'Same as in the file' %}">
+      </div>
+      <button class="btn" type="submit">{% translate "Import project" %}</button>
+    </div>
+  </form>
 </div>
 {% endblock %}

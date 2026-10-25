@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load i18n falcon %}
+{% block title %}{{ project.name }}{% endblock %}
+{% block header %}
+<header class="header portal-header">
+  <a class="brand" href="{% url 'portal:home' project.owner.username project.portal_slug %}">
+    <span class="brand-mark">{% icon 'database' 18 %}</span>
+    <span>{{ project.name }}</span>
+  </a>
+  <div class="header-actions">
+    <button type="button" class="icon-button" data-theme-toggle title="{% translate 'Toggle light/dark mode' %}" aria-label="{% translate 'Toggle light/dark mode' %}">
+      <span class="theme-icon-light">{% icon 'sun' %}</span><span class="theme-icon-dark">{% icon 'moon' %}</span>
+    </button>
+    {% include "core/_language_menu.html" %}
+    {% if portal_user %}
+      <span class="muted small portal-email">{{ portal_user.email }}</span>
+      <form method="post" action="{% url 'portal:logout' project.owner.username project.portal_slug %}">{% csrf_token %}
+        <button class="btn btn-sm" type="submit">{% icon 'logout' 14 %} {% translate "Sign out" %}</button></form>
+    {% else %}
+      <a class="btn btn-sm" href="{% url 'portal:login' project.owner.username project.portal_slug %}">{% translate "Sign in" %}</a>
+    {% endif %}
+  </div>
+</header>
+{% endblock %}
+{% block content %}
+<div class="container layout-sidebar portal-layout">
+  <aside class="sidebar">
+    <h3 style="font-size:14px">{% translate "Tables" %}</h3>
+    <ul class="sidebar-list">
+      {% for t in tables %}
+        <li><span class="muted">{% icon 'table' 14 %}</span>
+          <a href="{% url 'portal:table' project.owner.username project.portal_slug t.name %}" {% if table and table.name == t.name %}aria-current="page"{% endif %}>{{ t.name }}</a></li>
+      {% empty %}
+        <li class="muted small">{% translate "No tables are shared in this portal yet." %}</li>
+      {% endfor %}
+    </ul>
+  </aside>
+  <section>{% block portal %}{% endblock %}</section>
+</div>
+{% endblock %}
