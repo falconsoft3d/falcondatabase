@@ -4,11 +4,14 @@ This guide installs falcondatabase on a server with Docker, step by step, and co
 
 - [How it runs](#how-it-runs)
 - [Requirements](#requirements)
+- [Prepare the server](#prepare-the-server)
+- [Install Docker](#install-docker)
 - [Install with the script (recommended)](#install-with-the-script-recommended)
 - [Unattended install](#unattended-install)
 - [HTTPS](#https)
 - [Manual install (without the script)](#manual-install-without-the-script)
 - [Day-to-day operations](#day-to-day-operations)
+- [Keeping the server up to date](#keeping-the-server-up-to-date)
 - [Backups and restore](#backups-and-restore)
 - [Configuration reference](#configuration-reference)
 - [Security checklist](#security-checklist)
@@ -50,20 +53,131 @@ Files involved:
 - `git` and `curl`.
 - For HTTPS: a **domain name** with a DNS **A** (and/or **AAAA**) record pointing to the server, and ports **80** and **443** open in the firewall.
 
-Install Docker on Ubuntu/Debian:
+Starting from a fresh server? Follow [Prepare the server](#prepare-the-server) and [Install Docker](#install-docker) first. They take about 10 minutes.
+
+## Prepare the server
+
+These steps are for **Ubuntu 22.04/24.04** and **Debian 12**, run over SSH as `root` or as a user with `sudo`.
+
+### 1. Update the system
+
+```bash
+sudo apt update
+sudo apt full-upgrade -y
+sudo apt install -y git curl ca-certificates ufw unattended-upgrades
+```
+
+If the upgrade installed a new kernel, reboot before going on:
+
+```bash
+[ -f /var/run/reboot-required ] && sudo reboot
+```
+
+### 2. Create a user for the app (recommended)
+
+Don't run everything as `root`. Create a user with `sudo`, then log in again as that user:
+
+```bash
+sudo adduser falcon               # choose a password
+sudo usermod -aG sudo falcon
+# optional: reuse your SSH key
+sudo rsync --archive --chown=falcon:falcon ~/.ssh /home/falcon
+```
+
+### 3. Firewall
+
+Allow SSH first, so you don't lock yourself out, then the web ports:
+
+```bash
+sudo ufw allow OpenSSH
+sudo ufw allow 80,443/tcp         # HTTPS install (Caddy)
+# sudo ufw allow 8000/tcp         # only for an HTTP-only install on port 8000
+sudo ufw enable
+sudo ufw status
+```
+
+### 4. Automatic security updates
+
+Ubuntu and Debian can install security patches by themselves every day:
+
+```bash
+sudo dpkg-reconfigure -plow unattended-upgrades    # answer "Yes"
+```
+
+### 5. Swap on small servers (1–2 GB RAM)
+
+Building the image needs some memory. A 2 GB swap file avoids out-of-memory errors:
+
+```bash
+sudo fallocate -l 2G /swapfile
+sudo chmod 600 /swapfile
+sudo mkswap /swapfile
+sudo swapon /swapfile
+echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
+free -h                           # check: "Swap: 2.0Gi"
+```
+
+### 6. Time zone (optional)
+
+falcondatabase stores dates in UTC. The server time zone only affects logs and cron jobs:
+
+```bash
+sudo timedatectl set-timezone Europe/Madrid    # or UTC, America/Santiago…
+```
+
+## Install Docker
+
+### Option A — Docker's official repository (recommended)
+
+This keeps Docker up to date with the normal `apt upgrade`. On **Ubuntu**:
+
+```bash
+# 1. Remove old or unofficial packages (it's fine if none are installed)
+for pkg in docker.io docker-doc docker-compose podman-docker containerd runc; do sudo apt remove -y $pkg; done
+
+# 2. Add Docker's signing key and repository
+sudo install -m 0755 -d /etc/apt/keyrings
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+sudo chmod a+r /etc/apt/keyrings/docker.asc
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] \
+  https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "$VERSION_CODENAME") stable" \
+  | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+# 3. Install Docker Engine and the Compose plugin
+sudo apt update
+sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+# 4. Start Docker now and on every boot
+sudo systemctl enable --now docker
+```
+
+On **Debian**, use the same commands but replace `linux/ubuntu` with `linux/debian` in steps 2 (both lines).
+
+### Option B — The quick script
+
+Docker's convenience script does the same in one line (handy for test servers):
 
 ```bash
 curl -fsSL https://get.docker.com | sudo sh
-sudo usermod -aG docker $USER      # log out and back in afterwards
-docker compose version             # check the Compose plugin
 ```
 
-Open the firewall if you use `ufw`:
+### After installing
+
+Let your user run Docker without `sudo`, then **log out and back in** so the change applies:
 
 ```bash
-sudo ufw allow 80,443/tcp      # HTTPS install
-sudo ufw allow 8000/tcp        # HTTP-only install on port 8000
+sudo usermod -aG docker $USER
 ```
+
+Check that everything works:
+
+```bash
+docker --version                  # Docker version 27.x or newer
+docker compose version            # Docker Compose version v2.x
+docker run --rm hello-world       # prints "Hello from Docker!"
+```
+
+> **Docker and the firewall.** Ports published by Docker bypass `ufw`: Docker adds its own iptables rules. With HTTPS enabled, falcondatabase only publishes 80/443 (Caddy) and keeps the app on `127.0.0.1`, so that's not a problem. In an HTTP-only install, port 8000 is reachable from the internet even if `ufw` doesn't allow it. Set `FALCONDB_BIND=127.0.0.1` in `.env` if you put your own proxy in front.
 
 ## Install with the script (recommended)
 
@@ -265,7 +379,7 @@ docker compose down                    # stop everything (data is kept)
 docker compose up -d                   # start again
 ```
 
-### Updating to a new version
+### Updating falcondatabase
 
 ```bash
 cd /opt/falcondatabase
@@ -273,7 +387,7 @@ git pull
 ./install.sh
 ```
 
-The installer keeps `.env` and your data, rebuilds the image, applies the new migrations and restarts the containers. Take a backup first (next section).
+See [Keeping the server up to date](#keeping-the-server-up-to-date) for the full routine (system, Docker and images).
 
 ### Administration commands
 
@@ -292,6 +406,70 @@ docker compose exec db psql -U falcon falcondatabase
 ```
 
 From the web interface, the admin can also reset passwords and two-step authentication at **Users** (`/users/`).
+
+## Keeping the server up to date
+
+A short routine, once a month or whenever a new version is announced on the **Versions** page (`/changelog/`):
+
+### 1. Back up first
+
+```bash
+cd /opt/falcondatabase
+mkdir -p backups
+docker compose exec -T db pg_dump -U falcon falcondatabase | gzip > backups/falcondatabase-$(date +%F).sql.gz
+```
+
+See [Backups and restore](#backups-and-restore) for the uploaded files too.
+
+### 2. Update the operating system and Docker
+
+With Docker installed from its official repository, this also updates Docker Engine and the Compose plugin:
+
+```bash
+sudo apt update
+sudo apt full-upgrade -y
+sudo apt autoremove -y
+```
+
+When Docker itself is upgraded, it restarts and your containers come back by themselves (`restart: unless-stopped`).
+
+If the system asks for a reboot (new kernel), reboot. Docker starts on boot and brings falcondatabase back up:
+
+```bash
+[ -f /var/run/reboot-required ] && sudo reboot
+# after logging in again:
+cd /opt/falcondatabase && docker compose ps
+```
+
+### 3. Update falcondatabase
+
+```bash
+cd /opt/falcondatabase
+git pull
+./install.sh
+```
+
+The installer keeps `.env` and your data. It downloads the latest PostgreSQL 16 and Caddy patch releases, rebuilds the app image, applies the new database migrations and restarts the containers.
+
+### 4. Clean up and check
+
+```bash
+docker image prune -f                          # remove old, unused images
+curl -s http://127.0.0.1:8000/healthz          # {"status": "ok", "version": "<new version>"}
+```
+
+### Major PostgreSQL upgrades (16 → 17)
+
+Patch releases (16.x) are applied by step 3. A **major** version changes the data format, so it needs a dump and a restore:
+
+1. Back up (step 1).
+2. Stop the app: `docker compose stop web`.
+3. Change `postgres:16-alpine` to `postgres:17-alpine` in `docker-compose.yml`.
+4. Recreate the database volume: `docker compose down` then `docker volume rm falcondatabase_pgdata` (the name may start with your folder name: check `docker volume ls`).
+5. Start the new database (`docker compose up -d db`) and restore the backup as described in [Restore](#restore).
+6. `docker compose up -d`.
+
+Only do this when a falcondatabase release recommends it.
 
 ## Backups and restore
 
@@ -375,7 +553,8 @@ All settings live in `.env`. After editing it, apply the changes with `docker co
 - [ ] Public sign up disabled if only you should create accounts (**Users → Registration**).
 - [ ] `FALCONDB_CORS_ORIGINS` limited to your frontends' domains if you know them.
 - [ ] Daily backups copied off the server, plus a copy of `.env`.
-- [ ] `git pull && ./install.sh` regularly to get updates.
+- [ ] Automatic security updates enabled (`unattended-upgrades`) and the [update routine](#keeping-the-server-up-to-date) done regularly.
+- [ ] A non-root user with `sudo` for daily work, and SSH keys instead of passwords.
 
 ## Troubleshooting
 
