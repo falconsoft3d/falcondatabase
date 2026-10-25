@@ -369,3 +369,29 @@ class AccountApiTests(TestCase):
         config = archive.read("falcondatabase-extension/config.js").decode()
         self.assertIn('DEFAULT_SERVER = "http://testserver"', config)
         self.assertContains(self.client.get(reverse("home")), reverse("extension"))
+
+
+class CsrfTests(TestCase):
+    def setUp(self):
+        from django.test import Client
+        self.client = Client(enforce_csrf_checks=True)
+
+    def test_failure_page_explains_the_reason(self):
+        response = self.client.post(reverse("login"), {"username": "x", "password": "y"},
+                                    headers={"Origin": "https://evil.example.com", "Accept-Language": "en"})
+        self.assertEqual(response.status_code, 403)
+        self.assertContains(response, "The form could not be sent", status_code=403)
+        self.assertContains(response, "https://evil.example.com", status_code=403)
+
+    def test_https_origin_of_own_host_is_trusted_behind_proxy(self):
+        import importlib
+        import os
+
+        from config import settings as project_settings
+        try:
+            with mock.patch.dict(os.environ, {"ALLOWED_HOSTS": "db.example.com,localhost"}):
+                trusted = importlib.reload(project_settings).CSRF_TRUSTED_ORIGINS
+        finally:
+            importlib.reload(project_settings)
+        self.assertIn("https://db.example.com", trusted)
+        self.assertNotIn("https://localhost", trusted)

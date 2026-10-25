@@ -14,6 +14,8 @@ RELEASES = [
                       "\"Bad Request (400)\" al abrir una instalación por su IP: el instalador ahora propone la IP del servidor en lugar de localhost y también la acepta."),
             ("improved", "Running ./install.sh again on an install left on localhost asks for the address and fixes .env.",
                          "Volver a ejecutar ./install.sh en una instalación que quedó en localhost pide la dirección y corrige el .env."),
+            ("added", "Step-by-step guide in Spanish to update the server: docs/actualizar-servidor.md.",
+                      "Guía paso a paso en español para actualizar el servidor: docs/actualizar-servidor.md."),
             ("added", "Change the address or switch to HTTPS with one command: FALCONDB_DOMAIN=… FALCONDB_HTTPS=yes ./install.sh --yes.",
                       "Cambia la dirección o pasa a HTTPS con un comando: FALCONDB_DOMAIN=… FALCONDB_HTTPS=yes ./install.sh --yes."),
         ],

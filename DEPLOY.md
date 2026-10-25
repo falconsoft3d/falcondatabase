@@ -425,7 +425,7 @@ From the web interface, the admin can also reset passwords and two-step authenti
 
 ## Keeping the server up to date
 
-A short routine, once a month or whenever a new version is announced on the **Versions** page (`/changelog/`):
+A short routine, once a month or whenever a new version is announced on the **Versions** page (`/changelog/`). There is also a step-by-step guide in Spanish: [docs/actualizar-servidor.md](docs/actualizar-servidor.md).
 
 ### 1. Back up first
 

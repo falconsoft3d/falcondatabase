@@ -3566,3 +3566,27 @@ msgstr ""
 
 #~ msgid "No articles in this category yet"
 #~ msgstr "Aún no hay artículos en esta categoría"
+
+msgid "Form expired"
+msgstr "Formulario caducado"
+
+msgid "The form could not be sent"
+msgstr "No se pudo enviar el formulario"
+
+msgid "This protects you from forged requests. Usually reloading the page and sending the form again is enough."
+msgstr "Esto te protege de peticiones falsificadas. Normalmente basta con recargar la página y volver a enviar el formulario."
+
+msgid "Go back and reload"
+msgstr "Volver y recargar"
+
+msgid "Reason"
+msgstr "Motivo"
+
+msgid "Browser address"
+msgstr "Dirección del navegador"
+
+msgid "HTTPS detected by the server"
+msgstr "HTTPS detectado por el servidor"
+
+msgid "Administrator: if this happens every time, the address in the browser is missing from CSRF_TRUSTED_ORIGINS in .env, or the server is behind HTTPS but USE_HTTPS=false. Run FALCONDB_DOMAIN=your-domain FALCONDB_HTTPS=yes ./install.sh --yes, or see \"Troubleshooting\" in DEPLOY.md."
+msgstr "Administrador: si pasa siempre, falta la dirección del navegador en CSRF_TRUSTED_ORIGINS del .env, o el servidor está detrás de HTTPS pero USE_HTTPS=false. Ejecuta FALCONDB_DOMAIN=tu-dominio FALCONDB_HTTPS=yes ./install.sh --yes, o mira \"Troubleshooting\" en DEPLOY.md."

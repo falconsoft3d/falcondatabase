@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load i18n falcon %}
+{% block title %}{% translate "Form expired" %} · falcondatabase{% endblock %}
+{% block content %}
+<div class="container-sm" style="padding-top:64px">
+  <div style="text-align:center">
+    {% icon 'lock' 40 %}
+    <h1 style="margin-top:12px">{% translate "The form could not be sent" %}</h1>
+    <p class="muted">{% translate "This protects you from forged requests. Usually reloading the page and sending the form again is enough." %}</p>
+    <p><a class="btn btn-primary" href="javascript:history.back()">← {% translate "Go back and reload" %}</a></p>
+  </div>
+  <div class="box" style="margin-top:24px">
+    <div class="box-body">
+      <p><strong>{% translate "Reason" %}:</strong> <code>{{ reason }}</code></p>
+      {% if origin %}<p class="muted">{% translate "Browser address" %}: <code>{{ origin }}</code> · {% translate "HTTPS detected by the server" %}: <code>{{ is_secure|yesno }}</code></p>{% endif %}
+      {% if user.is_superuser %}
+      <p class="muted">{% blocktranslate %}Administrator: if this happens every time, the address in the browser is missing from CSRF_TRUSTED_ORIGINS in .env, or the server is behind HTTPS but USE_HTTPS=false. Run FALCONDB_DOMAIN=your-domain FALCONDB_HTTPS=yes ./install.sh --yes, or see "Troubleshooting" in DEPLOY.md.{% endblocktranslate %}</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

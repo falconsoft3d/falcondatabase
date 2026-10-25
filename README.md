@@ -105,7 +105,7 @@ cd falcondatabase && git pull && ./install.sh      # new version, latest Postgre
 docker image prune -f                              # remove old images
 ```
 
-Your data and `.env` are kept. [DEPLOY.md](DEPLOY.md#keeping-the-server-up-to-date) has the full routine, including major PostgreSQL upgrades, and also covers HTTPS, backups and troubleshooting.
+Your data and `.env` are kept. Step-by-step guide in Spanish: [docs/actualizar-servidor.md](docs/actualizar-servidor.md). [DEPLOY.md](DEPLOY.md#keeping-the-server-up-to-date) has the full routine, including major PostgreSQL upgrades, and also covers HTTPS, backups and troubleshooting.
 
 ## Local development
 

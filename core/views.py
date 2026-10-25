@@ -74,6 +74,15 @@ def extension_zip(request):
     return response
 
 
+def csrf_failure(request, reason=""):
+    """403 page for a rejected form that explains why (Django's default hides it)."""
+    return render(request, "403_csrf.html", {
+        "reason": reason,
+        "origin": request.headers.get("Origin", ""),
+        "is_secure": request.is_secure(),
+    }, status=403)
+
+
 def changelog_page(request):
     return render(request, "core/changelog.html", {"releases": changelog.releases(get_language())})
 

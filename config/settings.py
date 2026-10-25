@@ -25,6 +25,14 @@ if not DEBUG and SECRET_KEY == DEFAULT_SECRET_KEY:
     raise ImproperlyConfigured("Set SECRET_KEY when DEBUG is false.")
 ALLOWED_HOSTS = env_list("ALLOWED_HOSTS", "localhost,127.0.0.1")
 CSRF_TRUSTED_ORIGINS = env_list("CSRF_TRUSTED_ORIGINS")
+# Forms opened at https://<one of our hosts> are always accepted, even when a proxy
+# in front terminates HTTPS without telling Django (USE_HTTPS=false).
+CSRF_TRUSTED_ORIGINS += [
+    f"https://{host}" for host in ALLOWED_HOSTS
+    if host not in ("*", "localhost", "127.0.0.1") and not host.startswith(".")
+    and f"https://{host}" not in CSRF_TRUSTED_ORIGINS
+]
+CSRF_FAILURE_VIEW = "core.views.csrf_failure"
 
 # Behind an HTTPS reverse proxy (Caddy, nginx...) that sets X-Forwarded-Proto.
 USE_HTTPS = env_bool("USE_HTTPS", False)
