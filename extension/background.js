@@ -6,7 +6,7 @@ const ALARM = "refresh-badge";
 async function refreshBadge() {
   const state = await loadState();
   if (!state.token || !state.server) return chrome.action.setBadgeText({ text: "" });
-  const { data, error } = await fetchAnalytics({ ...state, days: 7 });
+  const { data, error } = await fetchAnalytics({ ...state, days: 1 });
   if (error) return chrome.action.setBadgeText({ text: error.status === 401 ? "!" : "" });
   const compact = new Intl.NumberFormat("en", { notation: "compact", maximumFractionDigits: 1 });
   chrome.action.setBadgeBackgroundColor({ color: "#2fa9a3" });

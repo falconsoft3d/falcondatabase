@@ -128,7 +128,21 @@ class StatsTests(TestCase):
         self.assertEqual({r["medium"] for r in report["mediums"]}, {"direct", "organic"})
         self.assertEqual(report["countries"][0]["width"], 100)
 
+    def test_today_is_hourly_and_compares_with_yesterday(self):
+        self.add("s1", "v1", "/")
+        self.add("s2", "v2", "/")
+        self.add("s0", "v0", "/", days_ago=1)
+        report = stats.report(PageView.objects.all(), 1)
+        now = timezone.now()
+        self.assertEqual(len(report["series"]), now.hour + 1)
+        self.assertEqual(report["series"][-1]["hour"], now.hour)
+        self.assertEqual(report["series"][-1]["pageviews"], 2)
+        self.assertEqual(sum(p["pageviews"] for p in report["series"]), 2)
+        kpis = {k["key"]: k for k in report["kpis"]}
+        self.assertEqual(kpis["sessions"]["change"], 100)  # 2 today vs 1 yesterday
+
     def test_parse_period(self):
+        self.assertEqual(stats.parse_period("1"), 1)
         self.assertEqual(stats.parse_period("30"), 30)
         self.assertEqual(stats.parse_period("5"), stats.DEFAULT_PERIOD)
         self.assertEqual(stats.parse_period(None), stats.DEFAULT_PERIOD)

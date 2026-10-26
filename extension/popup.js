@@ -6,6 +6,10 @@ const t = (key, ...subs) => chrome.i18n.getMessage(key, subs) || key;
 const lang = chrome.i18n.getUILanguage();
 const number = new Intl.NumberFormat(lang, { notation: "compact", maximumFractionDigits: 1 });
 const dayLabel = new Intl.DateTimeFormat(lang, { month: "short", day: "numeric", timeZone: "UTC" });
+const hourLabel = new Intl.DateTimeFormat(lang, { hour: "numeric", minute: "2-digit", timeZone: "UTC" });
+// Today's series comes by hour (points carry an "hour"), the other periods by day.
+const pointDate = (p) => new Date(`${p.date}T${String(p.hour || 0).padStart(2, "0")}:00:00Z`);
+const pointLabel = (p) => (p.hour === undefined ? dayLabel : hourLabel).format(pointDate(p));
 let regions = null;
 try { regions = new Intl.DisplayNames([lang], { type: "region" }); } catch { /* keep codes */ }
 
@@ -60,7 +64,7 @@ function delta(change, higherIsBetter) {
   return span;
 }
 
-function renderKpis(report) {
+function renderKpis(report, days) {
   const labels = { visitors: "visitors", sessions: "sessions", pageviews: "pageviews", bounce_rate: "bounceRate" };
   const box = $("kpis");
   box.replaceChildren();
@@ -75,7 +79,7 @@ function renderKpis(report) {
     value.textContent = kpi.value === null ? "—" : kpi.key === "bounce_rate" ? `${kpi.value}%` : number.format(kpi.value);
     const deltaRow = document.createElement("div");
     deltaRow.className = "delta muted";
-    deltaRow.append(delta(kpi.change, kpi.higher_is_better), ` ${t("vsPrevious")}`);
+    deltaRow.append(delta(kpi.change, kpi.higher_is_better), ` ${t(days === 1 ? "vsYesterday" : "vsPrevious")}`);
     tile.append(label, value, deltaRow);
     box.append(tile);
   }
@@ -105,14 +109,14 @@ function renderChart(series) {
   const last = values.length - 1;
   for (const [i, anchor] of [[0, "start"], [last, "end"]]) {
     const tick = el("text", { x: x(i), y: height - 4, class: "tick", "text-anchor": anchor });
-    tick.textContent = dayLabel.format(new Date(`${series[i].date}T00:00:00Z`));
+    tick.textContent = pointLabel(series[i]);
     svg.append(tick);
   }
   const cross = el("line", { y1: pad.top, y2: y(0), class: "cross", visibility: "hidden" });
   const dot = el("circle", { r: 4, class: "dot", cx: x(last), cy: y(values[last]) });
   svg.append(cross, dot);
   const readout = (i) => {
-    $("readout").textContent = `${dayLabel.format(new Date(`${series[i].date}T00:00:00Z`))} · ${values[i].toLocaleString(lang)}`;
+    $("readout").textContent = `${pointLabel(series[i])} · ${values[i].toLocaleString(lang)}`;
   };
   readout(last);
   svg.onpointermove = (event) => {
@@ -216,8 +220,9 @@ async function render() {
   if (state.project && data.selected !== state.project) await saveState({ project: "" });
   $("status").textContent = data.report.totals.pageviews ? "" : t("noData");
   fillSelect($("project"), [["", t("allProjects")], ...data.projects.map((p) => [p.ref, p.name])], data.selected);
-  fillSelect($("days"), [7, 14, 30, 90].map((d) => [d, t("days", String(d))]), state.days);
-  renderKpis(data.report);
+  fillSelect($("days"), [1, 7, 14, 30, 90].map((d) => [d, d === 1 ? t("todayPeriod") : t("days", String(d))]), state.days);
+  $("chart-title").textContent = t(state.days === 1 ? "hourlyPageviews" : "dailyPageviews");
+  renderKpis(data.report, state.days);
   renderChart(data.report.series);
   renderBars($("pages"), data.report.pages, (r) => `${r.hostname}${r.path}`);
   renderBars($("sources"), data.report.sources, (r) => r.source || "—");

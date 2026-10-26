@@ -10,6 +10,29 @@ Hay tres cosas que actualizar, en este orden:
 
 Tus datos (base de datos y archivos subidos) y tu configuración (`.env`) se conservan siempre.
 
+## Actualización rápida (solo la app)
+
+¿Solo quieres publicar los últimos cambios de falcondatabase (sin tocar el sistema)? Basta con esto:
+
+```bash
+# 1. En tu ordenador
+git push
+
+# 2. En el servidor
+ssh tu-usuario@falcondatabase.com
+cd ~/falcondatabase
+docker compose exec -T db pg_dump -U falcon falcondatabase | gzip > backups/falcondatabase-$(date +%F).sql.gz
+git pull && ./install.sh
+```
+
+Comprueba con `curl -s http://127.0.0.1:8000/healthz` que la versión es la nueva (la misma que aparece arriba del todo en `/changelog/`).
+
+**Extensión de Chrome:** si la versión trae cambios en la extensión, vuelve a descargarla desde la página **Extensión** de la web (`/extension/`), descomprímela encima de la carpeta anterior y pulsa **Recargar** (↻) en `chrome://extensions`. No hace falta volver a iniciar sesión.
+
+Para la rutina completa (sistema operativo, Docker, copias y qué hacer si algo falla) sigue los pasos de abajo.
+
+---
+
 > Tiempo estimado: 5–10 minutos. La app solo deja de responder unos segundos mientras se reinician los contenedores (y uno o dos minutos si hay que reiniciar el servidor).
 
 ---
@@ -100,7 +123,7 @@ Si `git pull` se queja de cambios locales, es que se editó algún archivo en el
 
 ```bash
 docker compose ps
-curl -s http://127.0.0.1:8000/healthz       # {"status": "ok", "version": "0.7.4"}
+curl -s http://127.0.0.1:8000/healthz       # {"status": "ok", "version": "0.7.6"}
 ```
 
 Abre la web y mira la versión en el pie de página o en **Versiones** (`/changelog/`). Entra con tu usuario para confirmar que el login funciona.

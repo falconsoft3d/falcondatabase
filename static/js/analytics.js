@@ -1,4 +1,4 @@
-// Analytics dashboard: daily area charts with a crosshair tooltip, and localized
+// Analytics dashboard: daily (or, for today, hourly) area charts with a crosshair tooltip, and localized
 // country names. Data comes from <script id="analytics-series" type="application/json">.
 (() => {
   const dataNode = document.getElementById("analytics-series");
@@ -16,7 +16,11 @@
   const longDay = new Intl.DateTimeFormat(lang, { weekday: "short", month: "short", day: "numeric", timeZone: "UTC" });
   const number = new Intl.NumberFormat(lang);
   const compact = new Intl.NumberFormat(lang, { notation: "compact", maximumFractionDigits: 1 });
-  const asDate = (iso) => new Date(`${iso}T00:00:00Z`);
+  const hourLabel = new Intl.DateTimeFormat(lang, { hour: "numeric", minute: "2-digit", timeZone: "UTC" });
+  const hourly = series.length > 0 && series[0].hour !== undefined;
+  const asDate = (point) => new Date(`${point.date}T${String(point.hour || 0).padStart(2, "0")}:00:00Z`);
+  const tick = (point) => (hourly ? hourLabel : dayLabel).format(asDate(point));
+  const longLabel = (point) => (hourly ? `${longDay.format(asDate(point))} ${hourLabel.format(asDate(point))}` : longDay.format(asDate(point)));
 
   // Country codes -> names in the interface language.
   try {
@@ -56,7 +60,7 @@
     const height = PAD.top + PLOT_HEIGHT + AXIS_BAND;
 
     const svg = el("svg", { width, height, viewBox: `0 0 ${width} ${height}`, class: "area-chart", tabindex: "0",
-                            "aria-label": `${title}: ${values.map((v, i) => `${series[i].date} ${v}`).join(", ")}` });
+                            "aria-label": `${title}: ${values.map((v, i) => `${tick(series[i])} ${v}`).join(", ")}` });
 
     // Gridlines + y ticks (0, ¼, ½, ¾, max): solid hairlines, recessive.
     for (let i = 0; i <= 4; i++) {
@@ -76,7 +80,7 @@
       if (i !== series.length - 1 && x(series.length - 1) - x(i) < MIN_LABEL_GAP) return;
       const anchor = i === 0 ? "start" : i === series.length - 1 ? "end" : "middle";
       const label = el("text", { x: x(i), y: PAD.top + PLOT_HEIGHT + 17, class: "tick", "text-anchor": anchor });
-      label.textContent = dayLabel.format(asDate(point.date));
+      label.textContent = tick(point);
       svg.append(label);
     });
 
@@ -112,7 +116,7 @@
       cross.setAttribute("visibility", "visible");
       dot.setAttribute("visibility", "visible");
       strong.textContent = number.format(values[active]);
-      sub.textContent = `${title} · ${longDay.format(asDate(series[active].date))}`;
+      sub.textContent = `${title} · ${longLabel(series[active])}`;
       tooltip.hidden = false;
       const left = Math.min(Math.max(cx - tooltip.offsetWidth / 2, 0), width - tooltip.offsetWidth);
       tooltip.style.left = `${left}px`;

@@ -1,6 +1,6 @@
 {% load i18n %}{# Expects: periods, report, extra_query #}
 <nav class="subnav" aria-label="{% translate 'Period' %}">
   {% for days in periods %}
-    <a href="?days={{ days }}{{ extra_query }}" class="{% if days == report.days %}selected{% endif %}">{% blocktranslate %}{{ days }} days{% endblocktranslate %}</a>
+    <a href="?days={{ days }}{{ extra_query }}" class="{% if days == report.days %}selected{% endif %}">{% if days == 1 %}{% translate "Today" %}{% else %}{% blocktranslate %}{{ days }} days{% endblocktranslate %}{% endif %}</a>
   {% endfor %}
 </nav>

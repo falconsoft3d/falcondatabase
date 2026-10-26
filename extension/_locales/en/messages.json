@@ -25,5 +25,8 @@
   "today": { "message": "Today: $COUNT$ pageviews", "placeholders": { "count": { "content": "$1" } } },
   "sessionExpired": { "message": "Your session expired. Sign in again." },
   "refresh": { "message": "Refresh" },
-  "loading": { "message": "Loading…" }
+  "loading": { "message": "Loading…" },
+  "todayPeriod": { "message": "Today" },
+  "vsYesterday": { "message": "vs. yesterday" },
+  "hourlyPageviews": { "message": "Pageviews by hour (UTC)" }
 }

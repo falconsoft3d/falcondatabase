@@ -12,7 +12,7 @@
       <input type="hidden" name="days" value="{{ report.days }}">
       <nav class="subnav" aria-label="{% translate 'Period' %}">
         {% for days in periods %}
-          <button type="submit" name="days" value="{{ days }}" class="{% if days == report.days %}selected{% endif %}">{% blocktranslate %}{{ days }} days{% endblocktranslate %}</button>
+          <button type="submit" name="days" value="{{ days }}" class="{% if days == report.days %}selected{% endif %}">{% if days == 1 %}{% translate "Today" %}{% else %}{% blocktranslate %}{{ days }} days{% endblocktranslate %}{% endif %}</button>
         {% endfor %}
       </nav>
       <fieldset class="project-chips">

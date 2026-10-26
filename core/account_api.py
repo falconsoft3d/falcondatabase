@@ -2,7 +2,7 @@
 
     POST /api/account/token      {"username", "password", "code"?} -> {"token", "user", "expires_in"}
     GET  /api/account/me         current account
-    GET  /api/account/analytics  ?days=7|14|30|90&p=<project slug> -> analytics of the account's projects
+    GET  /api/account/analytics  ?days=1|7|14|30|90&p=<project slug> -> analytics of the account's projects (1 = today, by hour)
 
 Requests send ``Authorization: Bearer <token>``. A token is a signature of the
 user id and their session hash, so it stops working when the password changes.

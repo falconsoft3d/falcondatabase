@@ -19,14 +19,14 @@
       <figure class="box chart-card" data-area-chart="{{ metric }}">
         <figcaption class="box-header">
           <strong class="grow">{% if metric == "sessions" %}{% translate "Sessions" %}{% elif metric == "visitors" %}{% translate "Users" %}{% else %}{% translate "Pageviews" %}{% endif %}</strong>
-          <span class="muted small">{% blocktranslate with days=report.days %}Last {{ days }} days, daily{% endblocktranslate %}</span>
+          <span class="muted small">{% if report.days == 1 %}{% translate "Today, hourly (UTC)" %}{% else %}{% blocktranslate with days=report.days %}Last {{ days }} days, daily{% endblocktranslate %}{% endif %}</span>
         </figcaption>
         <div class="chart-plot" role="img" aria-label="{% translate 'Daily chart' %}"></div>
         <details class="chart-table">
           <summary class="small">{% translate "Show as table" %}</summary>
           <table class="list small">
-            <thead><tr><th>{% translate "Day" %}</th><th>{% translate "Value" %}</th></tr></thead>
-            <tbody>{% for point in report.series %}<tr><td>{{ point.date }}</td><td class="num">{{ point|get_item:metric }}</td></tr>{% endfor %}</tbody>
+            <thead><tr><th>{% if report.days == 1 %}{% translate "Hour" %}{% else %}{% translate "Day" %}{% endif %}</th><th>{% translate "Value" %}</th></tr></thead>
+            <tbody>{% for point in report.series %}<tr><td>{{ point.date }}{% if point.hour is not None %} {{ point.hour|stringformat:"02d" }}:00{% endif %}</td><td class="num">{{ point|get_item:metric }}</td></tr>{% endfor %}</tbody>
           </table>
         </details>
       </figure>

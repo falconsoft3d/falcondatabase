@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-25 17:56+0000\n"
+"POT-Creation-Date: 2026-10-26 21:40+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -182,7 +182,7 @@ msgstr "Usuario o contraseña incorrectos."
 msgid "Enter the code from your authenticator app."
 msgstr "Escribe el código de tu app de autenticación."
 
-#: core/account_api.py:98 core/views.py:148
+#: core/account_api.py:98 core/views.py:157
 msgid "Invalid code. Try again."
 msgstr "Código incorrecto. Inténtalo de nuevo."
 
@@ -208,8 +208,7 @@ msgstr "Letras, números y guiones. Será parte de la URL de tus proyectos."
 
 #: core/forms.py:29
 msgid "Use only letters, numbers and hyphens (not at the start or end)."
-msgstr ""
-"Usa solo letras, números y guiones (sin empezar ni terminar en guion)."
+msgstr "Usa solo letras, números y guiones (sin empezar ni terminar en guion)."
 
 #: core/forms.py:31
 msgid "That username is reserved."
@@ -227,82 +226,81 @@ msgstr "Ya existe una cuenta con ese email."
 msgid "allow sign up"
 msgstr "permitir registro"
 
-#: core/views.py:94
+#: core/views.py:103
 msgid "Sign up is disabled. Ask the administrator for an account."
 msgstr "El registro está desactivado. Pide una cuenta al administrador."
 
-#: core/views.py:127
+#: core/views.py:136
 msgid "The verification expired. Sign in again."
 msgstr "La verificación caducó. Inicia sesión de nuevo."
 
-#: core/views.py:140
+#: core/views.py:149
 msgid "You have few recovery codes left. Generate new ones in Settings."
 msgstr ""
 "Te quedan pocos códigos de recuperación. Genera nuevos en Configuración."
 
-#: core/views.py:145
+#: core/views.py:154
 msgid "Too many failed attempts. Sign in again."
 msgstr "Demasiados intentos fallidos. Inicia sesión de nuevo."
 
-#: core/views.py:159
+#: core/views.py:168
 msgid "Choose an image."
 msgstr "Elige una imagen."
 
-#: core/views.py:164
+#: core/views.py:173
 msgid "Profile picture updated."
 msgstr "Foto de perfil actualizada."
 
-#: core/views.py:168
+#: core/views.py:177
 msgid "Profile picture removed."
 msgstr "Foto de perfil eliminada."
 
-#: core/views.py:178
+#: core/views.py:187
 msgid "Your password was changed."
 msgstr "Tu contraseña se cambió correctamente."
 
-#: core/views.py:201
+#: core/views.py:210
 msgid "Invalid code. Check the time on your phone and try again."
-msgstr ""
-"Código incorrecto. Revisa la hora de tu teléfono e inténtalo de nuevo."
+msgstr "Código incorrecto. Revisa la hora de tu teléfono e inténtalo de nuevo."
 
-#: core/views.py:207
+#: core/views.py:216
 msgid "Two-step authentication is enabled."
 msgstr "La autenticación en dos pasos está activada."
 
-#: core/views.py:222
+#: core/views.py:231
 msgid "Incorrect password."
 msgstr "Contraseña incorrecta."
 
-#: core/views.py:226
+#: core/views.py:235
 msgid "Two-step authentication is disabled."
 msgstr "La autenticación en dos pasos está desactivada."
 
-#: core/views.py:256
+#: core/views.py:265
 msgid "Sign up enabled."
 msgstr "Registro activado."
 
-#: core/views.py:256
+#: core/views.py:265
 msgid "Sign up disabled."
 msgstr "Registro desactivado."
 
-#: core/views.py:265
+#: core/views.py:274
 msgid "Visits to the public pages of this site"
 msgstr "Visitas a las páginas públicas de este sitio"
 
-#: core/views.py:272
+#: core/views.py:281
 msgid "Site analytics enabled."
 msgstr "Analítica del sitio activada."
 
-#: core/views.py:272
+#: core/views.py:281
 msgid "Site analytics disabled."
 msgstr "Analítica del sitio desactivada."
 
-#: core/views.py:277
+#: core/views.py:286
 #, python-format
 msgid "Two-step authentication removed for %(username)s."
 msgstr "Se quitó la autenticación en dos pasos de %(username)s."
 
-#: core/views.py:283
+#: core/views.py:292
 #, python-format
 msgid "User “%(username)s” created."
 msgstr "Usuario «%(username)s» creado."
@@ -366,8 +364,7 @@ msgstr "Nombre de la tabla"
 
 #: projects/forms.py:33 templates/projects/new.html:21
 #: templates/projects/settings.html:16 templates/projects/table_new.html:21
-#: templates/projects/table_structure.html:79
-#: templates/projects/tables.html:12
+#: templates/projects/table_structure.html:79 templates/projects/tables.html:12
 msgid "Description"
 msgstr "Descripción"
 
@@ -383,8 +380,8 @@ msgstr "«new» está reservado, elige otro nombre."
 #: projects/forms.py:70 projects/schema.py:87
 #: templates/projects/settings.html:10 templates/projects/table_new.html:15
 #: templates/projects/table_new.html:39
-#: templates/projects/table_structure.html:44
-#: templates/projects/tables.html:12 templates/storage/bucket.html:29
+#: templates/projects/table_structure.html:44 templates/projects/tables.html:12
+#: templates/storage/bucket.html:29
 msgid "Name"
 msgstr "Nombre"
 
@@ -477,9 +474,8 @@ msgstr "Dueño — cada usuario solo ve y edita sus propias filas"
 msgid "Private — service key only"
 msgstr "Privada — solo con la service key"
 
-#: projects/models.py:118 storage/models.py:20
-#: templates/projects/_keys.html:10 templates/storage/bucket.html:11
-#: templates/storage/dashboard.html:34
+#: projects/models.py:118 storage/models.py:20 templates/projects/_keys.html:10
+#: templates/storage/bucket.html:11 templates/storage/dashboard.html:34
 msgid "public"
 msgstr "pública"
 
@@ -821,8 +817,7 @@ msgstr "Rol desconocido."
 msgid ""
 "There is no account with the email %(email)s. Ask them to sign up first."
 msgstr ""
-"No hay ninguna cuenta con el email %(email)s. Pídele que se registre "
-"primero."
+"No hay ninguna cuenta con el email %(email)s. Pídele que se registre primero."
 
 #: projects/views.py:420
 msgid "You already own this project."
@@ -1005,6 +1000,50 @@ msgstr "Volver"
 msgid "Dashboard"
 msgstr "Dashboard"
 
+#: templates/403_csrf.html:3
+msgid "Form expired"
+msgstr "Formulario caducado"
+
+#: templates/403_csrf.html:8
+msgid "The form could not be sent"
+msgstr "No se pudo enviar el formulario"
+
+#: templates/403_csrf.html:9
+msgid ""
+"This protects you from forged requests. Usually reloading the page and "
+"sending the form again is enough."
+msgstr ""
+"Esto te protege de peticiones falsificadas. Normalmente basta con recargar "
+"la página y volver a enviar el formulario."
+
+#: templates/403_csrf.html:10
+msgid "Go back and reload"
+msgstr "Volver y recargar"
+
+#: templates/403_csrf.html:14
+msgid "Reason"
+msgstr "Motivo"
+
+#: templates/403_csrf.html:15
+msgid "Browser address"
+msgstr "Dirección del navegador"
+
+#: templates/403_csrf.html:15
+msgid "HTTPS detected by the server"
+msgstr "HTTPS detectado por el servidor"
+
+#: templates/403_csrf.html:17
+msgid ""
+"Administrator: if this happens every time, the address in the browser is "
+"missing from CSRF_TRUSTED_ORIGINS in .env, or the server is behind HTTPS but "
+"USE_HTTPS=false. Run FALCONDB_DOMAIN=your-domain FALCONDB_HTTPS=yes ./"
+"install.sh --yes, or see \"Troubleshooting\" in DEPLOY.md."
+msgstr ""
+"Administrador: si pasa siempre, falta la dirección del navegador en "
+"CSRF_TRUSTED_ORIGINS del .env, o el servidor está detrás de HTTPS pero "
+"USE_HTTPS=false. Ejecuta FALCONDB_DOMAIN=tu-dominio FALCONDB_HTTPS=yes ./"
+"install.sh --yes, o mira \"Troubleshooting\" en DEPLOY.md."
+
 #: templates/analytics/_bars.html:11 templates/analytics/_bars.html:15
 msgid "Unknown"
 msgstr "Desconocido"
@@ -1013,20 +1052,17 @@ msgstr "Desconocido"
 msgid "No data for this period."
 msgstr "Sin datos en este periodo."
 
-#: templates/analytics/_dashboard.html:8
-#: templates/analytics/_dashboard.html:41
+#: templates/analytics/_dashboard.html:8 templates/analytics/_dashboard.html:41
 #: templates/analytics/_dashboard.html:49
 msgid "Visitors"
 msgstr "Visitantes"
 
-#: templates/analytics/_dashboard.html:8
-#: templates/analytics/_dashboard.html:21
+#: templates/analytics/_dashboard.html:8 templates/analytics/_dashboard.html:21
 #: templates/analytics/_dashboard.html:43
 msgid "Sessions"
 msgstr "Sesiones"
 
-#: templates/analytics/_dashboard.html:8
-#: templates/analytics/_dashboard.html:21
+#: templates/analytics/_dashboard.html:8 templates/analytics/_dashboard.html:21
 #: templates/analytics/_dashboard.html:38
 #: templates/analytics/_dashboard.html:47
 msgid "Pageviews"
@@ -1047,6 +1083,10 @@ msgid "Users"
 msgstr "Usuarios"
 
 #: templates/analytics/_dashboard.html:22
+msgid "Today, hourly (UTC)"
+msgstr "Hoy, por hora (UTC)"
+
+#: templates/analytics/_dashboard.html:22
 #, python-format
 msgid "Last %(days)s days, daily"
 msgstr "Últimos %(days)s días, por día"
@@ -1058,6 +1098,10 @@ msgstr "Gráfico diario"
 #: templates/analytics/_dashboard.html:26
 msgid "Show as table"
 msgstr "Ver como tabla"
+
+#: templates/analytics/_dashboard.html:28
+msgid "Hour"
+msgstr "Hora"
 
 #: templates/analytics/_dashboard.html:28
 msgid "Day"
@@ -1108,6 +1152,10 @@ msgstr ""
 "proteger la privacidad, el identificador anónimo cambia cada día."
 
 #: templates/analytics/_delta.html:7
+msgid "vs yesterday"
+msgstr "vs. ayer"
+
+#: templates/analytics/_delta.html:7
 #, python-format
 msgid "vs previous %(days)s days"
 msgstr "vs. %(days)s días anteriores"
@@ -1115,6 +1163,10 @@ msgstr "vs. %(days)s días anteriores"
 #: templates/analytics/_periods.html:2 templates/analytics/overview.html:13
 msgid "Period"
 msgstr "Periodo"
+
+#: templates/analytics/_periods.html:4 templates/analytics/overview.html:15
+msgid "Today"
+msgstr "Hoy"
 
 #: templates/analytics/_periods.html:4 templates/analytics/overview.html:15
 #, python-format
@@ -1170,8 +1222,7 @@ msgstr "Script de seguimiento"
 #: templates/analytics/_setup.html:24
 msgid ""
 "Paste it in the <code>&lt;head&gt;</code> of every page of your website:"
-msgstr ""
-"Pégalo en el <code>&lt;head&gt;</code> de todas las páginas de tu web:"
+msgstr "Pégalo en el <code>&lt;head&gt;</code> de todas las páginas de tu web:"
 
 #: templates/analytics/_setup.html:27
 msgid "Copy"
@@ -1179,8 +1230,8 @@ msgstr "Copiar"
 
 #: templates/analytics/_setup.html:29
 msgid ""
-"No cookies and no personal data: your visitors don't need to accept a cookie"
-" banner for it. It also counts navigation in single-page apps (React, Vue…)."
+"No cookies and no personal data: your visitors don't need to accept a cookie "
+"banner for it. It also counts navigation in single-page apps (React, Vue…)."
 msgstr ""
 "Sin cookies ni datos personales: tus visitantes no necesitan aceptar un "
 "aviso de cookies por él. También cuenta la navegación en apps de una sola "
@@ -1225,8 +1276,8 @@ msgstr "Configuración"
 
 #: templates/analytics/project.html:16
 msgid ""
-"No visits yet in this period. Add the script to your website and open a page"
-" to see the first data."
+"No visits yet in this period. Add the script to your website and open a page "
+"to see the first data."
 msgstr ""
 "Aún no hay visitas en este periodo. Agrega el script a tu web y abre una "
 "página para ver los primeros datos."
@@ -1240,8 +1291,8 @@ msgid ""
 "Enable it to get a tracking script for your website and see visitors, "
 "sessions, pageviews, countries, sources and devices."
 msgstr ""
-"Actívala para obtener un script de seguimiento para tu web y ver visitantes,"
-" sesiones, páginas vistas, países, fuentes y dispositivos."
+"Actívala para obtener un script de seguimiento para tu web y ver visitantes, "
+"sesiones, páginas vistas, países, fuentes y dispositivos."
 
 #: templates/base.html:12
 msgid "Copied!"
@@ -1381,12 +1432,10 @@ msgstr ""
 "falcondatabase."
 
 #: templates/blog/index.html:14
-#| msgid "Search projects…"
 msgid "Search articles…"
 msgstr "Buscar artículos…"
 
 #: templates/blog/index.html:14
-#| msgid "Search projects…"
 msgid "Search articles"
 msgstr "Buscar artículos"
 
@@ -1412,20 +1461,16 @@ msgstr "Guías"
 
 #: templates/blog/index.html:32
 #, python-format
-#| msgid "%(counter)s file"
-#| msgid_plural "%(counter)s files"
 msgid "%(counter)s article"
 msgid_plural "%(counter)s articles"
 msgstr[0] "%(counter)s artículo"
 msgstr[1] "%(counter)s artículos"
 
 #: templates/blog/index.html:35
-#| msgid "Available filters"
 msgid "Clear filters"
 msgstr "Quitar filtros"
 
 #: templates/blog/index.html:44
-#| msgid "All articles →"
 msgid "No articles found"
 msgstr "No se encontraron artículos"
 
@@ -1434,7 +1479,6 @@ msgid "Try other words or another category."
 msgstr "Prueba con otras palabras u otra categoría."
 
 #: templates/blog/index.html:46
-#| msgid "All articles →"
 msgid "See all articles"
 msgstr "Ver todos los artículos"
 
@@ -1451,8 +1495,8 @@ msgid ""
 "Every request carries the <code class=\"inline\">apikey</code> header. Each "
 "project has two keys:"
 msgstr ""
-"Todas las peticiones llevan la cabecera <code "
-"class=\"inline\">apikey</code>. Hay dos claves por proyecto:"
+"Todas las peticiones llevan la cabecera <code class=\"inline\">apikey</"
+"code>. Hay dos claves por proyecto:"
 
 #: templates/core/_api_reference.html:6
 msgid "Key"
@@ -1485,17 +1529,16 @@ msgstr "Todo, ignora las reglas"
 #: templates/core/_api_reference.html:10
 msgid ""
 "When a user signs in they receive a <code class=\"inline\">token</code>; "
-"also send it in <code class=\"inline\">Authorization: Bearer "
-"&lt;token&gt;</code>."
+"also send it in <code class=\"inline\">Authorization: Bearer &lt;token&gt;</"
+"code>."
 msgstr ""
-"Cuando un usuario inicia sesión recibe un <code "
-"class=\"inline\">token</code>; envíalo además en <code "
-"class=\"inline\">Authorization: Bearer &lt;token&gt;</code>."
+"Cuando un usuario inicia sesión recibe un <code class=\"inline\">token</"
+"code>; envíalo además en <code class=\"inline\">Authorization: Bearer "
+"&lt;token&gt;</code>."
 
 #: templates/core/_api_reference.html:12 templates/portal/base.html:28
-#: templates/projects/base_project.html:17
-#: templates/projects/dashboard.html:46 templates/projects/overview.html:8
-#: templates/projects/tables.html:6
+#: templates/projects/base_project.html:17 templates/projects/dashboard.html:46
+#: templates/projects/overview.html:8 templates/projects/tables.html:6
 msgid "Tables"
 msgstr "Tablas"
 
@@ -1539,8 +1582,8 @@ msgstr "Elimina una fila"
 
 #: templates/core/_api_reference.html:22
 msgid ""
-"Listings respond with <code class=\"inline\">{\"data\": [...], \"count\": "
-"42}</code>, where <code class=\"inline\">count</code> is the total without "
+"Listings respond with <code class=\"inline\">{\"data\": [...], \"count\": 42}"
+"</code>, where <code class=\"inline\">count</code> is the total without "
 "pagination."
 msgstr ""
 "Los listados responden <code class=\"inline\">{\"data\": [...], \"count\": "
@@ -1558,8 +1601,8 @@ msgid ""
 "<code>lt</code>, <code>lte</code>, <code>like</code>, <code>ilike</code>, "
 "<code>is</code> (null/true/false) and <code>in</code>."
 msgstr ""
-"Filtra con <code class=\"inline\">columna=operador.valor</code>. Operadores:"
-" <code>eq</code>, <code>neq</code>, <code>gt</code>, <code>gte</code>, "
+"Filtra con <code class=\"inline\">columna=operador.valor</code>. Operadores: "
+"<code>eq</code>, <code>neq</code>, <code>gt</code>, <code>gte</code>, "
 "<code>lt</code>, <code>lte</code>, <code>like</code>, <code>ilike</code>, "
 "<code>is</code> (null/true/false) e <code>in</code>."
 
@@ -1659,8 +1702,8 @@ msgid ""
 "Upload (multipart field <code>file</code>; <code>?upsert=true</code> "
 "replaces)"
 msgstr ""
-"Sube un archivo (campo multipart <code>file</code>; "
-"<code>?upsert=true</code> reemplaza)"
+"Sube un archivo (campo multipart <code>file</code>; <code>?upsert=true</"
+"code> reemplaza)"
 
 #: templates/core/_api_reference.html:55
 msgid "Delete a file"
@@ -1680,8 +1723,8 @@ msgid ""
 "to the <code>&lt;head&gt;</code> of your website. It sets no cookies and "
 "stores no IP addresses."
 msgstr ""
-"Actívala en la pestaña <strong>Analítica</strong> del proyecto y agrega esta"
-" etiqueta al <code>&lt;head&gt;</code> de tu web. No usa cookies ni guarda "
+"Actívala en la pestaña <strong>Analítica</strong> del proyecto y agrega esta "
+"etiqueta al <code>&lt;head&gt;</code> de tu web. No usa cookies ni guarda "
 "direcciones IP."
 
 #: templates/core/_api_reference.html:67
@@ -1718,8 +1761,8 @@ msgid ""
 "A single file, no dependencies or build step. Import it straight from your "
 "server:"
 msgstr ""
-"Un único archivo, sin dependencias ni build. Impórtalo directamente desde tu"
-" servidor:"
+"Un único archivo, sin dependencias ni build. Impórtalo directamente desde tu "
+"servidor:"
 
 #: templates/core/_api_reference.html:78
 msgid "Chainable queries"
@@ -1834,8 +1877,8 @@ msgstr[0] ""
 "Al iniciar sesión te pedimos un código de tu app de autenticación. Te queda "
 "%(counter)s código de recuperación."
 msgstr[1] ""
-"Al iniciar sesión te pedimos un código de tu app de autenticación. Te quedan"
-" %(counter)s códigos de recuperación."
+"Al iniciar sesión te pedimos un código de tu app de autenticación. Te quedan "
+"%(counter)s códigos de recuperación."
 
 #: templates/core/account.html:67
 msgid "Confirm with your password"
@@ -1877,8 +1920,8 @@ msgstr "Actualizar contraseña"
 #: templates/core/changelog.html:7
 #, python-format
 msgid ""
-"What's new in falcondatabase. You are using version "
-"<strong>%(app_version)s</strong>."
+"What's new in falcondatabase. You are using version <strong>%(app_version)s</"
+"strong>."
 msgstr ""
 "Novedades de falcondatabase. Estás usando la versión "
 "<strong>%(app_version)s</strong>."
@@ -1906,8 +1949,8 @@ msgid ""
 "<strong>API</strong> tab shows these same examples with your real keys."
 msgstr ""
 "Cómo consultar los datos de un proyecto desde cualquier frontend. Dentro de "
-"cada proyecto, la pestaña <strong>API</strong> muestra estos mismos ejemplos"
-" con tus claves reales."
+"cada proyecto, la pestaña <strong>API</strong> muestra estos mismos ejemplos "
+"con tus claves reales."
 
 #: templates/core/extension.html:3 templates/core/extension.html:8
 msgid "Chrome extension"
@@ -2000,7 +2043,8 @@ msgid "Open the extensions page"
 msgstr "Abre la página de extensiones"
 
 #: templates/core/extension.html:34
-msgid "Type <code class=\"inline\">chrome://extensions</code> in the address bar."
+msgid ""
+"Type <code class=\"inline\">chrome://extensions</code> in the address bar."
 msgstr ""
 "Escribe <code class=\"inline\">chrome://extensions</code> en la barra de "
 "direcciones."
@@ -2031,13 +2075,12 @@ msgstr ""
 msgid ""
 "Click the icon and sign in with your falcondatabase username and password."
 msgstr ""
-"Pulsa el icono e inicia sesión con tu usuario y contraseña de "
-"falcondatabase."
+"Pulsa el icono e inicia sesión con tu usuario y contraseña de falcondatabase."
 
 #: templates/core/extension.html:39
 msgid ""
-"Chrome only installs extensions directly from the Chrome Web Store; until it"
-" is published there, it is installed this way. Updates: download the zip "
+"Chrome only installs extensions directly from the Chrome Web Store; until it "
+"is published there, it is installed this way. Updates: download the zip "
 "again and click the reload button of the extension."
 msgstr ""
 "Chrome solo instala extensiones directamente desde la Chrome Web Store; "
@@ -2149,8 +2192,7 @@ msgid "From any frontend"
 msgstr "Desde cualquier frontend"
 
 #: templates/core/home.html:60
-msgid ""
-"CORS ready so your apps on other domains can consume the data directly."
+msgid "CORS ready so your apps on other domains can consume the data directly."
 msgstr ""
 "CORS listo para que tus apps en otros dominios consuman los datos "
 "directamente."
@@ -2244,8 +2286,8 @@ msgid ""
 "If you lose your phone, each of these codes lets you sign in once. This is "
 "the only time they are shown: store them somewhere safe."
 msgstr ""
-"Si pierdes tu teléfono, cada uno de estos códigos te permite entrar una vez."
-" Es la única vez que se muestran: guárdalos en un lugar seguro."
+"Si pierdes tu teléfono, cada uno de estos códigos te permite entrar una vez. "
+"Es la única vez que se muestran: guárdalos en un lugar seguro."
 
 #: templates/core/recovery_codes.html:13
 msgid "Copy codes"
@@ -2370,8 +2412,8 @@ msgid ""
 "Home, blog, docs, versions and sign-in pages. No cookies; dashboards and "
 "portals are never measured."
 msgstr ""
-"Inicio, blog, documentación, versiones y páginas de acceso. Sin cookies; los"
-" dashboards y portales nunca se miden."
+"Inicio, blog, documentación, versiones y páginas de acceso. Sin cookies; los "
+"dashboards y portales nunca se miden."
 
 #: templates/core/users.html:79
 msgid "View site analytics →"
@@ -2529,8 +2571,8 @@ msgid ""
 "Tables, columns, rows, files and members created, changed or deleted — from "
 "the dashboard, the API or the portal."
 msgstr ""
-"Tablas, columnas, filas, archivos y miembros creados, cambiados o eliminados"
-" — desde el dashboard, la API o el portal."
+"Tablas, columnas, filas, archivos y miembros creados, cambiados o eliminados "
+"— desde el dashboard, la API o el portal."
 
 #: templates/projects/_contributions.html:33
 msgid "Less"
@@ -2547,8 +2589,7 @@ msgstr "URL del proyecto"
 #: templates/projects/_keys.html:15
 msgid "Safe to use in the browser. It follows each table's access rules."
 msgstr ""
-"Segura para usar en el navegador. Respeta las reglas de acceso de cada "
-"tabla."
+"Segura para usar en el navegador. Respeta las reglas de acceso de cada tabla."
 
 #: templates/projects/_keys.html:18
 msgid "secret"
@@ -2593,8 +2634,8 @@ msgstr "Usuarios de tu app"
 
 #: templates/projects/auth.html:11
 msgid ""
-"Login is disabled. Enable it on the right so your users can sign up and sign"
-" in."
+"Login is disabled. Enable it on the right so your users can sign up and sign "
+"in."
 msgstr ""
 "El login está desactivado. Actívalo a la derecha para que tus usuarios "
 "puedan registrarse e iniciar sesión."
@@ -2669,8 +2710,7 @@ msgstr "Si lo desactivas, solo tú creas usuarios (aquí o con la service key)."
 msgid "no login"
 msgstr "sin login"
 
-#: templates/projects/base_project.html:16
-#: templates/projects/dashboard.html:38
+#: templates/projects/base_project.html:16 templates/projects/dashboard.html:38
 msgid "Overview"
 msgstr "Resumen"
 
@@ -2678,8 +2718,8 @@ msgstr "Resumen"
 msgid "Authentication"
 msgstr "Autenticación"
 
-#: templates/projects/base_project.html:20
-#: templates/projects/dashboard.html:46 templates/storage/dashboard.html:6
+#: templates/projects/base_project.html:20 templates/projects/dashboard.html:46
+#: templates/storage/dashboard.html:6
 msgid "Storage"
 msgstr "Almacenamiento"
 
@@ -3003,8 +3043,10 @@ msgstr "General"
 
 #: templates/projects/settings.html:13
 #, python-format
-msgid "The project URL (<code class=\"inline\">%(path)s</code>) does not change."
-msgstr "La URL del proyecto (<code class=\"inline\">%(path)s</code>) no cambia."
+msgid ""
+"The project URL (<code class=\"inline\">%(path)s</code>) does not change."
+msgstr ""
+"La URL del proyecto (<code class=\"inline\">%(path)s</code>) no cambia."
 
 #: templates/projects/settings.html:24
 msgid "Members"
@@ -3048,8 +3090,8 @@ msgstr "Exportar"
 
 #: templates/projects/settings.html:58
 msgid ""
-"Download the project as a JSON file: settings, tables, columns, defaults and"
-" access rules. Import it later to create a copy, here or on another server. "
+"Download the project as a JSON file: settings, tables, columns, defaults and "
+"access rules. Import it later to create a copy, here or on another server. "
 "The users of your app are not exported."
 msgstr ""
 "Descarga el proyecto como archivo JSON: configuración, tablas, columnas, "
@@ -3225,8 +3267,8 @@ msgstr "La tabla está vacía"
 #: templates/projects/table_data.html:73
 #, python-format
 msgid ""
-"Insert rows here or from your frontend with the <a "
-"href=\"%(api_url)s\">API</a>."
+"Insert rows here or from your frontend with the <a href=\"%(api_url)s\">API</"
+"a>."
 msgstr ""
 "Inserta filas desde aquí o desde tu frontend con la <a "
 "href=\"%(api_url)s\">API</a>."
@@ -3319,8 +3361,7 @@ msgid "Delete column"
 msgstr "Eliminar columna"
 
 #: templates/projects/table_structure.html:61
-msgid ""
-"If the table already has rows, a required column needs a default value."
+msgid "If the table already has rows, a required column needs a default value."
 msgstr ""
 "Si la tabla ya tiene filas, una columna obligatoria necesita un valor por "
 "defecto."
@@ -3330,8 +3371,8 @@ msgid ""
 "The “Owner” policy adds the <code class=\"inline\">owner_id</code> column "
 "and fills it automatically with the user who inserts."
 msgstr ""
-"La política «Dueño» agrega la columna <code class=\"inline\">owner_id</code>"
-" y la rellena automáticamente con el usuario que inserta."
+"La política «Dueño» agrega la columna <code class=\"inline\">owner_id</code> "
+"y la rellena automáticamente con el usuario que inserta."
 
 #: templates/projects/table_structure.html:87
 msgid "This deletes the table and all its data. Continue?"
@@ -3386,11 +3427,11 @@ msgstr "¿Nuevo en falcondatabase?"
 #: templates/registration/login.html:27
 #, python-format
 msgid ""
-"Need an account? Contact the administrator at <a "
-"href=\"mailto:%(contact_email)s\">%(contact_email)s</a>."
+"Need an account? Contact the administrator at <a href=\"mailto:"
+"%(contact_email)s\">%(contact_email)s</a>."
 msgstr ""
-"¿Necesitas una cuenta? Contacta al administrador en <a "
-"href=\"mailto:%(contact_email)s\">%(contact_email)s</a>."
+"¿Necesitas una cuenta? Contacta al administrador en <a href=\"mailto:"
+"%(contact_email)s\">%(contact_email)s</a>."
 
 #: templates/registration/login_verify.html:3
 #: templates/registration/login_verify.html:7
@@ -3489,8 +3530,8 @@ msgstr "Eliminar bucket"
 #: templates/storage/dashboard.html:7
 msgid ""
 "Store files for your app in buckets: images, documents, backups… Public "
-"buckets give every file a direct URL; private ones need a signed link or the"
-" service key."
+"buckets give every file a direct URL; private ones need a signed link or the "
+"service key."
 msgstr ""
 "Guarda archivos para tu app en buckets: imágenes, documentos, copias de "
 "seguridad… Los buckets públicos dan a cada archivo una URL directa; los "
@@ -3557,36 +3598,9 @@ msgstr "Úsalo desde tu app"
 
 #: templates/storage/dashboard.html:66
 msgid ""
-"Uploads need a signed-in user of your app or the service key. Users can only"
-" see, share and delete the files they uploaded to private buckets."
+"Uploads need a signed-in user of your app or the service key. Users can only "
+"see, share and delete the files they uploaded to private buckets."
 msgstr ""
 "Para subir se necesita un usuario de tu app con sesión o la service key. En "
 "los buckets privados, cada usuario solo ve, comparte y elimina los archivos "
 "que subió."
-
-#~ msgid "No articles in this category yet"
-#~ msgstr "Aún no hay artículos en esta categoría"
-
-msgid "Form expired"
-msgstr "Formulario caducado"
-
-msgid "The form could not be sent"
-msgstr "No se pudo enviar el formulario"
-
-msgid "This protects you from forged requests. Usually reloading the page and sending the form again is enough."
-msgstr "Esto te protege de peticiones falsificadas. Normalmente basta con recargar la página y volver a enviar el formulario."
-
-msgid "Go back and reload"
-msgstr "Volver y recargar"
-
-msgid "Reason"
-msgstr "Motivo"
-
-msgid "Browser address"
-msgstr "Dirección del navegador"
-
-msgid "HTTPS detected by the server"
-msgstr "HTTPS detectado por el servidor"
-
-msgid "Administrator: if this happens every time, the address in the browser is missing from CSRF_TRUSTED_ORIGINS in .env, or the server is behind HTTPS but USE_HTTPS=false. Run FALCONDB_DOMAIN=your-domain FALCONDB_HTTPS=yes ./install.sh --yes, or see \"Troubleshooting\" in DEPLOY.md."
-msgstr "Administrador: si pasa siempre, falta la dirección del navegador en CSRF_TRUSTED_ORIGINS del .env, o el servidor está detrás de HTTPS pero USE_HTTPS=false. Ejecuta FALCONDB_DOMAIN=tu-dominio FALCONDB_HTTPS=yes ./install.sh --yes, o mira \"Troubleshooting\" en DEPLOY.md."

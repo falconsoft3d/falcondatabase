@@ -3,11 +3,11 @@
 import datetime
 
 from django.db.models import Count
-from django.db.models.functions import TruncDate
+from django.db.models.functions import TruncDate, TruncHour
 from django.utils import timezone
 
-PERIODS = (7, 14, 30, 90)
-DEFAULT_PERIOD = 14
+PERIODS = (1, 7, 14, 30, 90)   # 1 = today, shown by hour
+DEFAULT_PERIOD = 1
 BREAKDOWN_LIMIT = 10
 
 METRICS = {
@@ -46,6 +46,21 @@ def change(current, previous):
     if current is None or not previous:
         return None
     return round(100 * (current - previous) / previous)
+
+
+def hourly(queryset, start, end):
+    """Today's points, one per hour up to the current one."""
+    rows = {
+        row["hour"]: row
+        for row in queryset.annotate(hour=TruncHour("created_at", tzinfo=datetime.UTC))
+        .values("hour").annotate(**{name: metric() for name, metric in METRICS.items()})
+    }
+    series = []
+    for hour in range(end.hour + 1):
+        moment = start + datetime.timedelta(hours=hour)
+        row = rows.get(moment, {})
+        series.append({"date": moment.date().isoformat(), "hour": hour, **{name: row.get(name, 0) for name in METRICS}})
+    return series
 
 
 def timeseries(queryset, start, days):
@@ -91,7 +106,7 @@ def report(queryset, days, by_project=False):
         "end": end.date().isoformat(),
         "kpis": kpis,
         "totals": now_totals,
-        "series": timeseries(current, start, days),
+        "series": hourly(current, start, end) if days == 1 else timeseries(current, start, days),
         "countries": breakdown(current, "country", "visitors"),
         "mediums": breakdown(current, "medium", "sessions"),
         "sources": breakdown(current, "source", "sessions"),

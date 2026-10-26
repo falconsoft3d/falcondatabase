@@ -25,5 +25,8 @@
   "today": { "message": "Hoy: $COUNT$ páginas vistas", "placeholders": { "count": { "content": "$1" } } },
   "sessionExpired": { "message": "Tu sesión caducó. Inicia sesión de nuevo." },
   "refresh": { "message": "Actualizar" },
-  "loading": { "message": "Cargando…" }
+  "loading": { "message": "Cargando…" },
+  "todayPeriod": { "message": "Hoy" },
+  "vsYesterday": { "message": "vs. ayer" },
+  "hourlyPageviews": { "message": "Páginas vistas por hora (UTC)" }
 }

@@ -6,6 +6,15 @@ Change kinds: "added", "improved", "fixed".
 
 RELEASES = [
     {
+        "version": "0.7.6",
+        "date": "2026-10-26",
+        "title": {"en": "Analytics: Today period", "es": "Analítica: periodo Hoy"},
+        "changes": [
+            ("added", "\"Today\" period in the analytics and the Chrome extension, with an hourly chart and a comparison with yesterday. It is now the default period.",
+                      "Periodo \"Hoy\" en la analítica y en la extensión de Chrome, con gráfica por horas y comparación con ayer. Ahora es el periodo por defecto."),
+        ],
+    },
+    {
         "version": "0.7.5",
         "date": "2026-10-25",
         "title": {"en": "Extension: refresh button", "es": "Extensión: botón de actualizar"},

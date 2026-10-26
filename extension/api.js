@@ -5,7 +5,7 @@ const KEY = "falcondb";
 
 export async function loadState() {
   const { [KEY]: state } = await chrome.storage.local.get(KEY);
-  return { server: DEFAULT_SERVER, token: null, user: null, days: 7, project: "", ...(state || {}) };
+  return { server: DEFAULT_SERVER, token: null, user: null, days: 1, project: "", ...(state || {}) };
 }
 
 export async function saveState(changes) {

@@ -4,5 +4,5 @@
   {% elif item.change > 0 %}<span class="{% if item.higher_is_better %}delta-good{% else %}delta-bad{% endif %}">↑ {{ item.change }}%</span>
   {% elif item.change < 0 %}<span class="{% if item.higher_is_better %}delta-bad{% else %}delta-good{% endif %}">↓ {{ item.change|abs }}%</span>
   {% else %}<span class="muted">0%</span>{% endif %}
-  <span class="muted">{% blocktranslate %}vs previous {{ days }} days{% endblocktranslate %}</span>
+  <span class="muted">{% if days == 1 %}{% translate "vs yesterday" %}{% else %}{% blocktranslate %}vs previous {{ days }} days{% endblocktranslate %}{% endif %}</span>
 </div>
