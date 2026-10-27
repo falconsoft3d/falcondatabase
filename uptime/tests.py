@@ -119,8 +119,8 @@ class RecordTests(TestCase):
         paused = Monitor.objects.create(project=self.project, url="https://paused.example/", enabled=False)
         now = timezone.now()
         with mock.patch("uptime.checker.probe", return_value=Result(ok=True, status_code=200, response_ms=10)) as probe:
-            self.assertEqual(checker.run_due(now), 1)
-            self.assertEqual(checker.run_due(now), 0)
+            self.assertEqual(checker.run_due(now, parallel=1), 1)
+            self.assertEqual(checker.run_due(now, parallel=1), 0)
         probe.assert_called_once_with("https://shop.example/")
         self.monitor.refresh_from_db()
         self.assertEqual(self.monitor.next_check_at, now + datetime.timedelta(minutes=5))

@@ -14,7 +14,7 @@ from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 
 from django.conf import settings
-from django.db import close_old_connections, connection, transaction
+from django.db import connection, transaction
 from django.utils import timezone
 
 from . import notify
@@ -123,17 +123,22 @@ def _check_in_thread(monitor):
     except Exception:
         logger.exception("Uptime check of %s failed", monitor.url)
     finally:
-        connection.close()
+        connection.close()  # each thread has its own database connection
 
 
-def run_due(now=None):
-    """Check every due monitor (in parallel). Returns how many were checked."""
+def run_due(now=None, parallel=None):
+    """Check every due monitor, ``parallel`` at a time. Returns how many were checked."""
     due = claim_due(now)
-    if due:
-        due = list(Monitor.objects.filter(pk__in=[m.pk for m in due]).select_related("project__owner"))
-        with ThreadPoolExecutor(max_workers=min(MAX_PARALLEL, len(due))) as pool:
+    if not due:
+        return 0
+    due = list(Monitor.objects.filter(pk__in=[m.pk for m in due]).select_related("project__owner"))
+    workers = min(parallel or MAX_PARALLEL, len(due))
+    if workers == 1:
+        for monitor in due:
+            check(monitor)
+    else:
+        with ThreadPoolExecutor(max_workers=workers) as pool:
             list(pool.map(_check_in_thread, due))
-    close_old_connections()
     return len(due)
 
 

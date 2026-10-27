@@ -3,6 +3,7 @@ import signal
 import time
 
 from django.core.management.base import BaseCommand
+from django.db import close_old_connections
 from django.utils import timezone
 
 from uptime import checker
@@ -43,6 +44,7 @@ class Command(BaseCommand):
                     last_prune = started
             except Exception:
                 logger.exception("Uptime round failed")
+            close_old_connections()
             while not stopping and time.monotonic() - started < TICK:
                 time.sleep(1)
         self.stdout.write("Uptime worker stopped.")

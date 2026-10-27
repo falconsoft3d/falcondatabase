@@ -4140,3 +4140,292 @@ msgstr ""
 "Para subir se necesita un usuario de tu app con sesión o la service key. En "
 "los buckets privados, cada usuario solo ve, comparte y elimina los archivos "
 "que subió."
+
+# --- uptime ---
+msgid "No data"
+msgstr "Sin datos"
+
+msgid "Webhook (optional)"
+msgstr "Webhook (opcional)"
+
+msgid "Paused"
+msgstr "Pausado"
+
+msgid "Down"
+msgstr "Caído"
+
+msgid "not checked yet"
+msgstr "aún sin comprobar"
+
+msgid "Last %(days)s days, daily average"
+msgstr "Últimos %(days)s días, media diaria"
+
+msgid "Duration"
+msgstr "Duración"
+
+msgid "No incidents in this period."
+msgstr "Sin caídas en este periodo."
+
+msgid "Latest checks"
+msgstr "Últimas comprobaciones"
+
+msgid "Result"
+msgstr "Resultado"
+
+msgid "Delete this monitor and its history?"
+msgstr "¿Eliminar este monitor y su historial?"
+
+msgid "Delete monitor"
+msgstr "Eliminar monitor"
+
+msgid "No monitors yet"
+msgstr "Aún no hay monitores"
+
+msgid "New monitor"
+msgstr "Nuevo monitor"
+
+msgid "This URL is already monitored in this project."
+msgstr "Esta URL ya se monitoriza en este proyecto."
+
+msgid "%(n)s min"
+msgstr "%(n)s min"
+
+msgid "%(d)s days"
+msgstr "%(d)s días"
+
+msgid "Error: %(error)s"
+msgstr "Error: %(error)s"
+
+msgid "Project: %(project)s"
+msgstr "Proyecto: %(project)s"
+
+msgid "Down: %(error)s"
+msgstr "Caído: %(error)s"
+
+msgid "Monitor deleted."
+msgstr "Monitor eliminado."
+
+msgid "Uptime"
+msgstr "Uptime"
+
+msgid "down"
+msgstr "caído"
+
+msgid "Uptime per day"
+msgstr "Disponibilidad por día"
+
+msgid "Website URL"
+msgstr "URL del sitio web"
+
+msgid "It is requested like a browser would: any answer below 400 counts as up. A failed request is retried once before it counts as down."
+msgstr "Se solicita como lo haría un navegador: cualquier respuesta por debajo de 400 cuenta como activo. Una petición fallida se reintenta una vez antes de contar como caída."
+
+msgid "Check"
+msgstr "Comprobar"
+
+msgid "Email me when it goes down and when it comes back"
+msgstr "Avisarme por email cuando se caiga y cuando vuelva"
+
+msgid "Alerts go to the project owner (%(email)s)."
+msgstr "Los avisos van al dueño del proyecto (%(email)s)."
+
+msgid "Receives a JSON POST on every incident. Slack and Discord webhooks show it as a message."
+msgstr "Recibe un POST JSON en cada caída y recuperación. Los webhooks de Slack y Discord lo muestran como mensaje."
+
+msgid "checked %(when)s ago"
+msgstr "comprobado hace %(when)s"
+
+msgid "alerts on"
+msgstr "avisos activos"
+
+msgid "24 hours"
+msgstr "24 horas"
+
+msgid "30 days"
+msgstr "30 días"
+
+msgid "response"
+msgstr "respuesta"
+
+msgid "Checks are overdue: the uptime worker does not seem to be running. Start it with <code class=\"inline\">python manage.py uptime_worker</code> (with Docker it is the <code class=\"inline\">uptime</code> service)."
+msgstr "Hay comprobaciones atrasadas: parece que el worker de uptime no está en marcha. Arráncalo con <code class=\"inline\">python manage.py uptime_worker</code> (con Docker es el servicio <code class=\"inline\">uptime</code>)."
+
+msgid "Email alerts are written to the server log until SMTP is configured (<code class=\"inline\">EMAIL_HOST</code> in <code class=\"inline\">.env</code>). Webhooks work already."
+msgstr "Los avisos por email se escriben en el log del servidor hasta que configures SMTP (<code class=\"inline\">EMAIL_HOST</code> en <code class=\"inline\">.env</code>). Los webhooks ya funcionan."
+
+msgid "Up"
+msgstr "Activo"
+
+msgid "Pending"
+msgstr "Pendiente"
+
+msgid "for %(when)s"
+msgstr "desde hace %(when)s"
+
+msgid "Open website"
+msgstr "Abrir sitio"
+
+msgid "Check now"
+msgstr "Comprobar ahora"
+
+msgid "Down for %(when)s: %(error)s"
+msgstr "Caído desde hace %(when)s: %(error)s"
+
+msgid "Avg. response"
+msgstr "Respuesta media"
+
+msgid "last: %(ms)s ms"
+msgstr "última: %(ms)s ms"
+
+msgid "Incidents"
+msgstr "Caídas"
+
+msgid "Downtime"
+msgstr "Tiempo caído"
+
+msgid "Last 90 days"
+msgstr "Últimos 90 días"
+
+msgid "uptime per day (UTC)"
+msgstr "disponibilidad por día (UTC)"
+
+msgid "Response time (ms)"
+msgstr "Tiempo de respuesta (ms)"
+
+msgid "Last 24 hours, hourly average (UTC)"
+msgstr "Últimas 24 horas, media por hora (UTC)"
+
+msgid "Started"
+msgstr "Inicio"
+
+msgid "Resolved"
+msgstr "Resuelta"
+
+msgid "Error"
+msgstr "Error"
+
+msgid "Ongoing"
+msgstr "En curso"
+
+msgid "Time"
+msgstr "Hora"
+
+msgid "Waiting for the first check."
+msgstr "Esperando la primera comprobación."
+
+msgid "Websites of your analytics without a monitor:"
+msgstr "Sitios de tu analítica sin monitor:"
+
+msgid "Monitor them"
+msgstr "Monitorizarlos"
+
+msgid "Open a project and go to the Uptime tab to add the address of a website. falcondatabase will request it every few minutes, keep the history and email you when it goes down."
+msgstr "Abre un proyecto y ve a la pestaña Uptime para añadir la dirección de un sitio web. falcondatabase la consultará cada pocos minutos, guardará el historial y te avisará por email cuando se caiga."
+
+msgid "Domains of this project's analytics without a monitor:"
+msgstr "Dominios de la analítica de este proyecto sin monitor:"
+
+msgid "Add the address of a website and falcondatabase will request it every few minutes, keep the history and email you when it goes down."
+msgstr "Añade la dirección de un sitio web y falcondatabase la consultará cada pocos minutos, guardará el historial y te avisará por email cuando se caiga."
+
+msgid "Add monitor"
+msgstr "Añadir monitor"
+
+msgid "URL"
+msgstr "URL"
+
+msgid "Use an http:// or https:// address."
+msgstr "Usa una dirección http:// o https://."
+
+msgid "A project can have up to %(limit)s monitors."
+msgstr "Un proyecto puede tener hasta %(limit)s monitores."
+
+msgid "Every minute"
+msgstr "Cada minuto"
+
+msgid "Every 5 minutes"
+msgstr "Cada 5 minutos"
+
+msgid "Every 10 minutes"
+msgstr "Cada 10 minutos"
+
+msgid "Every 15 minutes"
+msgstr "Cada 15 minutos"
+
+msgid "Every 30 minutes"
+msgstr "Cada 30 minutos"
+
+msgid "Every hour"
+msgstr "Cada hora"
+
+msgid "check"
+msgstr "comprobación"
+
+msgid "email me when it goes down or comes back"
+msgstr "avisarme por email cuando se caiga o vuelva"
+
+msgid "webhook"
+msgstr "webhook"
+
+msgid "%(h)s h %(m)s min"
+msgstr "%(h)s h %(m)s min"
+
+msgid "🔴 Down: %(site)s"
+msgstr "🔴 Caído: %(site)s"
+
+msgid "%(url)s is not responding."
+msgstr "%(url)s no responde."
+
+msgid "🟢 Back up: %(site)s"
+msgstr "🟢 De nuevo activo: %(site)s"
+
+msgid "%(url)s is responding again."
+msgstr "%(url)s vuelve a responder."
+
+msgid "It was down for %(duration)s."
+msgstr "Estuvo caído %(duration)s."
+
+msgid "Time: %(time)s UTC"
+msgstr "Hora: %(time)s UTC"
+
+msgid "%(count)s monitors added. The first check runs within a minute."
+msgstr "%(count)s monitores añadidos. La primera comprobación se hace en menos de un minuto."
+
+msgid "Monitor added. The first check runs within a minute."
+msgstr "Monitor añadido. La primera comprobación se hace en menos de un minuto."
+
+msgid "Up: HTTP %(code)s in %(ms)s ms."
+msgstr "Activo: HTTP %(code)s en %(ms)s ms."
+
+msgid "Monitor saved."
+msgstr "Monitor guardado."
+
+msgid "%(counter)s failed check"
+msgid_plural "%(counter)s failed checks"
+msgstr[0] "%(counter)s comprobación fallida"
+msgstr[1] "%(counter)s comprobaciones fallidas"
+
+msgid "%(counter)s day ago"
+msgid_plural "%(counter)s days ago"
+msgstr[0] "hace %(counter)s día"
+msgstr[1] "hace %(counter)s días"
+
+msgid "%(counter)s check"
+msgid_plural "%(counter)s checks"
+msgstr[0] "%(counter)s comprobación"
+msgstr[1] "%(counter)s comprobaciones"
+
+msgid "%(counter)s up"
+msgid_plural "%(counter)s up"
+msgstr[0] "%(counter)s activo"
+msgstr[1] "%(counter)s activos"
+
+msgid "%(counter)s down"
+msgid_plural "%(counter)s down"
+msgstr[0] "%(counter)s caído"
+msgstr[1] "%(counter)s caídos"
+
+msgid "%(counter)s paused"
+msgid_plural "%(counter)s paused"
+msgstr[0] "%(counter)s pausado"
+msgstr[1] "%(counter)s pausados"
