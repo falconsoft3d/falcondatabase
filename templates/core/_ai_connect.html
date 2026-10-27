@@ -1,0 +1,51 @@
+{% load i18n falcon %}{# Expects: mcp_url, tools_url, ai_token, ai_project (optional) #}
+<div class="markdown">
+  <h3 style="margin-top:0">Claude Code</h3>
+  <p class="muted">{% translate "Run this once in your terminal; Claude can then use falcondatabase in every session." %}</p>
+  <div class="row" style="align-items:flex-start;gap:8px">
+<pre class="code grow" id="ai-claude-code">claude mcp add --transport http falcondatabase {{ mcp_url }} --header "Authorization: Bearer {{ ai_token }}"</pre>
+    <button type="button" class="btn btn-sm" data-copy="#ai-claude-code" title="{% translate 'Copy' %}">{% icon 'copy' %}</button>
+  </div>
+
+  <h3>Cursor · Windsurf · {% translate "other MCP clients" %}</h3>
+  <p class="muted">{% blocktranslate %}Add the server to the client's MCP configuration (in Cursor, <code class="inline">.cursor/mcp.json</code>). In VS Code use the key <code class="inline">"servers"</code> and add <code class="inline">"type": "http"</code>.{% endblocktranslate %}</p>
+  <div class="row" style="align-items:flex-start;gap:8px">
+<pre class="code grow" id="ai-mcp-json">{
+  "mcpServers": {
+    "falcondatabase": {
+      "url": "{{ mcp_url }}",
+      "headers": { "Authorization": "Bearer {{ ai_token }}" }
+    }
+  }
+}</pre>
+    <button type="button" class="btn btn-sm" data-copy="#ai-mcp-json" title="{% translate 'Copy' %}">{% icon 'copy' %}</button>
+  </div>
+
+  <h3>Claude Desktop</h3>
+  <p class="muted">{% blocktranslate %}In <strong>Settings → Developer → Edit config</strong> (<code class="inline">claude_desktop_config.json</code>). It needs Node.js installed.{% endblocktranslate %}</p>
+  <div class="row" style="align-items:flex-start;gap:8px">
+<pre class="code grow" id="ai-desktop-json">{
+  "mcpServers": {
+    "falcondatabase": {
+      "command": "npx",
+      "args": ["-y", "mcp-remote", "{{ mcp_url }}", "--header", "Authorization:${AUTH_HEADER}"],
+      "env": { "AUTH_HEADER": "Bearer {{ ai_token }}" }
+    }
+  }
+}</pre>
+    <button type="button" class="btn btn-sm" data-copy="#ai-desktop-json" title="{% translate 'Copy' %}">{% icon 'copy' %}</button>
+  </div>
+
+  <h3>{% translate "Any other AI, agent or script (HTTP)" %}</h3>
+  <p class="muted">{% blocktranslate %}Each tool is also a plain endpoint: <code class="inline">POST /api/ai/tools/&lt;tool&gt;</code> with the arguments as JSON. <code class="inline">GET /api/ai/tools</code> returns the list with its JSON schemas, ready to declare as functions in any model.{% endblocktranslate %}</p>
+  <div class="row" style="align-items:flex-start;gap:8px">
+<pre class="code grow" id="ai-curl">curl {{ tools_url }} -H "Authorization: Bearer {{ ai_token }}"
+
+curl -X POST {{ tools_url }}/create_table \
+  -H "Authorization: Bearer {{ ai_token }}" -H "Content-Type: application/json" \
+  -d '{"project": "{% if ai_project %}{{ ai_project.ref }}{% else %}PROJECT_REF{% endif %}", "name": "tasks", "columns": [
+        {"name": "title", "type": "text", "required": true},
+        {"name": "done", "type": "boolean", "default": "false"}]}'</pre>
+    <button type="button" class="btn btn-sm" data-copy="#ai-curl" title="{% translate 'Copy' %}">{% icon 'copy' %}</button>
+  </div>
+</div>

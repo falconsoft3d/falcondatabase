@@ -66,3 +66,19 @@ def add_column(table, **column):
 def drop_column(table, column):
     schema.drop_column(table.project.schema, table.name, column)
     table.save(update_fields=["updated_at"])
+
+
+@transaction.atomic
+def rename_table(table, new_name):
+    new_name = schema.validate_identifier(new_name, _("Table name"))
+    if table.project.tables.filter(name=new_name).exclude(pk=table.pk).exists():
+        raise schema.SchemaError(_("A table named “%(name)s” already exists.") % {"name": new_name})
+    schema.rename_table(table.project.schema, table.name, new_name)
+    table.name = new_name
+    table.save(update_fields=["name", "updated_at"])
+
+
+@transaction.atomic
+def rename_column(table, column, new_name):
+    schema.rename_column(table.project.schema, table.name, column, new_name)
+    table.save(update_fields=["updated_at"])

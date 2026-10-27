@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% load i18n falcon %}
+{% block title %}{% translate "AI access" %} · falcondatabase{% endblock %}
+{% block content %}
+<div class="container layout-split">
+  <div class="stack">
+    <div class="row">
+      <h1 class="grow" style="margin:0">{% translate "AI access" %}</h1>
+      <a href="{% url 'ai' %}">{% icon 'book' %} {% translate "Guide" %}</a>
+    </div>
+    <p class="muted" style="margin:0">{% translate "Tokens let an AI assistant (Claude, Cursor…) create and edit your tables, data and users. Each one acts as your account." %}</p>
+
+    {% if new_token %}{% include "core/_ai_new_token.html" %}{% endif %}
+
+    <div class="box">
+      <table class="list">
+        <thead><tr><th>{% translate "Name" %}</th><th>{% translate "Projects" %}</th><th>{% translate "Access" %}</th><th>{% translate "Created" %}</th><th>{% translate "Last used" %}</th><th></th></tr></thead>
+        <tbody>
+          {% for t in tokens %}
+            <tr>
+              <td><strong>{{ t.name }}</strong> <span class="muted small mono">…{{ t.hint }}</span></td>
+              <td>{% if t.project %}<a href="{{ t.project.get_absolute_url }}">{{ t.project.owner.username }}/{{ t.project.slug }}</a>{% else %}<span class="muted">{% translate "All" %}</span>{% endif %}</td>
+              <td>{% if t.read_only %}<span class="label">{% translate "read only" %}</span>{% else %}<span class="label label-success">{% translate "read and write" %}</span>{% endif %}</td>
+              <td class="muted small">{{ t.created_at|date:"d M Y" }}</td>
+              <td class="muted small">{{ t.last_used_at|date:"d M Y H:i"|default:"—" }}</td>
+              <td style="text-align:right">
+                <form method="post" data-confirm="{% blocktranslate with name=t.name %}Revoke the token “{{ name }}”? Assistants using it lose access.{% endblocktranslate %}">
+                  {% csrf_token %}<input type="hidden" name="action" value="revoke"><input type="hidden" name="token" value="{{ t.pk }}">
+                  <button class="btn btn-xs btn-danger" type="submit">{% translate "Revoke" %}</button>
+                </form>
+              </td>
+            </tr>
+          {% empty %}
+            <tr><td colspan="6" class="muted">{% translate "You have no AI tokens yet." %}</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="box">
+      <div class="box-header">{% icon 'link' %} <strong>{% translate "Connect your AI" %}</strong></div>
+      <div class="box-body">{% include "core/_ai_connect.html" %}</div>
+    </div>
+  </div>
+
+  <aside class="stack">
+    <form method="post" class="box">
+      {% csrf_token %}<input type="hidden" name="action" value="create">
+      <div class="box-header">{% icon 'key' %} <strong>{% translate "New token" %}</strong></div>
+      <div class="box-body">
+        <div class="field">
+          <label for="id_token_name">{% translate "Name" %}</label>
+          <input type="text" name="name" id="id_token_name" maxlength="100" placeholder="{% translate 'e.g. Claude on my laptop' %}">
+        </div>
+        <div class="field">
+          <label for="id_token_project">{% translate "Projects" %}</label>
+          <select name="project" id="id_token_project">
+            <option value="">{% translate "All my projects (can also create new ones)" %}</option>
+            {% for p in projects %}<option value="{{ p.ref }}">{{ p.owner.username }}/{{ p.slug }}</option>{% endfor %}
+          </select>
+        </div>
+        <div class="field">
+          <label class="checkbox" style="margin-bottom:8px"><input type="radio" name="access" value="write" checked> <span>{% translate "Read and write" %}</span></label>
+          <label class="checkbox"><input type="radio" name="access" value="read"> <span>{% translate "Read only" %}</span></label>
+        </div>
+        <button class="btn btn-primary btn-block" type="submit">{% translate "Create token" %}</button>
+      </div>
+    </form>
+  </aside>
+</div>
+{% endblock %}

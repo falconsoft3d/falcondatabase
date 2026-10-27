@@ -63,6 +63,19 @@
 </section>
 
 <section class="container" style="padding-top:48px">
+  <div class="box ai-banner">
+    <div class="box-body row" style="flex-wrap:wrap;gap:24px">
+      <div class="stat-icon">{% icon 'zap' 28 %}</div>
+      <div class="grow">
+        <h2 style="margin:0 0 4px">{% translate "Manage it with AI" %}</h2>
+        <p class="muted" style="margin:0">{% translate "Give Claude, Cursor or any assistant a token and ask in plain words: it creates tables, loads data and creates users for you." %}</p>
+      </div>
+      <a class="btn btn-primary" href="{% url 'ai' %}">{% icon 'book' %} {% translate "See how it works" %}</a>
+    </div>
+  </div>
+</section>
+
+<section class="container" style="padding-top:48px">
   <div class="box extension-banner">
     <div class="box-body row" style="flex-wrap:wrap;gap:24px">
       <img src="{% static 'img/extension-icon.png' %}" width="56" height="56" alt="">

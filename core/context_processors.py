@@ -5,7 +5,7 @@ from .models import SiteSettings
 
 CONSENT_COOKIE = "falcondb_cookie_consent"
 # Public pages measured by the site analytics (dashboards and portals never are).
-TRACKED_PAGES = {"home", "docs", "cookies", "changelog", "extension", "login", "signup", "blog:index", "blog:detail"}
+TRACKED_PAGES = {"home", "docs", "cookies", "changelog", "extension", "ai", "login", "signup", "blog:index", "blog:detail"}
 
 
 def site(request):

@@ -23,7 +23,7 @@ from blog import posts as blog_posts
 
 from . import avatars, changelog, totp
 from .forms import SignupForm
-from .models import Avatar, SiteSettings, TwoFactor
+from .models import AccessToken, Avatar, SiteSettings, TwoFactor
 
 # Session keys of the two-step login and of the 2FA setup.
 PENDING_LOGIN = "falcondb_2fa_pending"
@@ -81,6 +81,44 @@ def csrf_failure(request, reason=""):
         "origin": request.headers.get("Origin", ""),
         "is_secure": request.is_secure(),
     }, status=403)
+
+
+def ai_context(request, token=None, project=None):
+    """URLs and token shown in the "connect your AI" snippets (a placeholder until a token is created)."""
+    base = request.build_absolute_uri("/").rstrip("/")
+    return {
+        "mcp_url": f"{base}/api/ai/mcp", "tools_url": f"{base}/api/ai/tools",
+        "ai_token": token or _("fdb_ai_YOUR_TOKEN"), "ai_project": project,
+    }
+
+
+def ai_page(request):
+    return render(request, "core/ai.html", ai_context(request))
+
+
+@login_required
+def ai_tokens(request):
+    """Create and revoke the personal tokens AI assistants use (Settings → AI access)."""
+    from projects.models import Project, ProjectMember
+
+    projects = Project.accessible_by(request.user).select_related("owner").order_by("name")
+    new_token = token = None
+    if request.method == "POST":
+        if request.POST.get("action") == "revoke":
+            deleted, _rows = AccessToken.objects.filter(user=request.user, pk=request.POST.get("token")).delete()
+            if deleted:
+                messages.success(request, _("Token revoked. Assistants using it lose access immediately."))
+            return redirect("ai_tokens")
+        project = projects.filter(ref=request.POST.get("project", "")).first() if request.POST.get("project") else None
+        read_only = request.POST.get("access") == "read" or (
+            project is not None and project.role_for(request.user) == ProjectMember.VIEWER)
+        name = request.POST.get("name", "").strip()[:100] or _("AI assistant")
+        token, new_token = AccessToken.issue(request.user, name, project=project, read_only=read_only)
+    return render(request, "core/ai_tokens.html", {
+        **ai_context(request, new_token, token.project if token else None),
+        "tokens": request.user.access_tokens.select_related("project__owner"),
+        "projects": projects, "new_token": new_token,
+    })
 
 
 def changelog_page(request):

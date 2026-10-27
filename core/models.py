@@ -85,3 +85,48 @@ class Avatar(models.Model):
     @property
     def version(self):
         return int(self.updated_at.timestamp())
+
+
+def hash_access_token(raw):
+    return hashlib.sha256(raw.encode()).hexdigest()
+
+
+class AccessToken(models.Model):
+    """Personal token an AI assistant (or any script) uses to manage the owner's projects.
+
+    Only the SHA-256 of the token is stored; the clear text is shown once when it is created.
+    """
+
+    PREFIX = "fdb_ai_"
+
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="access_tokens")
+    name = models.CharField(_("name"), max_length=100)
+    # None: every project the user can access (and they may create new ones).
+    project = models.ForeignKey("projects.Project", on_delete=models.CASCADE, null=True, blank=True,
+                                related_name="+")
+    read_only = models.BooleanField(_("read only"), default=False)
+    digest = models.CharField(max_length=64, unique=True)
+    hint = models.CharField(max_length=8)  # last characters, to recognize it in the list
+    created_at = models.DateTimeField(auto_now_add=True)
+    last_used_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return f"{self.user} · {self.name}"
+
+    @classmethod
+    def issue(cls, user, name, project=None, read_only=False):
+        """Create a token and return ``(token, clear_text)``."""
+        raw = cls.PREFIX + secrets.token_hex(24)
+        token = cls.objects.create(user=user, name=name, project=project, read_only=read_only,
+                                   digest=hash_access_token(raw), hint=raw[-4:])
+        return token, raw
+
+    @classmethod
+    def lookup(cls, raw):
+        if not raw or not raw.startswith(cls.PREFIX):
+            return None
+        return (cls.objects.select_related("user", "project")
+                .filter(digest=hash_access_token(raw), user__is_active=True).first())

@@ -193,6 +193,26 @@ def drop_column(schema, table, column):
     )
 
 
+def rename_table(schema, table, new_name):
+    new_name = validate_identifier(new_name, _("Table name"))
+    _execute(
+        sql.SQL("ALTER TABLE {} RENAME TO {}").format(_table_ident(schema, table), sql.Identifier(new_name))
+    )
+    return new_name
+
+
+def rename_column(schema, table, column, new_name):
+    new_name = validate_identifier(new_name, _("Column name"))
+    if column in RESERVED_COLUMNS or new_name in RESERVED_COLUMNS:
+        raise SchemaError(_("System columns cannot be renamed."))
+    _execute(
+        sql.SQL("ALTER TABLE {} RENAME COLUMN {} TO {}").format(
+            _table_ident(schema, table), sql.Identifier(column), sql.Identifier(new_name)
+        )
+    )
+    return new_name
+
+
 def ensure_owner_column(schema, table):
     _execute(
         sql.SQL("ALTER TABLE {} ADD COLUMN IF NOT EXISTS {} bigint").format(

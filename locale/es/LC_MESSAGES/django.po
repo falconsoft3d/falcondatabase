@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-26 21:40+0000\n"
+"POT-Creation-Date: 2026-10-27 12:41+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -69,6 +69,100 @@ msgstr "Analítica activada."
 msgid "Analytics disabled."
 msgstr "Analítica desactivada."
 
+#: api/ai.py:37
+msgid ""
+"Invalid or missing AI token. Send it in “Authorization: Bearer fdb_ai_…”."
+msgstr "Token de IA inválido o ausente. Envíalo en «Authorization: Bearer fdb_ai_…»."
+
+#: api/ai.py:51 api/ai.py:62 api/ai.py:121 api/views.py:61
+#: core/account_api.py:67
+#, python-format
+msgid "Method %(method)s not allowed."
+msgstr "Método %(method)s no permitido."
+
+#: api/ai_tools.py:107
+#, python-format
+msgid "Unknown tool: %(name)s."
+msgstr "Herramienta desconocida: %(name)s."
+
+#: api/ai_tools.py:109
+msgid "The arguments must be a JSON object."
+msgstr "Los argumentos deben ser un objeto JSON."
+
+#: api/ai_tools.py:112
+#, python-format
+msgid "Missing argument: %(name)s."
+msgstr "Falta el argumento: %(name)s."
+
+#: api/ai_tools.py:134
+#, python-format
+msgid "Project “%(name)s” not found."
+msgstr "No se encontró el proyecto «%(name)s»."
+
+#: api/ai_tools.py:136
+msgid "You only have read access to this project."
+msgstr "Solo tienes acceso de lectura a este proyecto."
+
+#: api/ai_tools.py:143 api/views.py:97
+#, python-format
+msgid "Table “%(name)s” does not exist."
+msgstr "La tabla «%(name)s» no existe."
+
+#: api/ai_tools.py:151
+#, python-format
+msgid "User “%(name)s” not found."
+msgstr "No se encontró el usuario «%(name)s»."
+
+#: api/ai_tools.py:161
+msgid "Each column must be an object with “name” and “type”."
+msgstr "Cada columna debe ser un objeto con «name» y «type»."
+
+#: api/ai_tools.py:186 api/views.py:251 portal/views.py:147
+#, python-format
+msgid "The password must have at least %(n)s characters."
+msgstr "La contraseña debe tener al menos %(n)s caracteres."
+
+#: api/ai_tools.py:263
+msgid "“columns” must be a list."
+msgstr "«columns» debe ser una lista."
+
+#: api/ai_tools.py:287 projects/views.py:236
+msgid "Unknown access policy."
+msgstr "Política de acceso desconocida."
+
+#: api/ai_tools.py:351
+msgid "“filters” must be an object."
+msgstr "«filters» debe ser un objeto."
+
+#: api/ai_tools.py:360
+msgid "“limit” and “offset” must be integers."
+msgstr "«limit» y «offset» deben ser números enteros."
+
+#: api/ai_tools.py:375
+msgid "“rows” must be a list of objects."
+msgstr "«rows» debe ser una lista de objetos."
+
+#: api/ai_tools.py:391
+msgid "“values” must be an object."
+msgstr "«values» debe ser un objeto."
+
+#: api/ai_tools.py:394 api/views.py:205 api/views.py:216 projects/views.py:286
+msgid "Row not found."
+msgstr "Fila no encontrada."
+
+#: api/ai_tools.py:433 api/views.py:249 portal/views.py:145
+msgid "The email is not valid."
+msgstr "El email no es válido."
+
+#: api/ai_tools.py:436 api/views.py:253 portal/views.py:149
+#: projects/views.py:335
+msgid "A user with that email already exists."
+msgstr "Ya existe un usuario con ese email."
+
+#: api/ai_tools.py:438 api/ai_tools.py:458 api/views.py:256
+msgid "“data” must be an object."
+msgstr "«data» debe ser un objeto."
+
 #: api/auth.py:61
 msgid "Missing API key. Send it in the “apikey” header."
 msgstr "Falta la API key. Envíala en la cabecera «apikey»."
@@ -93,11 +187,6 @@ msgstr "Necesitas iniciar sesión para esta operación."
 msgid "This table is private: it can only be accessed with the service key."
 msgstr "Esta tabla es privada: solo se accede con la service key."
 
-#: api/views.py:61 core/account_api.py:67
-#, python-format
-msgid "Method %(method)s not allowed."
-msgstr "Método %(method)s no permitido."
-
 #: api/views.py:64
 msgid "Project not found."
 msgstr "Proyecto no encontrado."
@@ -105,11 +194,6 @@ msgstr "Proyecto no encontrado."
 #: api/views.py:91
 msgid "The request body is not valid JSON."
 msgstr "El cuerpo de la petición no es JSON válido."
-
-#: api/views.py:97
-#, python-format
-msgid "Table “%(name)s” does not exist."
-msgstr "La tabla «%(name)s» no existe."
 
 #: api/views.py:125
 #, python-format
@@ -125,10 +209,6 @@ msgstr "«%(name)s» no puede ser negativo."
 msgid "Each row must be a JSON object."
 msgstr "Cada fila debe ser un objeto JSON."
 
-#: api/views.py:205 api/views.py:216 projects/views.py:286
-msgid "Row not found."
-msgstr "Fila no encontrada."
-
 #: api/views.py:228
 msgid "Send an object with “email” and “password”."
 msgstr "Envía un objeto con «email» y «password»."
@@ -140,23 +220,6 @@ msgstr "«email» y «password» son obligatorios."
 #: api/views.py:244
 msgid "Public sign up is disabled for this project."
 msgstr "El registro público está desactivado en este proyecto."
-
-#: api/views.py:249 portal/views.py:145
-msgid "The email is not valid."
-msgstr "El email no es válido."
-
-#: api/views.py:251 portal/views.py:147
-#, python-format
-msgid "The password must have at least %(n)s characters."
-msgstr "La contraseña debe tener al menos %(n)s caracteres."
-
-#: api/views.py:253 portal/views.py:149 projects/views.py:335
-msgid "A user with that email already exists."
-msgstr "Ya existe un usuario con ese email."
-
-#: api/views.py:256
-msgid "“data” must be an object."
-msgstr "«data» debe ser un objeto."
 
 #: api/views.py:270 portal/views.py:132
 msgid "Incorrect email or password."
@@ -182,7 +245,7 @@ msgstr "Usuario o contraseña incorrectos."
 msgid "Enter the code from your authenticator app."
 msgstr "Escribe el código de tu app de autenticación."
 
-#: core/account_api.py:98 core/views.py:157
+#: core/account_api.py:98 core/views.py:195
 msgid "Invalid code. Try again."
 msgstr "Código incorrecto. Inténtalo de nuevo."
 
@@ -226,81 +289,102 @@ msgstr "Ya existe una cuenta con ese email."
 msgid "allow sign up"
 msgstr "permitir registro"
 
-#: core/views.py:103
+#: core/models.py:103 projects/models.py:31 storage/models.py:19
+msgid "name"
+msgstr "nombre"
+
+#: core/models.py:107 templates/core/ai_tokens.html:23
+#: templates/projects/ai.html:66
+msgid "read only"
+msgstr "solo lectura"
+
+#: core/views.py:91
+msgid "fdb_ai_YOUR_TOKEN"
+msgstr "fdb_ai_TU_TOKEN"
+
+#: core/views.py:110 projects/views.py:407
+msgid "Token revoked. Assistants using it lose access immediately."
+msgstr "Token revocado. Los asistentes que lo usaban pierden el acceso al instante."
+
+#: core/views.py:115 projects/views.py:409
+msgid "AI assistant"
+msgstr "Asistente de IA"
+
+#: core/views.py:141
 msgid "Sign up is disabled. Ask the administrator for an account."
 msgstr "El registro está desactivado. Pide una cuenta al administrador."
 
-#: core/views.py:136
+#: core/views.py:174
 msgid "The verification expired. Sign in again."
 msgstr "La verificación caducó. Inicia sesión de nuevo."
 
-#: core/views.py:149
+#: core/views.py:187
 msgid "You have few recovery codes left. Generate new ones in Settings."
 msgstr ""
 "Te quedan pocos códigos de recuperación. Genera nuevos en Configuración."
 
-#: core/views.py:154
+#: core/views.py:192
 msgid "Too many failed attempts. Sign in again."
 msgstr "Demasiados intentos fallidos. Inicia sesión de nuevo."
 
-#: core/views.py:168
+#: core/views.py:206
 msgid "Choose an image."
 msgstr "Elige una imagen."
 
-#: core/views.py:173
+#: core/views.py:211
 msgid "Profile picture updated."
 msgstr "Foto de perfil actualizada."
 
-#: core/views.py:177
+#: core/views.py:215
 msgid "Profile picture removed."
 msgstr "Foto de perfil eliminada."
 
-#: core/views.py:187
+#: core/views.py:225
 msgid "Your password was changed."
 msgstr "Tu contraseña se cambió correctamente."
 
-#: core/views.py:210
+#: core/views.py:248
 msgid "Invalid code. Check the time on your phone and try again."
 msgstr "Código incorrecto. Revisa la hora de tu teléfono e inténtalo de nuevo."
 
-#: core/views.py:216
+#: core/views.py:254
 msgid "Two-step authentication is enabled."
 msgstr "La autenticación en dos pasos está activada."
 
-#: core/views.py:231
+#: core/views.py:269
 msgid "Incorrect password."
 msgstr "Contraseña incorrecta."
 
-#: core/views.py:235
+#: core/views.py:273
 msgid "Two-step authentication is disabled."
 msgstr "La autenticación en dos pasos está desactivada."
 
-#: core/views.py:265
+#: core/views.py:303
 msgid "Sign up enabled."
 msgstr "Registro activado."
 
-#: core/views.py:265
+#: core/views.py:303
 msgid "Sign up disabled."
 msgstr "Registro desactivado."
 
-#: core/views.py:274
+#: core/views.py:312
 msgid "Visits to the public pages of this site"
 msgstr "Visitas a las páginas públicas de este sitio"
 
-#: core/views.py:281
+#: core/views.py:319
 msgid "Site analytics enabled."
 msgstr "Analítica del sitio activada."
 
-#: core/views.py:281
+#: core/views.py:319
 msgid "Site analytics disabled."
 msgstr "Analítica del sitio desactivada."
 
-#: core/views.py:286
+#: core/views.py:324
 #, python-format
 msgid "Two-step authentication removed for %(username)s."
 msgstr "Se quitó la autenticación en dos pasos de %(username)s."
 
-#: core/views.py:292
+#: core/views.py:330
 #, python-format
 msgid "User “%(username)s” created."
 msgstr "Usuario «%(username)s» creado."
@@ -358,7 +442,7 @@ msgid "Optional"
 msgstr "Opcional"
 
 #: projects/forms.py:32 projects/forms.py:39 projects/schema.py:161
-#: projects/services.py:37
+#: projects/schema.py:197 projects/services.py:37 projects/services.py:73
 msgid "Table name"
 msgstr "Nombre de la tabla"
 
@@ -377,7 +461,8 @@ msgstr "Acceso desde la API"
 msgid "“new” is reserved, choose another name."
 msgstr "«new» está reservado, elige otro nombre."
 
-#: projects/forms.py:70 projects/schema.py:87
+#: projects/forms.py:70 projects/schema.py:87 templates/core/ai_tokens.html:17
+#: templates/core/ai_tokens.html:52 templates/projects/ai.html:50
 #: templates/projects/settings.html:10 templates/projects/table_new.html:15
 #: templates/projects/table_new.html:39
 #: templates/projects/table_structure.html:44 templates/projects/tables.html:12
@@ -412,10 +497,6 @@ msgstr "Único"
 #: templates/projects/auth.html:55 templates/registration/login.html:19
 msgid "Password"
 msgstr "Contraseña"
-
-#: projects/models.py:31 storage/models.py:19
-msgid "name"
-msgstr "nombre"
 
 #: projects/models.py:33 projects/models.py:127
 msgid "description"
@@ -561,40 +642,56 @@ msgid "removed a column from"
 msgstr "quitó una columna de"
 
 #: projects/models.py:221
+msgid "renamed a column in"
+msgstr "renombró una columna de"
+
+#: projects/models.py:222
+msgid "renamed table"
+msgstr "renombró la tabla"
+
+#: projects/models.py:223
 msgid "inserted rows in"
 msgstr "insertó filas en"
 
-#: projects/models.py:222
+#: projects/models.py:224
 msgid "updated a row in"
 msgstr "actualizó una fila en"
 
-#: projects/models.py:223
+#: projects/models.py:225
 msgid "deleted a row from"
 msgstr "eliminó una fila de"
 
-#: projects/models.py:224
+#: projects/models.py:226
 msgid "created bucket"
 msgstr "creó el bucket"
 
-#: projects/models.py:225
+#: projects/models.py:227
 msgid "uploaded files to"
 msgstr "subió archivos a"
 
-#: projects/models.py:226
+#: projects/models.py:228
 msgid "deleted a file from"
 msgstr "eliminó un archivo de"
 
-#: projects/models.py:227
+#: projects/models.py:229
 msgid "shared the project with"
 msgstr "compartió el proyecto con"
 
-#: projects/models.py:228
+#: projects/models.py:230
 msgid "added app user"
 msgstr "agregó al usuario de la app"
 
-#: projects/models.py:229
+#: projects/models.py:231
 msgid "signed up"
 msgstr "se registró"
+
+#: projects/models.py:232
+msgid "updated app user"
+msgstr "actualizó al usuario de la app"
+
+#: projects/models.py:233
+msgid "deleted app user"
+msgstr "eliminó al usuario de la app"
 
 #: projects/schema.py:86
 #, python-format
@@ -605,7 +702,7 @@ msgstr ""
 "%(kind)s «%(name)s» no es válido: usa minúsculas, números y guion bajo, "
 "empezando por una letra (máx. 63 caracteres)."
 
-#: projects/schema.py:136
+#: projects/schema.py:136 projects/schema.py:205
 msgid "Column name"
 msgstr "Nombre de columna"
 
@@ -633,31 +730,35 @@ msgstr "Hay columnas con nombres repetidos."
 msgid "“%(name)s” is a system column and cannot be removed."
 msgstr "«%(name)s» es una columna del sistema y no se puede eliminar."
 
-#: projects/schema.py:265 projects/schema.py:308 projects/schema.py:317
-#: projects/schema.py:364
+#: projects/schema.py:207
+msgid "System columns cannot be renamed."
+msgstr "Las columnas del sistema no se pueden renombrar."
+
+#: projects/schema.py:285 projects/schema.py:328 projects/schema.py:337
+#: projects/schema.py:384
 #, python-format
 msgid "Column “%(name)s” does not exist."
 msgstr "La columna «%(name)s» no existe."
 
-#: projects/schema.py:275
+#: projects/schema.py:295
 msgid "The “is” operator accepts null, true or false."
 msgstr "El operador «is» acepta null, true o false."
 
-#: projects/schema.py:286
+#: projects/schema.py:306
 #, python-format
 msgid "Unknown operator: %(op)s."
 msgstr "Operador desconocido: %(op)s."
 
-#: projects/schema.py:391
+#: projects/schema.py:411
 msgid "There are no values to update."
 msgstr "No hay valores para actualizar."
 
-#: projects/schema.py:425
+#: projects/schema.py:445
 #, python-format
 msgid "“%(name)s” does not contain valid JSON: %(error)s."
 msgstr "«%(name)s» no contiene JSON válido: %(error)s."
 
-#: projects/services.py:39
+#: projects/services.py:39 projects/services.py:75
 #, python-format
 msgid "A table named “%(name)s” already exists."
 msgstr "Ya existe una tabla llamada «%(name)s»."
@@ -745,10 +846,6 @@ msgstr "Columna agregada."
 msgid "Column removed."
 msgstr "Columna eliminada."
 
-#: projects/views.py:236
-msgid "Unknown access policy."
-msgstr "Política de acceso desconocida."
-
 #: projects/views.py:239
 msgid "Settings saved."
 msgstr "Configuración guardada."
@@ -808,58 +905,58 @@ msgstr "Ya usas esa dirección en otro proyecto."
 msgid "Portal settings saved."
 msgstr "Configuración del portal guardada."
 
-#: projects/views.py:416
+#: projects/views.py:439
 msgid "Unknown role."
 msgstr "Rol desconocido."
 
-#: projects/views.py:418
+#: projects/views.py:441
 #, python-format
 msgid ""
 "There is no account with the email %(email)s. Ask them to sign up first."
 msgstr ""
 "No hay ninguna cuenta con el email %(email)s. Pídele que se registre primero."
 
-#: projects/views.py:420
+#: projects/views.py:443
 msgid "You already own this project."
 msgstr "Ya eres el dueño de este proyecto."
 
-#: projects/views.py:422
+#: projects/views.py:445
 #, python-format
 msgid "%(username)s already has access."
 msgstr "%(username)s ya tiene acceso."
 
-#: projects/views.py:426
+#: projects/views.py:449
 #, python-format
 msgid "Project shared with %(username)s."
 msgstr "Proyecto compartido con %(username)s."
 
-#: projects/views.py:432
+#: projects/views.py:455
 #, python-format
 msgid "%(username)s no longer has access."
 msgstr "%(username)s ya no tiene acceso."
 
-#: projects/views.py:436
+#: projects/views.py:459
 msgid "Role updated."
 msgstr "Rol actualizado."
 
-#: projects/views.py:442
+#: projects/views.py:465
 msgid "Project updated."
 msgstr "Proyecto actualizado."
 
-#: projects/views.py:447
+#: projects/views.py:470
 msgid "New API keys were generated. The previous ones no longer work."
 msgstr "Se generaron nuevas API keys. Las anteriores ya no funcionan."
 
-#: projects/views.py:451
+#: projects/views.py:474
 msgid "The confirmation text does not match."
 msgstr "El texto de confirmación no coincide."
 
-#: projects/views.py:455
+#: projects/views.py:478
 #, python-format
 msgid "Project “%(name)s” deleted."
 msgstr "Proyecto «%(name)s» eliminado."
 
-#: projects/views.py:472
+#: projects/views.py:495
 #, python-format
 msgid "You left “%(name)s”."
 msgstr "Saliste de «%(name)s»."
@@ -1077,7 +1174,8 @@ msgid "Bounce rate"
 msgstr "Tasa de rebote"
 
 #: templates/analytics/_dashboard.html:21 templates/base.html:32
-#: templates/base.html:53 templates/core/users.html:3
+#: templates/base.html:54 templates/core/_ai_tools.html:19
+#: templates/core/ai.html:25 templates/core/users.html:3
 #: templates/core/users.html:16 templates/projects/overview.html:10
 msgid "Users"
 msgstr "Usuarios"
@@ -1175,7 +1273,7 @@ msgstr "%(days)s días"
 
 #: templates/analytics/_setup.html:5 templates/base.html:52
 #: templates/core/account.html:3 templates/core/account.html:6
-#: templates/projects/auth.html:83 templates/projects/base_project.html:23
+#: templates/projects/auth.html:83 templates/projects/base_project.html:24
 #: templates/projects/dashboard.html:11 templates/projects/portal.html:20
 #: templates/storage/bucket.html:62
 msgid "Settings"
@@ -1224,7 +1322,9 @@ msgid ""
 "Paste it in the <code>&lt;head&gt;</code> of every page of your website:"
 msgstr "Pégalo en el <code>&lt;head&gt;</code> de todas las páginas de tu web:"
 
-#: templates/analytics/_setup.html:27
+#: templates/analytics/_setup.html:27 templates/core/_ai_connect.html:7
+#: templates/core/_ai_connect.html:21 templates/core/_ai_connect.html:36
+#: templates/core/_ai_connect.html:49
 msgid "Copy"
 msgstr "Copiar"
 
@@ -1243,8 +1343,10 @@ msgstr ""
 msgid "Analytics"
 msgstr "Analítica"
 
-#: templates/analytics/overview.html:19 templates/core/users.html:21
-#: templates/projects/dashboard.html:46 templates/projects/dashboard.html:63
+#: templates/analytics/overview.html:19 templates/core/_ai_tools.html:5
+#: templates/core/ai_tokens.html:17 templates/core/ai_tokens.html:56
+#: templates/core/users.html:21 templates/projects/dashboard.html:46
+#: templates/projects/dashboard.html:63
 msgid "Projects"
 msgstr "Proyectos"
 
@@ -1318,12 +1420,12 @@ msgstr "Inicio"
 msgid "Docs"
 msgstr "Docs"
 
-#: templates/base.html:30 templates/base.html:88 templates/blog/detail.html:7
+#: templates/base.html:30 templates/base.html:89 templates/blog/detail.html:7
 #: templates/blog/index.html:3 templates/blog/index.html:7
 msgid "Blog"
 msgstr "Blog"
 
-#: templates/base.html:31 templates/base.html:86
+#: templates/base.html:31 templates/base.html:87
 #: templates/core/changelog.html:3 templates/core/changelog.html:6
 msgid "Versions"
 msgstr "Versiones"
@@ -1337,16 +1439,21 @@ msgstr "Cambiar modo claro/oscuro"
 msgid "Signed in as <strong>%(username)s</strong>"
 msgstr "Conectado como <strong>%(username)s</strong>"
 
-#: templates/base.html:50 templates/base.html:87 templates/core/docs.html:3
+#: templates/base.html:50 templates/base.html:88 templates/core/docs.html:3
 #: templates/core/docs.html:6
 msgid "Documentation"
 msgstr "Documentación"
 
-#: templates/base.html:56 templates/portal/base.html:18
+#: templates/base.html:53 templates/core/account.html:58
+#: templates/core/ai_tokens.html:3 templates/core/ai_tokens.html:8
+msgid "AI access"
+msgstr "Acceso IA"
+
+#: templates/base.html:57 templates/portal/base.html:18
 msgid "Sign out"
 msgstr "Cerrar sesión"
 
-#: templates/base.html:61 templates/core/extension.html:37
+#: templates/base.html:62 templates/core/extension.html:37
 #: templates/core/home.html:14 templates/portal/base.html:20
 #: templates/portal/home.html:11 templates/portal/login.html:19
 #: templates/portal/login.html:23 templates/registration/login.html:3
@@ -1354,23 +1461,23 @@ msgstr "Cerrar sesión"
 msgid "Sign in"
 msgstr "Iniciar sesión"
 
-#: templates/base.html:62 templates/registration/signup.html:3
+#: templates/base.html:63 templates/registration/signup.html:3
 msgid "Sign up"
 msgstr "Crear cuenta"
 
-#: templates/base.html:89 templates/base.html:96 templates/core/cookies.html:3
+#: templates/base.html:90 templates/base.html:97 templates/core/cookies.html:3
 msgid "Cookie policy"
 msgstr "Política de cookies"
 
-#: templates/base.html:91
+#: templates/base.html:92
 msgid "Contact"
 msgstr "Contacto"
 
-#: templates/base.html:94
+#: templates/base.html:95
 msgid "Cookie consent"
 msgstr "Consentimiento de cookies"
 
-#: templates/base.html:95
+#: templates/base.html:96
 msgid ""
 "We use cookies that are essential for signing in and keeping the site "
 "secure, plus one to remember your language. We don't use advertising or "
@@ -1380,11 +1487,11 @@ msgstr ""
 "una para recordar tu idioma. No usamos cookies de publicidad ni de "
 "seguimiento."
 
-#: templates/base.html:98
+#: templates/base.html:99
 msgid "Accept"
 msgstr "Aceptar"
 
-#: templates/base.html:99
+#: templates/base.html:100
 msgid "Only essential"
 msgstr "Solo esenciales"
 
@@ -1399,7 +1506,8 @@ msgstr[1] "%(counter)s min de lectura"
 msgid "Tutorial"
 msgstr "Tutorial"
 
-#: templates/blog/_category.html:1
+#: templates/blog/_category.html:1 templates/core/ai_tokens.html:9
+#: templates/projects/ai.html:88
 msgid "Guide"
 msgstr "Guía"
 
@@ -1447,7 +1555,7 @@ msgstr "Buscar"
 msgid "Categories"
 msgstr "Categorías"
 
-#: templates/blog/index.html:19
+#: templates/blog/index.html:19 templates/core/ai_tokens.html:22
 msgid "All"
 msgstr "Todos"
 
@@ -1485,6 +1593,155 @@ msgstr "Ver todos los artículos"
 #: templates/blog/index.html:52
 msgid "Topics"
 msgstr "Temas"
+
+#: templates/core/_ai_connect.html:4
+msgid ""
+"Run this once in your terminal; Claude can then use falcondatabase in every "
+"session."
+msgstr "Ejecútalo una vez en tu terminal; a partir de ahí Claude podrá usar falcondatabase en cada sesión."
+
+#: templates/core/_ai_connect.html:10
+msgid "other MCP clients"
+msgstr "otros clientes MCP"
+
+#: templates/core/_ai_connect.html:11
+msgid ""
+"Add the server to the client's MCP configuration (in Cursor, <code "
+"class=\"inline\">.cursor/mcp.json</code>). In VS Code use the key <code "
+"class=\"inline\">\"servers\"</code> and add <code class=\"inline\">\"type\": "
+"\"http\"</code>."
+msgstr "Añade el servidor a la configuración MCP del cliente (en Cursor, <code class=\"inline\">.cursor/mcp.json</code>). En VS Code usa la clave <code class=\"inline\">\"servers\"</code> y añade <code class=\"inline\">\"type\": \"http\"</code>."
+
+#: templates/core/_ai_connect.html:25
+msgid ""
+"In <strong>Settings → Developer → Edit config</strong> (<code "
+"class=\"inline\">claude_desktop_config.json</code>). It needs Node.js "
+"installed."
+msgstr "En <strong>Settings → Developer → Edit config</strong> (<code class=\"inline\">claude_desktop_config.json</code>). Necesita Node.js instalado."
+
+#: templates/core/_ai_connect.html:39
+msgid "Any other AI, agent or script (HTTP)"
+msgstr "Cualquier otra IA, agente o script (HTTP)"
+
+#: templates/core/_ai_connect.html:40
+msgid ""
+"Each tool is also a plain endpoint: <code class=\"inline\">POST /api/ai/"
+"tools/&lt;tool&gt;</code> with the arguments as JSON. <code "
+"class=\"inline\">GET /api/ai/tools</code> returns the list with its JSON "
+"schemas, ready to declare as functions in any model."
+msgstr "Cada herramienta es también un endpoint normal: <code class=\"inline\">POST /api/ai/tools/&lt;herramienta&gt;</code> con los argumentos en JSON. <code class=\"inline\">GET /api/ai/tools</code> devuelve la lista con sus esquemas JSON, lista para declararla como funciones en cualquier modelo."
+
+#: templates/core/_ai_new_token.html:3
+msgid "Your new AI token. Copy it now: it will not be shown again."
+msgstr "Tu nuevo token de IA. Cópialo ahora: no se volverá a mostrar."
+
+#: templates/core/_ai_new_token.html:8
+msgid "The connection examples on this page already include it."
+msgstr "Los ejemplos de conexión de esta página ya lo incluyen."
+
+#: templates/core/_ai_tools.html:4
+msgid "Area"
+msgstr "Área"
+
+#: templates/core/_ai_tools.html:4
+msgid "Tool"
+msgstr "Herramienta"
+
+#: templates/core/_ai_tools.html:4
+msgid "What it does"
+msgstr "Qué hace"
+
+#: templates/core/_ai_tools.html:5
+msgid "Your projects and your role in each"
+msgstr "Tus proyectos y tu rol en cada uno"
+
+#: templates/core/_ai_tools.html:6
+msgid "New project with its own schema and keys"
+msgstr "Proyecto nuevo con su propio esquema y claves"
+
+#: templates/core/_ai_tools.html:7
+msgid "Tables, columns, rows, login settings, API URL and anon key"
+msgstr "Tablas, columnas, filas, ajustes de login, URL de la API y clave anon"
+
+#: templates/core/_ai_tools.html:8
+msgid "Turn login and public sign up on or off"
+msgstr "Activa o desactiva el login y el registro público"
+
+#: templates/core/_ai_tools.html:9 templates/core/_api_reference.html:12
+#: templates/core/ai.html:21 templates/portal/base.html:28
+#: templates/projects/base_project.html:17 templates/projects/dashboard.html:46
+#: templates/projects/overview.html:8 templates/projects/tables.html:6
+msgid "Tables"
+msgstr "Tablas"
+
+#: templates/core/_ai_tools.html:9
+msgid "Real PostgreSQL table with typed columns and an access rule"
+msgstr "Tabla real de PostgreSQL con columnas tipadas y una regla de acceso"
+
+#: templates/core/_ai_tools.html:10
+msgid "Rename it, change its description or access rule"
+msgstr "Renombrarla, cambiar su descripción o su regla de acceso"
+
+#: templates/core/_ai_tools.html:11
+msgid "Add a column (type, required, unique, default)"
+msgstr "Añadir una columna (tipo, obligatoria, única, valor por defecto)"
+
+#: templates/core/_ai_tools.html:12
+msgid "Rename a column"
+msgstr "Renombrar una columna"
+
+#: templates/core/_ai_tools.html:13
+msgid "Remove a column"
+msgstr "Quitar una columna"
+
+#: templates/core/_ai_tools.html:14
+msgid "Delete a table and its rows"
+msgstr "Eliminar una tabla y sus filas"
+
+#: templates/core/_ai_tools.html:15 templates/core/ai.html:23
+#: templates/projects/_table_header.html:10
+msgid "Data"
+msgstr "Datos"
+
+#: templates/core/_ai_tools.html:15
+msgid "Read with filters, search, ordering and pagination"
+msgstr "Leer con filtros, búsqueda, orden y paginación"
+
+#: templates/core/_ai_tools.html:16
+msgid "Insert one or many rows (all or none)"
+msgstr "Insertar una o muchas filas (todas o ninguna)"
+
+#: templates/core/_ai_tools.html:17
+msgid "Change columns of a row"
+msgstr "Cambiar columnas de una fila"
+
+#: templates/core/_ai_tools.html:18
+msgid "Delete rows by id"
+msgstr "Eliminar filas por id"
+
+#: templates/core/_ai_tools.html:19
+msgid "Users of the project's app"
+msgstr "Usuarios de la app del proyecto"
+
+#: templates/core/_ai_tools.html:20
+msgid "Create a user with email, password and extra data"
+msgstr "Crear un usuario con email, contraseña y datos extra"
+
+#: templates/core/_ai_tools.html:21
+msgid "Change password, data or deactivate"
+msgstr "Cambiar contraseña, datos o desactivar"
+
+#: templates/core/_ai_tools.html:22
+msgid "Delete a user"
+msgstr "Eliminar un usuario"
+
+#: templates/core/_ai_tools.html:23
+msgid "Admin"
+msgstr "Administración"
+
+#: templates/core/_ai_tools.html:23
+msgid "Create a falcondatabase account (administrator tokens only)"
+msgstr "Crear una cuenta de falcondatabase (solo tokens del administrador)"
 
 #: templates/core/_api_reference.html:3
 msgid "Authenticating requests"
@@ -1535,12 +1792,6 @@ msgstr ""
 "Cuando un usuario inicia sesión recibe un <code class=\"inline\">token</"
 "code>; envíalo además en <code class=\"inline\">Authorization: Bearer "
 "&lt;token&gt;</code>."
-
-#: templates/core/_api_reference.html:12 templates/portal/base.html:28
-#: templates/projects/base_project.html:17 templates/projects/dashboard.html:46
-#: templates/projects/overview.html:8 templates/projects/tables.html:6
-msgid "Tables"
-msgstr "Tablas"
 
 #: templates/core/_api_reference.html:14 templates/core/_api_reference.html:31
 #: templates/core/_api_reference.html:51
@@ -1850,22 +2101,32 @@ msgstr "Oscuro"
 msgid "Saved in this browser."
 msgstr "Se guarda en este navegador."
 
-#: templates/core/account.html:58
+#: templates/core/account.html:60 templates/core/ai_tokens.html:11
+msgid ""
+"Tokens let an AI assistant (Claude, Cursor…) create and edit your tables, "
+"data and users. Each one acts as your account."
+msgstr "Los tokens permiten que un asistente de IA (Claude, Cursor…) cree y edite tus tablas, datos y usuarios. Cada uno actúa como tu cuenta."
+
+#: templates/core/account.html:61
+msgid "Manage AI tokens"
+msgstr "Gestionar tokens de IA"
+
+#: templates/core/account.html:66
 msgid "Two-step authentication"
 msgstr "Autenticación en dos pasos"
 
-#: templates/core/account.html:59 templates/core/users.html:32
+#: templates/core/account.html:67 templates/core/users.html:32
 #: templates/projects/base_project.html:19
 #: templates/projects/base_project.html:20
 #: templates/projects/base_project.html:21
 msgid "enabled"
 msgstr "activada"
 
-#: templates/core/account.html:59
+#: templates/core/account.html:67
 msgid "disabled"
 msgstr "desactivada"
 
-#: templates/core/account.html:63
+#: templates/core/account.html:71
 #, python-format
 msgid ""
 "When you sign in we ask for a code from your authenticator app. You have "
@@ -1880,19 +2141,19 @@ msgstr[1] ""
 "Al iniciar sesión te pedimos un código de tu app de autenticación. Te quedan "
 "%(counter)s códigos de recuperación."
 
-#: templates/core/account.html:67
+#: templates/core/account.html:75
 msgid "Confirm with your password"
 msgstr "Confirma con tu contraseña"
 
-#: templates/core/account.html:71
+#: templates/core/account.html:79
 msgid "New recovery codes"
 msgstr "Nuevos códigos de recuperación"
 
-#: templates/core/account.html:72
+#: templates/core/account.html:80
 msgid "Disable"
 msgstr "Desactivar"
 
-#: templates/core/account.html:76
+#: templates/core/account.html:84
 msgid ""
 "Protect your account: besides your password, ask for a code from an "
 "authenticator app on your phone."
@@ -1900,22 +2161,206 @@ msgstr ""
 "Protege tu cuenta: además de la contraseña, pide un código de una app de "
 "autenticación en tu teléfono."
 
-#: templates/core/account.html:77 templates/core/two_factor_setup.html:3
+#: templates/core/account.html:85 templates/core/two_factor_setup.html:3
 #: templates/core/two_factor_setup.html:6
 msgid "Enable two-step authentication"
 msgstr "Activar autenticación en dos pasos"
 
-#: templates/core/account.html:84
+#: templates/core/account.html:92
 msgid "Change password"
 msgstr "Cambiar contraseña"
 
-#: templates/core/account.html:86
+#: templates/core/account.html:94
 msgid "You will stay signed in on this browser after the change."
 msgstr "Seguirás con la sesión iniciada en este navegador después del cambio."
 
-#: templates/core/account.html:95
+#: templates/core/account.html:103
 msgid "Update password"
 msgstr "Actualizar contraseña"
+
+#: templates/core/ai.html:3 templates/core/home.html:70
+msgid "Manage it with AI"
+msgstr "Gestiónalo con IA"
+
+#: templates/core/ai.html:8
+msgid "Let your AI manage your database"
+msgstr "Deja que tu IA gestione tu base de datos"
+
+#: templates/core/ai.html:9
+msgid ""
+"Create a token in your dashboard, give it to Claude, Cursor or any "
+"assistant, and ask in plain words: <em>“create a customers table with name, "
+"unique email and phone”</em>, <em>“load 20 sample products”</em>, "
+"<em>“create the user ana@example.com”</em>. The AI creates and edits tables, "
+"data and users for you."
+msgstr "Crea un token en tu panel, dáselo a Claude, Cursor o cualquier asistente y pide con tus palabras: <em>«crea una tabla clientes con nombre, email único y teléfono»</em>, <em>«carga 20 productos de ejemplo»</em>, <em>«crea el usuario ana@example.com»</em>. La IA crea y edita tablas, datos y usuarios por ti."
+
+#: templates/core/ai.html:12
+msgid "Create an AI token"
+msgstr "Crea un token de IA"
+
+#: templates/core/ai.html:14
+msgid "Sign in to create a token"
+msgstr "Inicia sesión para crear un token"
+
+#: templates/core/ai.html:16
+msgid "How to connect it"
+msgstr "Cómo conectarla"
+
+#: templates/core/ai.html:22
+msgid ""
+"Create, rename and delete tables; add, rename and remove columns; change "
+"access rules."
+msgstr "Crea, renombra y elimina tablas; añade, renombra y quita columnas; cambia las reglas de acceso."
+
+#: templates/core/ai.html:24
+msgid "Query with filters, insert in bulk, edit and delete rows."
+msgstr "Consulta con filtros, inserta en bloque, edita y elimina filas."
+
+#: templates/core/ai.html:26
+msgid ""
+"Create the users of your app, change their password or data, deactivate them "
+"and turn login on."
+msgstr "Crea los usuarios de tu app, cambia su contraseña o sus datos, desactívalos y activa el login."
+
+#: templates/core/ai.html:27
+msgid "Under your control"
+msgstr "Bajo tu control"
+
+#: templates/core/ai.html:28
+msgid ""
+"Limit a token to one project or make it read-only, revoke it anytime, and "
+"see every change in the project activity."
+msgstr "Limita un token a un proyecto o hazlo de solo lectura, revócalo cuando quieras y ve cada cambio en la actividad del proyecto."
+
+#: templates/core/ai.html:32
+msgid "How it works"
+msgstr "Cómo funciona"
+
+#: templates/core/ai.html:35
+msgid "Create a token"
+msgstr "Crea un token"
+
+#: templates/core/ai.html:35
+msgid ""
+"In <strong>Settings → AI access</strong> (all your projects) or in the "
+"<strong>AI</strong> tab of a project (only that one). It starts with <code "
+"class=\"inline\">fdb_ai_</code> and is shown only once."
+msgstr "En <strong>Ajustes → Acceso IA</strong> (todos tus proyectos) o en la pestaña <strong>IA</strong> de un proyecto (solo ese). Empieza por <code class=\"inline\">fdb_ai_</code> y se muestra una sola vez."
+
+#: templates/core/ai.html:36 templates/core/ai.html:43
+#: templates/core/ai_tokens.html:41
+msgid "Connect your AI"
+msgstr "Conecta tu IA"
+
+#: templates/core/ai.html:36
+msgid ""
+"Paste the command or configuration below into your assistant. The project's "
+"AI tab gives you everything already filled in with your server, project and "
+"token."
+msgstr "Pega en tu asistente el comando o la configuración de abajo. La pestaña IA del proyecto te lo da todo ya rellenado con tu servidor, proyecto y token."
+
+#: templates/core/ai.html:37
+msgid "Ask in your own words"
+msgstr "Pide con tus palabras"
+
+#: templates/core/ai.html:37
+msgid ""
+"The assistant sees the tools falcondatabase offers, looks at your tables "
+"first and makes the changes. Before deleting anything it should ask you."
+msgstr "El asistente ve las herramientas que ofrece falcondatabase, mira primero tus tablas y hace los cambios. Antes de borrar algo debería preguntarte."
+
+#: templates/core/ai.html:45
+#, python-format
+msgid ""
+"falcondatabase is an MCP server (Model Context Protocol) at <code "
+"class=\"inline\">%(mcp_url)s</code>. Replace <code "
+"class=\"inline\">%(ai_token)s</code> with your token."
+msgstr "falcondatabase es un servidor MCP (Model Context Protocol) en <code class=\"inline\">%(mcp_url)s</code>. Sustituye <code class=\"inline\">%(ai_token)s</code> por tu token."
+
+#: templates/core/ai.html:51 templates/projects/ai.html:38
+msgid "What the AI can do"
+msgstr "Qué puede hacer la IA"
+
+#: templates/core/ai.html:56
+msgid "Security"
+msgstr "Seguridad"
+
+#: templates/core/ai.html:59
+msgid ""
+"A token acts as your account: it reaches the projects you own or that were "
+"shared with you, with your role (viewers can only read)."
+msgstr "Un token actúa como tu cuenta: llega a los proyectos que son tuyos o que te compartieron, con tu rol (los lectores solo pueden leer)."
+
+#: templates/core/ai.html:60
+msgid ""
+"Only a fingerprint of the token is stored; if you lose it, create a new one "
+"and revoke the old one."
+msgstr "Solo se guarda una huella del token; si lo pierdes, crea uno nuevo y revoca el anterior."
+
+#: templates/core/ai.html:61
+msgid ""
+"Treat it like a password: never put it in a frontend or a public repository."
+msgstr "Trátalo como una contraseña: nunca lo pongas en un frontend ni en un repositorio público."
+
+#: templates/core/ai.html:62
+msgid ""
+"Changing your password does not revoke tokens: revoke them in Settings → AI "
+"access."
+msgstr "Cambiar tu contraseña no revoca los tokens: revócalos en Ajustes → Acceso IA."
+
+#: templates/core/ai_tokens.html:17 templates/projects/tables.html:12
+msgid "Access"
+msgstr "Acceso"
+
+#: templates/core/ai_tokens.html:17 templates/projects/auth.html:16
+msgid "Created"
+msgstr "Creado"
+
+#: templates/core/ai_tokens.html:17
+msgid "Last used"
+msgstr "Último uso"
+
+#: templates/core/ai_tokens.html:23 templates/projects/ai.html:66
+msgid "read and write"
+msgstr "lectura y escritura"
+
+#: templates/core/ai_tokens.html:27 templates/projects/ai.html:68
+#, python-format
+msgid "Revoke the token “%(name)s”? Assistants using it lose access."
+msgstr "¿Revocar el token «%(name)s»? Los asistentes que lo usan pierden el acceso."
+
+#: templates/core/ai_tokens.html:29 templates/projects/ai.html:70
+msgid "Revoke"
+msgstr "Revocar"
+
+#: templates/core/ai_tokens.html:34
+msgid "You have no AI tokens yet."
+msgstr "Todavía no tienes tokens de IA."
+
+#: templates/core/ai_tokens.html:49
+msgid "New token"
+msgstr "Nuevo token"
+
+#: templates/core/ai_tokens.html:53 templates/projects/ai.html:51
+msgid "e.g. Claude on my laptop"
+msgstr "p. ej. Claude en mi portátil"
+
+#: templates/core/ai_tokens.html:58
+msgid "All my projects (can also create new ones)"
+msgstr "Todos mis proyectos (también puede crear nuevos)"
+
+#: templates/core/ai_tokens.html:63
+msgid "Read and write"
+msgstr "Lectura y escritura"
+
+#: templates/core/ai_tokens.html:64 templates/projects/ai.html:54
+msgid "Read only"
+msgstr "Solo lectura"
+
+#: templates/core/ai_tokens.html:66 templates/projects/ai.html:55
+msgid "Create token"
+msgstr "Crear token"
 
 #: templates/core/changelog.html:7
 #, python-format
@@ -1973,7 +2418,7 @@ msgstr ""
 msgid "Download the extension"
 msgstr "Descargar la extensión"
 
-#: templates/core/extension.html:13 templates/core/home.html:74
+#: templates/core/extension.html:13 templates/core/home.html:87
 msgid "Installation guide"
 msgstr "Guía de instalación"
 
@@ -2197,11 +2642,21 @@ msgstr ""
 "CORS listo para que tus apps en otros dominios consuman los datos "
 "directamente."
 
-#: templates/core/home.html:70
+#: templates/core/home.html:71
+msgid ""
+"Give Claude, Cursor or any assistant a token and ask in plain words: it "
+"creates tables, loads data and creates users for you."
+msgstr "Dale un token a Claude, Cursor o cualquier asistente y pide con tus palabras: crea tablas, carga datos y crea usuarios por ti."
+
+#: templates/core/home.html:73
+msgid "See how it works"
+msgstr "Mira cómo funciona"
+
+#: templates/core/home.html:83
 msgid "Your statistics in the browser"
 msgstr "Tus estadísticas en el navegador"
 
-#: templates/core/home.html:71
+#: templates/core/home.html:84
 msgid ""
 "Install the Chrome extension, sign in, and see the visits to your projects "
 "from the toolbar."
@@ -2209,27 +2664,27 @@ msgstr ""
 "Instala la extensión de Chrome, inicia sesión y ve las visitas de tus "
 "proyectos desde la barra del navegador."
 
-#: templates/core/home.html:75
+#: templates/core/home.html:88
 msgid "Get the Chrome extension"
 msgstr "Obtener la extensión de Chrome"
 
-#: templates/core/home.html:84
+#: templates/core/home.html:97
 msgid "Latest from the blog"
 msgstr "Lo último del blog"
 
-#: templates/core/home.html:85
+#: templates/core/home.html:98
 msgid "All articles →"
 msgstr "Todos los artículos →"
 
-#: templates/core/home.html:92
+#: templates/core/home.html:105
 msgid "That simple"
 msgstr "Así de simple"
 
-#: templates/core/home.html:94
+#: templates/core/home.html:107
 msgid "Create your account and a project"
 msgstr "Crea tu cuenta y un proyecto"
 
-#: templates/core/home.html:94
+#: templates/core/home.html:107
 msgid ""
 "You get an API URL and two keys: <code class=\"inline\">anon</code> for the "
 "browser and <code class=\"inline\">service</code> for your server."
@@ -2237,11 +2692,11 @@ msgstr ""
 "Obtienes una URL de API y dos claves: <code class=\"inline\">anon</code> "
 "para el navegador y <code class=\"inline\">service</code> para tu servidor."
 
-#: templates/core/home.html:95
+#: templates/core/home.html:108
 msgid "Add tables"
 msgstr "Agrega tablas"
 
-#: templates/core/home.html:95
+#: templates/core/home.html:108
 msgid ""
 "Define columns from the dashboard. They are created as real PostgreSQL "
 "tables."
@@ -2249,19 +2704,19 @@ msgstr ""
 "Define columnas desde el dashboard. Se crean como tablas reales en "
 "PostgreSQL."
 
-#: templates/core/home.html:96
+#: templates/core/home.html:109
 msgid "Enable login (optional)"
 msgstr "Activa el login (opcional)"
 
-#: templates/core/home.html:96
+#: templates/core/home.html:109
 msgid "Your users sign up and sign in from your frontend."
 msgstr "Tus usuarios se registran e inician sesión desde tu frontend."
 
-#: templates/core/home.html:97
+#: templates/core/home.html:110
 msgid "Query from your app"
 msgstr "Consulta desde tu app"
 
-#: templates/core/home.html:97
+#: templates/core/home.html:110
 msgid ""
 "Use <code class=\"inline\">fetch</code> or the <code "
 "class=\"inline\">falcondb.js</code> SDK."
@@ -2269,7 +2724,7 @@ msgstr ""
 "Usa <code class=\"inline\">fetch</code> o el SDK <code "
 "class=\"inline\">falcondb.js</code>."
 
-#: templates/core/home.html:97
+#: templates/core/home.html:110
 msgid "See the documentation →"
 msgstr "Ver documentación →"
 
@@ -2539,7 +2994,7 @@ msgid_plural "%(counter)s contributions in the last year"
 msgstr[0] "%(counter)s contribución en el último año"
 msgstr[1] "%(counter)s contribuciones en el último año"
 
-#: templates/projects/_contributions.html:7
+#: templates/projects/_contributions.html:7 templates/projects/ai.html:80
 msgid "Project"
 msgstr "Proyecto"
 
@@ -2612,13 +3067,98 @@ msgstr "por defecto: %(default)s"
 msgid "tables"
 msgstr "tablas"
 
-#: templates/projects/_table_header.html:10
-msgid "Data"
-msgstr "Datos"
-
 #: templates/projects/_table_header.html:11
 msgid "Structure"
 msgstr "Estructura"
+
+#: templates/projects/ai.html:7
+msgid "Manage this project with AI"
+msgstr "Gestiona este proyecto con IA"
+
+#: templates/projects/ai.html:8
+#, python-format
+msgid ""
+"Connect Claude, Cursor or any assistant and ask it to create tables, load "
+"data or create users in <strong>%(name)s</strong>. The examples below are "
+"already filled in for this project."
+msgstr "Conecta Claude, Cursor o cualquier asistente y pídele que cree tablas, cargue datos o cree usuarios en <strong>%(name)s</strong>. Los ejemplos de abajo ya están rellenados para este proyecto."
+
+#: templates/projects/ai.html:15
+#, python-format
+msgid ""
+"Create a token for this project (on the right) and the examples will include "
+"it, ready to copy. Until then they show <code class=\"inline\">%(ai_token)s</"
+"code>."
+msgstr "Crea un token para este proyecto (a la derecha) y los ejemplos lo incluirán, listos para copiar. Mientras tanto muestran <code class=\"inline\">%(ai_token)s</code>."
+
+#: templates/projects/ai.html:20
+msgid "1. Connect your AI"
+msgstr "1. Conecta tu IA"
+
+#: templates/projects/ai.html:25
+msgid "2. Ask in your own words"
+msgstr "2. Pide con tus palabras"
+
+#: templates/projects/ai.html:27
+msgid "Examples you can copy into your assistant:"
+msgstr "Ejemplos que puedes copiar en tu asistente:"
+
+#: templates/projects/ai.html:29
+#, python-format
+msgid ""
+"In falcondatabase project %(ref)s, create a “customers” table with name "
+"(required), unique email, phone and signup date (default now())."
+msgstr "En el proyecto %(ref)s de falcondatabase, crea una tabla «clientes» con nombre (obligatorio), email único, teléfono y fecha de alta (por defecto now())."
+
+#: templates/projects/ai.html:30
+#, python-format
+msgid "Insert 10 realistic sample rows in each table of project %(ref)s."
+msgstr "Inserta 10 filas de ejemplo realistas en cada tabla del proyecto %(ref)s."
+
+#: templates/projects/ai.html:31
+#, python-format
+msgid ""
+"Enable login in project %(ref)s and create the user ana@example.com with a "
+"secure password."
+msgstr "Activa el login en el proyecto %(ref)s y crea el usuario ana@example.com con una contraseña segura."
+
+#: templates/projects/ai.html:32
+#, python-format
+msgid ""
+"Show me the columns of “%(name)s” in project %(ref)s and add the ones you "
+"think are missing."
+msgstr "Muéstrame las columnas de «%(name)s» en el proyecto %(ref)s y añade las que creas que faltan."
+
+#: templates/projects/ai.html:47
+msgid "Token for this project"
+msgstr "Token para este proyecto"
+
+#: templates/projects/ai.html:54
+msgid "The AI can look but not change anything."
+msgstr "La IA puede mirar pero no cambiar nada."
+
+#: templates/projects/ai.html:56
+msgid "It only reaches this project. It is shown once."
+msgstr "Solo llega a este proyecto. Se muestra una sola vez."
+
+#: templates/projects/ai.html:62
+msgid "Your tokens for this project"
+msgstr "Tus tokens de este proyecto"
+
+#: templates/projects/ai.html:66
+msgid "last used"
+msgstr "último uso"
+
+#: templates/projects/ai.html:75
+msgid "None yet."
+msgstr "Ninguno todavía."
+
+#: templates/projects/ai.html:88
+#, python-format
+msgid ""
+"For a token that reaches all your projects, go to <a "
+"href=\"%(tokens_url)s\">Settings → AI access</a>."
+msgstr "Para un token que llegue a todos tus proyectos, ve a <a href=\"%(tokens_url)s\">Ajustes → Acceso IA</a>."
 
 #: templates/projects/api.html:10 templates/projects/overview.html:104
 msgid "Connection"
@@ -2643,10 +3183,6 @@ msgstr ""
 #: templates/projects/auth.html:16
 msgid "Status"
 msgstr "Estado"
-
-#: templates/projects/auth.html:16
-msgid "Created"
-msgstr "Creado"
 
 #: templates/projects/auth.html:27
 msgid "Deactivate"
@@ -2723,7 +3259,11 @@ msgstr "Autenticación"
 msgid "Storage"
 msgstr "Almacenamiento"
 
-#: templates/projects/base_project.html:28
+#: templates/projects/base_project.html:23
+msgid "AI"
+msgstr "IA"
+
+#: templates/projects/base_project.html:29
 #, python-format
 msgid "You have read-only access to this project, shared by %(owner)s."
 msgstr ""
@@ -3386,10 +3926,6 @@ msgstr "Escribe <strong>%(name)s</strong> para confirmar:"
 #: templates/projects/table_structure.html:93
 msgid "Delete table"
 msgstr "Eliminar tabla"
-
-#: templates/projects/tables.html:12
-msgid "Access"
-msgstr "Acceso"
 
 #: templates/projects/tables.html:12 templates/storage/bucket.html:29
 msgid "Updated"

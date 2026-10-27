@@ -1,0 +1,9 @@
+{% load i18n falcon %}{# Expects: new_token #}
+<div class="flash flash-attention" role="status">{% icon 'key' %}
+  <span class="grow">{% translate "Your new AI token. Copy it now: it will not be shown again." %}
+    <span class="key-field" style="margin-top:8px">
+      <input type="text" id="new-ai-token" readonly value="{{ new_token }}">
+      <button type="button" class="btn" data-copy="#new-ai-token">{% icon 'copy' %}</button>
+    </span>
+    <span class="small">{% translate "The connection examples on this page already include it." %}</span></span>
+</div>

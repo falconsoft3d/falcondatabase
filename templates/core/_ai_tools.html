@@ -1,0 +1,25 @@
+{% load i18n %}
+<div class="markdown">
+  <table>
+    <tr><th>{% translate "Area" %}</th><th>{% translate "Tool" %}</th><th>{% translate "What it does" %}</th></tr>
+    <tr><td rowspan="4">{% translate "Projects" %}</td><td><code>list_projects</code></td><td>{% translate "Your projects and your role in each" %}</td></tr>
+    <tr><td><code>create_project</code></td><td>{% translate "New project with its own schema and keys" %}</td></tr>
+    <tr><td><code>describe_project</code></td><td>{% translate "Tables, columns, rows, login settings, API URL and anon key" %}</td></tr>
+    <tr><td><code>update_auth_settings</code></td><td>{% translate "Turn login and public sign up on or off" %}</td></tr>
+    <tr><td rowspan="6">{% translate "Tables" %}</td><td><code>create_table</code></td><td>{% translate "Real PostgreSQL table with typed columns and an access rule" %}</td></tr>
+    <tr><td><code>update_table</code></td><td>{% translate "Rename it, change its description or access rule" %}</td></tr>
+    <tr><td><code>add_column</code></td><td>{% translate "Add a column (type, required, unique, default)" %}</td></tr>
+    <tr><td><code>rename_column</code></td><td>{% translate "Rename a column" %}</td></tr>
+    <tr><td><code>drop_column</code></td><td>{% translate "Remove a column" %}</td></tr>
+    <tr><td><code>delete_table</code></td><td>{% translate "Delete a table and its rows" %}</td></tr>
+    <tr><td rowspan="4">{% translate "Data" %}</td><td><code>query_rows</code></td><td>{% translate "Read with filters, search, ordering and pagination" %}</td></tr>
+    <tr><td><code>insert_rows</code></td><td>{% translate "Insert one or many rows (all or none)" %}</td></tr>
+    <tr><td><code>update_row</code></td><td>{% translate "Change columns of a row" %}</td></tr>
+    <tr><td><code>delete_rows</code></td><td>{% translate "Delete rows by id" %}</td></tr>
+    <tr><td rowspan="4">{% translate "Users" %}</td><td><code>list_users</code></td><td>{% translate "Users of the project's app" %}</td></tr>
+    <tr><td><code>create_user</code></td><td>{% translate "Create a user with email, password and extra data" %}</td></tr>
+    <tr><td><code>update_user</code></td><td>{% translate "Change password, data or deactivate" %}</td></tr>
+    <tr><td><code>delete_user</code></td><td>{% translate "Delete a user" %}</td></tr>
+    <tr><td>{% translate "Admin" %}</td><td><code>create_account</code></td><td>{% translate "Create a falcondatabase account (administrator tokens only)" %}</td></tr>
+  </table>
+</div>

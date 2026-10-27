@@ -21,6 +21,7 @@ urlpatterns = [
     path(f"{T}/rows/<int:row_id>/delete/", views.row_delete, name="row_delete"),
     path(f"{P}/auth/", views.auth, name="auth"),
     path(f"{P}/api/", views.api_docs, name="api"),
+    path(f"{P}/ai/", views.ai_access, name="ai"),
     path(f"{P}/analytics/", analytics_views.project_analytics, name="analytics"),
     path(f"{P}/portal/", views.portal_settings, name="portal"),
     path(f"{P}/storage/", storage_views.dashboard, name="storage"),

@@ -55,6 +55,14 @@
   </div>
 
   <div class="box">
+    <div class="box-header">{% icon 'zap' %} <strong>{% translate "AI access" %}</strong></div>
+    <div class="box-body row" style="flex-wrap:wrap">
+      <p class="muted grow" style="margin:0">{% translate "Tokens let an AI assistant (Claude, Cursor…) create and edit your tables, data and users. Each one acts as your account." %}</p>
+      <a class="btn" href="{% url 'ai_tokens' %}">{% icon 'key' %} {% translate "Manage AI tokens" %}</a>
+    </div>
+  </div>
+
+  <div class="box">
     <div class="box-header">{% icon 'shield' %} <strong class="grow">{% translate "Two-step authentication" %}</strong>
       {% if two_factor %}<span class="label label-success">{% translate "enabled" %}</span>{% else %}<span class="label">{% translate "disabled" %}</span>{% endif %}
     </div>

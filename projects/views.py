@@ -393,6 +393,29 @@ def portal_settings(request, username, slug):
 
 
 @login_required
+def ai_access(request, username, slug):
+    """How to connect an AI assistant to this project, with a token scoped to it."""
+    from core.models import AccessToken
+    from core.views import ai_context
+
+    project = get_project(request, username, slug)
+    tokens = AccessToken.objects.filter(user=request.user, project=project)
+    new_token = None
+    if request.method == "POST":
+        if request.POST.get("action") == "revoke":
+            if tokens.filter(pk=request.POST.get("token")).delete()[0]:
+                messages.success(request, _("Token revoked. Assistants using it lose access immediately."))
+            return redirect(project.url("ai"))
+        name = request.POST.get("name", "").strip()[:100] or _("AI assistant")
+        _token, new_token = AccessToken.issue(request.user, name, project=project,
+                                              read_only=bool(request.POST.get("read_only")))
+    return render(request, "projects/ai.html", project_context(
+        request, project, "ai", tokens=tokens, new_token=new_token, tables=project.tables.all(),
+        **ai_context(request, new_token, project),
+    ))
+
+
+@login_required
 def api_docs(request, username, slug):
     project = get_project(request, username, slug)
     return render(request, "projects/api.html", project_context(

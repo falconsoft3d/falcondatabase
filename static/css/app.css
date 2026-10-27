@@ -649,6 +649,8 @@ img.avatar { object-fit: cover; background: var(--bg-subtle); }
 /* --- extension ---------------------------------------------------------------- */
 .extension-shot { width: 100%; max-width: 380px; justify-self: center; border-radius: 12px; border: 1px solid var(--border); box-shadow: var(--shadow); }
 .extension-banner { background: linear-gradient(120deg, var(--tint-success), transparent 60%), var(--bg); }
+.ai-banner { background: linear-gradient(120deg, var(--tint-attention), transparent 60%), var(--bg); }
+.ai-banner .stat-icon { color: var(--link); }
 
 /* --- contribution graph (ordinal ramps validated for both themes) --------------- */
 :root { --contrib-0: #161b22; --contrib-1: #155c58; --contrib-2: #1a8a84; --contrib-3: #2fb5ad; --contrib-4: #7ee0da; }

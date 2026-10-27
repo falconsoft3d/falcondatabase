@@ -20,6 +20,8 @@ urlpatterns = [
     path("logout/", auth_views.LogoutView.as_view(), name="logout"),
     path("settings/", core_views.account, name="account"),
     path("avatars/<int:user_id>/", core_views.avatar_image, name="avatar"),
+    path("settings/ai/", core_views.ai_tokens, name="ai_tokens"),
+    path("ai/", core_views.ai_page, name="ai"),
     path("settings/2fa/", core_views.two_factor_setup, name="two_factor_setup"),
     path("settings/2fa/manage/", core_views.two_factor_manage, name="two_factor_manage"),
     path("i18n/", include("django.conf.urls.i18n")),

@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% load i18n falcon %}
+{% block title %}{% translate "Manage it with AI" %} · falcondatabase{% endblock %}
+{% block content %}
+<div class="container-md stack">
+  <div>
+    <span class="label label-accent" style="margin-bottom:12px">{% icon 'zap' 12 %} MCP · REST</span>
+    <h1 style="font-size:32px">{% translate "Let your AI manage your database" %}</h1>
+    <p class="muted" style="font-size:16px">{% blocktranslate %}Create a token in your dashboard, give it to Claude, Cursor or any assistant, and ask in plain words: <em>“create a customers table with name, unique email and phone”</em>, <em>“load 20 sample products”</em>, <em>“create the user ana@example.com”</em>. The AI creates and edits tables, data and users for you.{% endblocktranslate %}</p>
+    <div class="row" style="flex-wrap:wrap;margin-top:16px">
+      {% if user.is_authenticated %}
+        <a class="btn btn-primary" href="{% url 'ai_tokens' %}">{% icon 'key' %} {% translate "Create an AI token" %}</a>
+      {% else %}
+        <a class="btn btn-primary" href="{% url 'login' %}?next={% url 'ai_tokens' %}">{% icon 'key' %} {% translate "Sign in to create a token" %}</a>
+      {% endif %}
+      <a class="btn" href="#connect">{% icon 'link' %} {% translate "How to connect it" %}</a>
+    </div>
+  </div>
+
+  <div class="features" style="margin-top:16px">
+    <div class="feature"><div class="stat-icon">{% icon 'table' 20 %}</div><h3>{% translate "Tables" %}</h3>
+      <p class="muted">{% translate "Create, rename and delete tables; add, rename and remove columns; change access rules." %}</p></div>
+    <div class="feature"><div class="stat-icon">{% icon 'rows' 20 %}</div><h3>{% translate "Data" %}</h3>
+      <p class="muted">{% translate "Query with filters, insert in bulk, edit and delete rows." %}</p></div>
+    <div class="feature"><div class="stat-icon">{% icon 'users' 20 %}</div><h3>{% translate "Users" %}</h3>
+      <p class="muted">{% translate "Create the users of your app, change their password or data, deactivate them and turn login on." %}</p></div>
+    <div class="feature"><div class="stat-icon">{% icon 'shield' 20 %}</div><h3>{% translate "Under your control" %}</h3>
+      <p class="muted">{% translate "Limit a token to one project or make it read-only, revoke it anytime, and see every change in the project activity." %}</p></div>
+  </div>
+
+  <div class="box">
+    <div class="box-header">{% icon 'book' %} <strong>{% translate "How it works" %}</strong></div>
+    <div class="box-body">
+      <ol class="steps">
+        <li><h3>{% translate "Create a token" %}</h3><p class="muted">{% blocktranslate %}In <strong>Settings → AI access</strong> (all your projects) or in the <strong>AI</strong> tab of a project (only that one). It starts with <code class="inline">fdb_ai_</code> and is shown only once.{% endblocktranslate %}</p></li>
+        <li><h3>{% translate "Connect your AI" %}</h3><p class="muted">{% translate "Paste the command or configuration below into your assistant. The project's AI tab gives you everything already filled in with your server, project and token." %}</p></li>
+        <li><h3>{% translate "Ask in your own words" %}</h3><p class="muted">{% translate "The assistant sees the tools falcondatabase offers, looks at your tables first and makes the changes. Before deleting anything it should ask you." %}</p></li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="box" id="connect">
+    <div class="box-header">{% icon 'link' %} <strong>{% translate "Connect your AI" %}</strong></div>
+    <div class="box-body">
+      <p class="muted">{% blocktranslate %}falcondatabase is an MCP server (Model Context Protocol) at <code class="inline">{{ mcp_url }}</code>. Replace <code class="inline">{{ ai_token }}</code> with your token.{% endblocktranslate %}</p>
+      {% include "core/_ai_connect.html" %}
+    </div>
+  </div>
+
+  <div class="box">
+    <div class="box-header">{% icon 'zap' %} <strong>{% translate "What the AI can do" %}</strong></div>
+    <div class="box-body">{% include "core/_ai_tools.html" %}</div>
+  </div>
+
+  <div class="box">
+    <div class="box-header">{% icon 'lock' %} <strong>{% translate "Security" %}</strong></div>
+    <div class="box-body markdown">
+      <ul>
+        <li>{% translate "A token acts as your account: it reaches the projects you own or that were shared with you, with your role (viewers can only read)." %}</li>
+        <li>{% translate "Only a fingerprint of the token is stored; if you lose it, create a new one and revoke the old one." %}</li>
+        <li>{% translate "Treat it like a password: never put it in a frontend or a public repository." %}</li>
+        <li>{% translate "Changing your password does not revoke tokens: revoke them in Settings → AI access." %}</li>
+      </ul>
+    </div>
+  </div>
+</div>
+{% endblock %}

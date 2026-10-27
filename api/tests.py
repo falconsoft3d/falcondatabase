@@ -192,3 +192,128 @@ class SerializationTests(ApiTestCase):
         services.add_column(self.table, name="price", type_="decimal")
         row = self.call("post", "/tables/todos", {"title": "x", "price": "12.50"}).json()["data"]
         self.assertEqual(row["price"], 12.5)
+
+
+class AiToolsTests(TestCase):
+    def setUp(self):
+        from core.models import AccessToken
+
+        self.owner = get_user_model().objects.create_user("ana", "ana@example.com", "pass12345")
+        self.project = services.create_project(self.owner, "App")
+        self.other = services.create_project(self.owner, "Other")
+        self.token, self.raw = AccessToken.issue(self.owner, "claude")
+
+    def headers(self, raw=None):
+        return {"Authorization": f"Bearer {raw or self.raw}"}
+
+    def tool(self, tool_name, raw=None, **arguments):
+        return self.client.post(f"/api/ai/tools/{tool_name}", data=arguments, content_type="application/json",
+                                headers=self.headers(raw))
+
+    def rpc(self, method, params=None, msg_id=1, raw=None):
+        message = {"jsonrpc": "2.0", "method": method, "params": params or {}}
+        if msg_id is not None:
+            message["id"] = msg_id
+        return self.client.post("/api/ai/mcp", data=message, content_type="application/json",
+                                headers=self.headers(raw))
+
+    def test_requires_token(self):
+        self.assertEqual(self.client.post("/api/ai/mcp", data={}, content_type="application/json").status_code, 401)
+        self.assertEqual(self.client.get("/api/ai/tools", headers=self.headers("fdb_ai_nope")).status_code, 401)
+        self.assertEqual(self.client.get("/api/ai/tools", headers=self.headers()).status_code, 200)
+        self.token.refresh_from_db()
+        self.assertIsNotNone(self.token.last_used_at)
+
+    def test_mcp_handshake(self):
+        result = self.rpc("initialize", {"protocolVersion": "2025-06-18", "capabilities": {},
+                                         "clientInfo": {"name": "test", "version": "1"}}).json()["result"]
+        self.assertEqual(result["protocolVersion"], "2025-06-18")
+        self.assertIn("tools", result["capabilities"])
+        self.assertEqual(self.rpc("notifications/initialized", msg_id=None).status_code, 202)
+        names = {t["name"] for t in self.rpc("tools/list").json()["result"]["tools"]}
+        self.assertTrue({"create_table", "insert_rows", "create_user", "create_project"} <= names)
+        self.assertNotIn("create_account", names)  # admins only
+        self.assertEqual(self.rpc("nope").json()["error"]["code"], -32601)
+
+    def test_tables_data_and_users(self):
+        ref = self.project.ref
+        response = self.rpc("tools/call", {"name": "create_table", "arguments": {
+            "project": ref, "name": "Tasks", "access": "private",
+            "columns": [{"name": "title", "type": "text", "required": True}, {"name": "done", "type": "boolean"}],
+        }}).json()["result"]
+        self.assertFalse(response["isError"], response)
+        self.assertEqual(self.tool("add_column", project=ref, table="tasks", name="due", type="date").status_code, 200)
+        self.assertEqual(self.tool("rename_column", project=ref, table="tasks", column="due", new_name="deadline").status_code, 200)
+        self.assertEqual(self.tool("update_table", project="ana/app", table="tasks", new_name="todos").status_code, 200)
+
+        rows = self.tool("insert_rows", project="app", table="todos",
+                         rows=[{"title": "a"}, {"title": "b", "done": True}]).json()["data"]["data"]
+        self.assertEqual(len(rows), 2)
+        result = self.tool("query_rows", project=ref, table="todos", filters={"done": "is.true"}).json()["data"]
+        self.assertEqual((result["count"], result["data"][0]["title"]), (1, "b"))
+        self.tool("update_row", project=ref, table="todos", id=rows[0]["id"], values={"done": True})
+        self.assertEqual(self.tool("query_rows", project=ref, table="todos", filters={"done": True}).json()["data"]["count"], 2)
+        self.assertEqual(self.tool("delete_rows", project=ref, table="todos", ids=[rows[0]["id"]]).json()["data"]["deleted"], [rows[0]["id"]])
+        columns = [c["name"] for c in self.tool("describe_project", project=ref).json()["data"]["tables"][0]["columns"]]
+        self.assertEqual(columns, ["id", "created_at", "title", "done", "deadline"])
+
+        bad = self.tool("insert_rows", project=ref, table="todos", rows=[{"title": "ok"}, {"title": None}])
+        self.assertEqual(bad.status_code, 400)
+        self.assertEqual(self.tool("query_rows", project=ref, table="todos").json()["data"]["count"], 1)
+
+        user = self.tool("create_user", project=ref, email="Bob@Example.com", password="secreto1", data={"name": "Bob"})
+        self.assertEqual(user.status_code, 200)
+        self.assertEqual(self.tool("create_user", project=ref, email="bob@example.com", password="secreto1").status_code, 409)
+        self.tool("update_user", project=ref, user="bob@example.com", is_active=False, data={"plan": "pro"})
+        bob = self.project.users.get()
+        self.assertEqual((bob.is_active, bob.data), (False, {"name": "Bob", "plan": "pro"}))
+        self.tool("delete_user", project=ref, user=bob.pk)
+        self.assertFalse(self.project.users.exists())
+        self.assertTrue(self.project.activity.filter(kind="table_renamed", user=self.owner).exists())
+
+        self.assertEqual(self.tool("delete_table", project=ref, table="todos").status_code, 200)
+        self.assertFalse(self.project.tables.exists())
+
+    def test_tool_errors_in_mcp(self):
+        result = self.rpc("tools/call", {"name": "create_table", "arguments": {"project": "zzz", "name": "x"}}).json()["result"]
+        self.assertTrue(result["isError"])
+        self.assertEqual(self.tool("create_table", project=self.project.ref).status_code, 400)  # missing name
+
+    def test_scoped_and_read_only_tokens(self):
+        from core.models import AccessToken
+        from projects.models import ProjectMember
+
+        _token, scoped = AccessToken.issue(self.owner, "one", project=self.project)
+        projects = self.tool("list_projects", raw=scoped).json()["data"]["projects"]
+        self.assertEqual([p["ref"] for p in projects], [self.project.ref])
+        self.assertEqual(self.tool("describe_project", raw=scoped, project=self.other.ref).status_code, 404)
+        self.assertEqual(self.tool("create_project", raw=scoped, name="x").status_code, 404)
+
+        _token, reader = AccessToken.issue(self.owner, "ro", read_only=True)
+        names = {t["name"] for t in self.client.get("/api/ai/tools", headers=self.headers(reader)).json()["tools"]}
+        self.assertIn("query_rows", names)
+        self.assertNotIn("create_table", names)
+        self.assertEqual(self.tool("create_table", raw=reader, project=self.project.ref, name="t").status_code, 404)
+
+        guest = get_user_model().objects.create_user("eva", "eva@example.com", "pass12345")
+        ProjectMember.objects.create(project=self.project, user=guest, role=ProjectMember.VIEWER)
+        _token, guest_raw = AccessToken.issue(guest, "eva")
+        self.assertEqual(self.tool("describe_project", raw=guest_raw, project="ana/app").status_code, 200)
+        self.assertEqual(self.tool("create_table", raw=guest_raw, project="ana/app", name="t").status_code, 403)
+
+    def test_dashboard_pages(self):
+        self.client.force_login(self.owner)
+        response = self.client.post(self.project.url("ai"), {"action": "create", "name": "laptop"})
+        self.assertEqual(response.status_code, 200)
+        token = self.owner.access_tokens.get(name="laptop")
+        self.assertEqual(token.project, self.project)
+        self.assertContains(response, response.context["new_token"])
+        self.assertContains(response, "claude mcp add --transport http falcondatabase")
+        self.assertEqual(self.tool("list_projects", raw=response.context["new_token"]).status_code, 200)
+
+        self.client.post(self.project.url("ai"), {"action": "revoke", "token": token.pk})
+        self.assertFalse(self.owner.access_tokens.filter(pk=token.pk).exists())
+
+        response = self.client.post("/settings/ai/", {"action": "create", "name": "all", "access": "read"})
+        self.assertTrue(self.owner.access_tokens.get(name="all").read_only)
+        self.assertEqual(self.client.get("/ai/").status_code, 200)

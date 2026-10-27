@@ -6,6 +6,21 @@ Change kinds: "added", "improved", "fixed".
 
 RELEASES = [
     {
+        "version": "0.8.0",
+        "date": "2026-10-27",
+        "title": {"en": "Manage it with AI", "es": "Gestiónalo con IA"},
+        "changes": [
+            ("added", "AI tokens (Settings → AI access): give Claude, Cursor or any assistant a token and it can create and edit tables, columns, data and the users of your apps. A token can be limited to one project or be read-only, and is revoked in one click.",
+                      "Tokens de IA (Ajustes → Acceso IA): dale un token a Claude, Cursor o cualquier asistente y podrá crear y editar tablas, columnas, datos y los usuarios de tus apps. Un token puede limitarse a un proyecto o ser de solo lectura, y se revoca con un clic."),
+            ("added", "MCP server at /api/ai/mcp and the same tools over HTTP at /api/ai/tools/<tool>.",
+                      "Servidor MCP en /api/ai/mcp y las mismas herramientas por HTTP en /api/ai/tools/<herramienta>."),
+            ("added", "\"AI\" tab in every project with the connection guide already filled in with the server, the project and a token created right there.",
+                      "Pestaña \"IA\" en cada proyecto con la guía de conexión ya rellenada con el servidor, el proyecto y un token creado allí mismo."),
+            ("added", "\"Manage it with AI\" page, linked from the home page, explaining how it works.",
+                      "Página \"Gestiónalo con IA\", enlazada desde el inicio, que explica cómo funciona."),
+        ],
+    },
+    {
         "version": "0.7.6",
         "date": "2026-10-26",
         "title": {"en": "Analytics: Today period", "es": "Analítica: periodo Hoy"},

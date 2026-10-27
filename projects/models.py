@@ -218,6 +218,8 @@ class ActivityEvent(models.Model):
         ("table_deleted", _("deleted table")),
         ("column_added", _("added a column to")),
         ("column_removed", _("removed a column from")),
+        ("column_renamed", _("renamed a column in")),
+        ("table_renamed", _("renamed table")),
         ("rows_inserted", _("inserted rows in")),
         ("row_updated", _("updated a row in")),
         ("row_deleted", _("deleted a row from")),
@@ -227,6 +229,8 @@ class ActivityEvent(models.Model):
         ("member_added", _("shared the project with")),
         ("app_user_added", _("added app user")),
         ("app_user_signed_up", _("signed up")),
+        ("app_user_updated", _("updated app user")),
+        ("app_user_deleted", _("deleted app user")),
     ]
 
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name="activity")

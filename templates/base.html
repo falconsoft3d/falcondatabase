@@ -50,6 +50,7 @@
             <a href="{% url 'docs' %}">{% icon 'book' %} {% translate "Documentation" %}</a>
             <hr>
             <a href="{% url 'account' %}">{% icon 'gear' %} {% translate "Settings" %}</a>
+            <a href="{% url 'ai_tokens' %}">{% icon 'zap' %} {% translate "AI access" %}</a>
             {% if user.is_superuser %}<a href="{% url 'users' %}">{% icon 'users' %} {% translate "Users" %}</a>{% endif %}
             <hr>
             <form method="post" action="{% url 'logout' %}">{% csrf_token %}

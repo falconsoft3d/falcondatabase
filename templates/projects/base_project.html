@@ -20,6 +20,7 @@
       <a class="tab {% if tab == 'storage' %}selected{% endif %}" href="{% url 'projects:storage' project.owner.username project.slug %}">{% icon 'folder' %} {% translate "Storage" %}{% if project.storage_enabled %} <span class="dot-live" title="{% translate 'enabled' %}"></span>{% endif %}</a>
       <a class="tab {% if tab == 'portal' %}selected{% endif %}" href="{% url 'projects:portal' project.owner.username project.slug %}">{% icon 'globe' %} {% translate "Portal" %}{% if project.portal_enabled %} <span class="dot-live" title="{% translate 'enabled' %}"></span>{% endif %}</a>
       <a class="tab {% if tab == 'api' %}selected{% endif %}" href="{% url 'projects:api' project.owner.username project.slug %}">{% icon 'code' %} API</a>
+      <a class="tab {% if tab == 'ai' %}selected{% endif %}" href="{% url 'projects:ai' project.owner.username project.slug %}">{% icon 'zap' %} {% translate "AI" %}</a>
       {% if project.role == "owner" %}<a class="tab {% if tab == 'settings' %}selected{% endif %}" href="{% url 'projects:settings' project.owner.username project.slug %}">{% icon 'gear' %} {% translate "Settings" %}</a>{% endif %}
     </nav>
   </div>

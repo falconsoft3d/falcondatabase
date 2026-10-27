@@ -1,0 +1,93 @@
+{% extends "projects/base_project.html" %}
+{% load i18n falcon %}
+{% block content %}
+<div class="container layout-split">
+  <div class="stack">
+    <div>
+      <h2 style="margin:0 0 4px">{% translate "Manage this project with AI" %}</h2>
+      <p class="muted" style="margin:0">{% blocktranslate with name=project.name %}Connect Claude, Cursor or any assistant and ask it to create tables, load data or create users in <strong>{{ name }}</strong>. The examples below are already filled in for this project.{% endblocktranslate %}</p>
+    </div>
+
+    {% if new_token %}
+      {% include "core/_ai_new_token.html" %}
+    {% else %}
+      <div class="flash flash-info">{% icon 'key' %}
+        <span>{% blocktranslate %}Create a token for this project (on the right) and the examples will include it, ready to copy. Until then they show <code class="inline">{{ ai_token }}</code>.{% endblocktranslate %}</span>
+      </div>
+    {% endif %}
+
+    <div class="box">
+      <div class="box-header">{% icon 'link' %} <strong>{% translate "1. Connect your AI" %}</strong></div>
+      <div class="box-body">{% include "core/_ai_connect.html" %}</div>
+    </div>
+
+    <div class="box">
+      <div class="box-header">{% icon 'zap' %} <strong>{% translate "2. Ask in your own words" %}</strong></div>
+      <div class="box-body markdown">
+        <p class="muted">{% translate "Examples you can copy into your assistant:" %}</p>
+        <ul>
+          <li>{% blocktranslate with ref=project.ref %}In falcondatabase project {{ ref }}, create a “customers” table with name (required), unique email, phone and signup date (default now()).{% endblocktranslate %}</li>
+          <li>{% blocktranslate with ref=project.ref %}Insert 10 realistic sample rows in each table of project {{ ref }}.{% endblocktranslate %}</li>
+          <li>{% blocktranslate with ref=project.ref %}Enable login in project {{ ref }} and create the user ana@example.com with a secure password.{% endblocktranslate %}</li>
+          {% for table in tables|slice:":1" %}<li>{% blocktranslate with ref=project.ref name=table.name %}Show me the columns of “{{ name }}” in project {{ ref }} and add the ones you think are missing.{% endblocktranslate %}</li>{% endfor %}
+        </ul>
+      </div>
+    </div>
+
+    <div class="box">
+      <div class="box-header">{% icon 'book' %} <strong>{% translate "What the AI can do" %}</strong></div>
+      <div class="box-body">{% include "core/_ai_tools.html" %}</div>
+    </div>
+  </div>
+
+  <aside class="stack">
+    {% if project.role != "viewer" %}
+      <form method="post" class="box">
+        {% csrf_token %}<input type="hidden" name="action" value="create">
+        <div class="box-header">{% icon 'key' %} <strong>{% translate "Token for this project" %}</strong></div>
+        <div class="box-body">
+          <div class="field">
+            <label for="id_token_name">{% translate "Name" %}</label>
+            <input type="text" name="name" id="id_token_name" maxlength="100" placeholder="{% translate 'e.g. Claude on my laptop' %}">
+          </div>
+          <label class="checkbox" style="margin-bottom:12px"><input type="checkbox" name="read_only">
+            <span>{% translate "Read only" %} <span class="muted small">{% translate "The AI can look but not change anything." %}</span></span></label>
+          <button class="btn btn-primary btn-block" type="submit">{% translate "Create token" %}</button>
+          <p class="help" style="margin-bottom:0">{% translate "It only reaches this project. It is shown once." %}</p>
+        </div>
+      </form>
+    {% endif %}
+
+    <div class="box">
+      <div class="box-header">{% icon 'shield' %} <strong>{% translate "Your tokens for this project" %}</strong></div>
+      {% for t in tokens %}
+        <div class="box-row">
+          <span class="grow"><strong>{{ t.name }}</strong> <span class="muted small mono">…{{ t.hint }}</span><br>
+            <span class="muted small">{% if t.read_only %}{% translate "read only" %}{% else %}{% translate "read and write" %}{% endif %} · {% translate "last used" %} {{ t.last_used_at|date:"d M H:i"|default:"—" }}</span></span>
+          {% if project.role != "viewer" %}
+            <form method="post" data-confirm="{% blocktranslate with name=t.name %}Revoke the token “{{ name }}”? Assistants using it lose access.{% endblocktranslate %}">
+              {% csrf_token %}<input type="hidden" name="action" value="revoke"><input type="hidden" name="token" value="{{ t.pk }}">
+              <button class="btn btn-xs btn-danger" type="submit">{% translate "Revoke" %}</button>
+            </form>
+          {% endif %}
+        </div>
+      {% empty %}
+        <div class="box-row muted">{% translate "None yet." %}</div>
+      {% endfor %}
+    </div>
+
+    <div class="box">
+      <div class="box-header">{% icon 'database' %} <strong>{% translate "Project" %}</strong></div>
+      <div class="box-body">
+        <div class="field">
+          <label for="ai-ref">ref</label>
+          <div class="key-field"><input type="text" id="ai-ref" readonly value="{{ project.ref }}">
+            <button type="button" class="btn" data-copy="#ai-ref">{% icon 'copy' %}</button></div>
+        </div>
+        {% url 'ai_tokens' as tokens_url %}
+        <p class="help" style="margin:0">{% blocktranslate %}For a token that reaches all your projects, go to <a href="{{ tokens_url }}">Settings → AI access</a>.{% endblocktranslate %} <a href="{% url 'ai' %}">{% translate "Guide" %}</a></p>
+      </div>
+    </div>
+  </aside>
+</div>
+{% endblock %}

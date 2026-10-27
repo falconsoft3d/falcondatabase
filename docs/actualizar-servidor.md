@@ -20,7 +20,7 @@ git push
 
 # 2. En el servidor
 ssh tu-usuario@falcondatabase.com
-cd ~/falcondatabase
+cd /opt/falcondatabase
 docker compose exec -T db pg_dump -U falcon falcondatabase | gzip > backups/falcondatabase-$(date +%F).sql.gz
 git pull && ./install.sh
 ```
@@ -50,10 +50,16 @@ git push
 
 ```bash
 ssh tu-usuario@falcondatabase.com
-cd ~/falcondatabase          # la carpeta donde clonaste el proyecto (o /opt/falcondatabase)
+cd /opt/falcondatabase       # la carpeta donde clonaste el proyecto
 ```
 
 Todos los comandos `docker compose` se ejecutan **dentro de esa carpeta**.
+
+¿No sabes dónde está? Pregúntaselo a Docker (funciona mientras la app esté arrancada):
+
+```bash
+docker inspect falcondatabase-web-1 --format '{{ index .Config.Labels "com.docker.compose.project.working_dir" }}'
+```
 
 ## 2. Copia de seguridad (no te la saltes)
 
@@ -73,7 +79,7 @@ ls -lh backups/              # comprueba que los ficheros no están vacíos
 Guarda también una copia fuera del servidor de vez en cuando (desde tu ordenador):
 
 ```bash
-scp tu-usuario@falcondatabase.com:falcondatabase/backups/*$(date +%F)* ./
+scp tu-usuario@falcondatabase.com:/opt/falcondatabase/backups/*$(date +%F)* ./
 ```
 
 ## 3. Actualiza el sistema operativo y Docker
@@ -96,7 +102,7 @@ Si hay que reiniciar:
 sudo reboot
 ```
 
-Espera un minuto, vuelve a entrar (`ssh …` y `cd ~/falcondatabase`) y comprueba que todo arrancó solo:
+Espera un minuto, vuelve a entrar (`ssh …` y `cd /opt/falcondatabase`) y comprueba que todo arrancó solo:
 
 ```bash
 docker compose ps            # db y web (y caddy si usas HTTPS) en estado "running" / "healthy"
@@ -142,7 +148,7 @@ df -h /                      # espacio libre en disco
 ## Chuleta (todo junto)
 
 ```bash
-cd ~/falcondatabase
+cd /opt/falcondatabase
 mkdir -p backups
 docker compose exec -T db pg_dump -U falcon falcondatabase | gzip > backups/falcondatabase-$(date +%F).sql.gz
 sudo apt update && sudo apt full-upgrade -y && sudo apt autoremove -y
@@ -217,7 +223,7 @@ FALCONDB_HTTPS=no ./install.sh --yes
 - **Copias de seguridad:** antes de cada actualización. También puedes programar una copia diaria con `crontab -e`:
 
   ```cron
-  0 3 * * * cd /home/tu-usuario/falcondatabase && docker compose exec -T db pg_dump -U falcon falcondatabase | gzip > backups/falcondatabase-$(date +\%F).sql.gz
+  0 3 * * * cd /opt/falcondatabase && docker compose exec -T db pg_dump -U falcon falcondatabase | gzip > backups/falcondatabase-$(date +\%F).sql.gz
   ```
 
 Más detalle (en inglés) en [DEPLOY.md](../DEPLOY.md#keeping-the-server-up-to-date).
