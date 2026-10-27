@@ -5,6 +5,7 @@ from django.urls import include, path
 from core import account_api
 from core import views as core_views
 from projects import views as project_views
+from uptime import views as uptime_views
 
 urlpatterns = [
     path("", core_views.home, name="home"),
@@ -27,6 +28,7 @@ urlpatterns = [
     path("i18n/", include("django.conf.urls.i18n")),
     path("users/", core_views.users, name="users"),
     path("dashboard/", project_views.dashboard, name="dashboard"),
+    path("uptime/", uptime_views.overview, name="uptime"),
     path("new/", project_views.project_new, name="project_new"),
     path("new/import/", project_views.project_import, name="project_import"),
     path("admin/", admin.site.urls),

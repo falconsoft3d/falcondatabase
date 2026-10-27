@@ -1,0 +1,39 @@
+{% extends "projects/base_project.html" %}
+{% load i18n falcon %}
+{% block content %}
+<div class="container stack">
+  <div class="row" style="flex-wrap:wrap">
+    <h2 class="grow" style="margin:0">{% translate "Uptime" %}</h2>
+    <a class="btn btn-sm" href="{% url 'uptime' %}">{% icon 'chart' 14 %} {% translate "All projects" %}</a>
+  </div>
+  {% include "uptime/_notices.html" %}
+
+  {% if suggestions and project.role != "viewer" %}
+    <form method="post" class="flash flash-info" style="flex-wrap:wrap">{% csrf_token %}<input type="hidden" name="action" value="add_domains">
+      {% icon 'globe' %}
+      <span class="grow">{% translate "Domains of this project's analytics without a monitor:" %} <strong>{{ suggestions|join:", " }}</strong></span>
+      <button class="btn btn-sm btn-primary" type="submit">{% icon 'plus' 14 %} {% translate "Monitor them" %}</button>
+    </form>
+  {% endif %}
+
+  {% if monitors %}
+    {% include "uptime/_list.html" %}
+  {% else %}
+    <div class="box blankslate">
+      {% icon 'zap' 32 %}
+      <h3>{% translate "No monitors yet" %}</h3>
+      <p class="muted">{% translate "Add the address of a website and falcondatabase will request it every few minutes, keep the history and email you when it goes down." %}</p>
+    </div>
+  {% endif %}
+
+  {% if project.role != "viewer" %}
+    <form method="post" class="box" id="new-monitor">
+      <div class="box-header">{% icon 'plus' %} <strong>{% translate "New monitor" %}</strong></div>
+      <div class="box-body">
+        {% include "uptime/_form.html" %}
+        <button class="btn btn-primary" type="submit">{% translate "Add monitor" %}</button>
+      </div>
+    </form>
+  {% endif %}
+</div>
+{% endblock %}

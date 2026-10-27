@@ -1,0 +1,28 @@
+{% load i18n %}{# Expects: form; optional action #}
+{% csrf_token %}{% if action %}<input type="hidden" name="action" value="{{ action }}">{% endif %}
+{% for error in form.non_field_errors %}<p class="error">{{ error }}</p>{% endfor %}
+<div class="field">
+  <label for="id_url">{% translate "Website URL" %}</label>
+  <input type="text" name="url" id="id_url" maxlength="500" required inputmode="url" placeholder="https://example.com/" value="{{ form.url.value|default:'' }}">
+  {% for error in form.url.errors %}<p class="error">{{ error }}</p>{% endfor %}
+  <span class="help">{% translate "It is requested like a browser would: any answer below 400 counts as up. A failed request is retried once before it counts as down." %}</span>
+</div>
+<div class="field">
+  <label for="id_interval">{% translate "Check" %}</label>
+  <select name="interval" id="id_interval" style="max-width:240px">
+    {% for value, label in form.fields.interval.choices %}<option value="{{ value }}" {% if form.interval.value|stringformat:"s" == value|stringformat:"s" %}selected{% endif %}>{{ label }}</option>{% endfor %}
+  </select>
+</div>
+<div class="field">
+  <label class="checkbox" style="font-weight:400"><input type="checkbox" name="notify" {% if form.notify.value %}checked{% endif %}> {% translate "Email me when it goes down and when it comes back" %}</label>
+  <span class="help">{% blocktranslate with email=project.owner.email %}Alerts go to the project owner ({{ email }}).{% endblocktranslate %}</span>
+</div>
+<div class="field">
+  <label for="id_webhook_url">{% translate "Webhook (optional)" %}</label>
+  <input type="url" name="webhook_url" id="id_webhook_url" maxlength="500" placeholder="https://hooks.slack.com/services/…" value="{{ form.webhook_url.value|default:'' }}">
+  {% for error in form.webhook_url.errors %}<p class="error">{{ error }}</p>{% endfor %}
+  <span class="help">{% translate "Receives a JSON POST on every incident. Slack and Discord webhooks show it as a message." %}</span>
+</div>
+<div class="field">
+  <label class="checkbox" style="font-weight:400"><input type="checkbox" name="enabled" {% if form.enabled.value %}checked{% endif %}> {% translate "Enabled" %}</label>
+</div>

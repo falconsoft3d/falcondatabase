@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load i18n falcon %}
+{% block title %}{% translate "Uptime" %} · falcondatabase{% endblock %}
+{% block content %}
+<div class="container stack">
+  <div class="row" style="flex-wrap:wrap">
+    <h1 class="grow" style="margin:0">{% translate "Uptime" %}</h1>
+    {% if monitors %}
+      <span class="status status-up">{% icon 'check' 14 %} {% blocktranslate count counter=up %}{{ counter }} up{% plural %}{{ counter }} up{% endblocktranslate %}</span>
+      <span class="status status-down">{% icon 'x' 14 %} {% blocktranslate count counter=down %}{{ counter }} down{% plural %}{{ counter }} down{% endblocktranslate %}</span>
+      {% if paused %}<span class="status status-paused">{% blocktranslate count counter=paused %}{{ counter }} paused{% plural %}{{ counter }} paused{% endblocktranslate %}</span>{% endif %}
+    {% endif %}
+  </div>
+  {% include "uptime/_notices.html" %}
+
+  {% if suggestions %}
+    <form method="post" class="flash flash-info" style="flex-wrap:wrap">{% csrf_token %}<input type="hidden" name="action" value="add_domains">
+      {% icon 'globe' %}
+      <span class="grow">{% translate "Websites of your analytics without a monitor:" %}
+        {% for project, hosts in suggestions %}<strong>{{ hosts|join:", " }}</strong> <span class="muted small">({{ project.name }})</span>{% if not forloop.last %} · {% endif %}{% endfor %}</span>
+      <button class="btn btn-sm btn-primary" type="submit">{% icon 'plus' 14 %} {% translate "Monitor them" %}</button>
+    </form>
+  {% endif %}
+
+  {% if monitors %}
+    {% include "uptime/_list.html" with show_project=True %}
+  {% else %}
+    <div class="box blankslate">
+      {% icon 'zap' 32 %}
+      <h3>{% translate "No monitors yet" %}</h3>
+      <p class="muted">{% translate "Open a project and go to the Uptime tab to add the address of a website. falcondatabase will request it every few minutes, keep the history and email you when it goes down." %}</p>
+      {% if projects %}
+        <div class="row" style="justify-content:center;flex-wrap:wrap">
+          {% for project in projects|slice:":6" %}<a class="btn btn-sm" href="{% url 'projects:uptime' project.owner.username project.slug %}">{{ project.name }}</a>{% endfor %}
+        </div>
+      {% endif %}
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

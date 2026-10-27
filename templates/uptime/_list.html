@@ -1,0 +1,27 @@
+{% load i18n falcon %}{# Expects: monitors (annotated by uptime.stats.annotate); optional show_project #}
+<div class="box">
+  {% for m in monitors %}
+    <div class="monitor-row">
+      <div>
+        <div class="monitor-title">
+          {% include "uptime/_status.html" %}
+          <a href="{{ m.get_absolute_url }}">{{ m.label }}</a>
+          {% if show_project %}<a class="muted small" href="{% url 'projects:uptime' m.project.owner.username m.project.slug %}">{{ m.project.owner.username }}/{{ m.project.slug }}</a>{% endif %}
+        </div>
+        <div class="small muted" style="margin-top:4px">
+          {{ m.get_interval_display }}
+          {% if m.last_checked_at %} · {% blocktranslate with when=m.last_checked_at|timesince %}checked {{ when }} ago{% endblocktranslate %}{% endif %}
+          {% if m.enabled and m.status == "down" and m.last_error %} · <span class="status-down">{{ m.last_error }}</span>{% endif %}
+          {% if m.notify %} · {% icon 'zap' 12 %} {% translate "alerts on" %}{% endif %}
+        </div>
+      </div>
+      <div class="monitor-numbers">
+        <div><strong>{% if m.uptime_24h is None %}—{% else %}{{ m.uptime_24h|floatformat:"-2" }}%{% endif %}</strong><span class="small muted">{% translate "24 hours" %}</span></div>
+        <div><strong>{% if m.uptime_30d is None %}—{% else %}{{ m.uptime_30d|floatformat:"-2" }}%{% endif %}</strong><span class="small muted">{% translate "30 days" %}</span></div>
+        <div><strong>{% if m.last_response_ms is None %}—{% else %}{{ m.last_response_ms }} ms{% endif %}</strong><span class="small muted">{% translate "response" %}</span></div>
+      </div>
+      {% include "uptime/_bars.html" with bars=m.bars %}
+    </div>
+  {% endfor %}
+</div>
+{% include "uptime/_legend.html" with days=monitors.0.bars|length %}

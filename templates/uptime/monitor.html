@@ -1,0 +1,133 @@
+{% extends "projects/base_project.html" %}
+{% load i18n static falcon uptime_tags %}
+{% block content %}
+<div class="container stack analytics" data-lang="{{ LANGUAGE_CODE }}">
+  <div class="row" style="flex-wrap:wrap">
+    <div class="grow" style="min-width:0">
+      <a class="small" href="{% url 'projects:uptime' project.owner.username project.slug %}">{% icon 'arrow-left' 12 %} {% translate "Uptime" %}</a>
+      <h2 style="margin:4px 0 0;overflow-wrap:anywhere">{{ monitor.label }}</h2>
+      <div class="small muted" style="margin-top:4px">
+        {% include "uptime/_status.html" with m=monitor %}
+        {% if monitor.status_since and monitor.enabled %} · {% blocktranslate with when=monitor.status_since|timesince %}for {{ when }}{% endblocktranslate %}{% endif %}
+        · {{ monitor.get_interval_display }}
+        · <a href="{{ monitor.url }}" target="_blank" rel="noopener noreferrer">{% translate "Open website" %} {% icon 'link' 12 %}</a>
+      </div>
+    </div>
+    {% if project.role != "viewer" %}
+      <form method="post">{% csrf_token %}<input type="hidden" name="action" value="check">
+        <button class="btn" type="submit">{% icon 'refresh' 14 %} {% translate "Check now" %}</button></form>
+    {% endif %}
+  </div>
+  {% include "uptime/_notices.html" with email_configured=True %}
+  {% if monitor.enabled and monitor.status == "down" %}
+    <div class="flash flash-error">{% icon 'x' %} <span>{% blocktranslate with error=monitor.last_error when=monitor.status_since|timesince %}Down for {{ when }}: {{ error }}{% endblocktranslate %}</span></div>
+  {% endif %}
+
+  <nav class="subnav" aria-label="{% translate 'Period' %}" style="display:inline-flex">
+    {% for days in periods %}
+      <a href="?days={{ days }}" class="{% if days == report.days %}selected{% endif %}">{% if days == 1 %}{% translate "24 hours" %}{% else %}{% blocktranslate %}{{ days }} days{% endblocktranslate %}{% endif %}</a>
+    {% endfor %}
+  </nav>
+
+  <div class="kpi-row">
+    <div class="stat kpi"><div><div class="stat-label">{% translate "Uptime" %}</div>
+      <div class="stat-value">{% if report.uptime is None %}—{% else %}{{ report.uptime|floatformat:"-2" }}%{% endif %}</div>
+      <div class="small muted">{% blocktranslate count counter=report.checks %}{{ counter }} check{% plural %}{{ counter }} checks{% endblocktranslate %}</div></div></div>
+    <div class="stat kpi"><div><div class="stat-label">{% translate "Avg. response" %}</div>
+      <div class="stat-value">{% if report.avg_ms is None %}—{% else %}{{ report.avg_ms|floatformat:0 }} ms{% endif %}</div>
+      <div class="small muted">{% if monitor.last_response_ms is not None %}{% blocktranslate with ms=monitor.last_response_ms %}last: {{ ms }} ms{% endblocktranslate %}{% else %}&nbsp;{% endif %}</div></div></div>
+    <div class="stat kpi"><div><div class="stat-label">{% translate "Incidents" %}</div>
+      <div class="stat-value">{{ report.incidents|length }}</div>
+      <div class="small muted">{% blocktranslate count counter=report.failed %}{{ counter }} failed check{% plural %}{{ counter }} failed checks{% endblocktranslate %}</div></div></div>
+    <div class="stat kpi"><div><div class="stat-label">{% translate "Downtime" %}</div>
+      <div class="stat-value">{{ report.downtime|duration }}</div>
+      <div class="small muted">{% if monitor.last_checked_at %}{% blocktranslate with when=monitor.last_checked_at|timesince %}checked {{ when }} ago{% endblocktranslate %}{% else %}{% translate "not checked yet" %}{% endif %}</div></div></div>
+  </div>
+
+  <section class="box">
+    <div class="box-header"><strong class="grow">{% translate "Last 90 days" %}</strong><span class="muted small">{% translate "uptime per day (UTC)" %}</span></div>
+    <div class="box-body">
+      {% include "uptime/_bars.html" with bars=report.bars %}
+      {% include "uptime/_legend.html" with days=report.bars|length %}
+    </div>
+  </section>
+
+  <figure class="box chart-card" data-area-chart="response_ms">
+    <figcaption class="box-header">
+      <strong class="grow">{% translate "Response time (ms)" %}</strong>
+      <span class="muted small">{% if report.days == 1 %}{% translate "Last 24 hours, hourly average (UTC)" %}{% else %}{% blocktranslate with days=report.days %}Last {{ days }} days, daily average{% endblocktranslate %}{% endif %}</span>
+    </figcaption>
+    {% if report.series %}
+      <div class="chart-plot" role="img" aria-label="{% translate 'Response time (ms)' %}"></div>
+      <details class="chart-table">
+        <summary class="small">{% translate "Show as table" %}</summary>
+        <table class="list small">
+          <thead><tr><th>{% if report.days == 1 %}{% translate "Hour" %}{% else %}{% translate "Day" %}{% endif %}</th><th>ms</th></tr></thead>
+          <tbody>{% for point in report.series %}<tr><td>{{ point.date }}{% if point.hour is not None %} {{ point.hour|stringformat:"02d" }}:00{% endif %}</td><td class="num">{{ point.response_ms }}</td></tr>{% endfor %}</tbody>
+        </table>
+      </details>
+    {% else %}
+      <p class="muted small box-body">{% translate "No data for this period." %}</p>
+    {% endif %}
+  </figure>
+
+  <section class="box">
+    <div class="box-header"><strong>{% translate "Incidents" %}</strong></div>
+    {% if report.incidents %}
+      <table class="list small">
+        <thead><tr><th>{% translate "Started" %}</th><th>{% translate "Resolved" %}</th><th>{% translate "Duration" %}</th><th>{% translate "Error" %}</th></tr></thead>
+        <tbody>
+          {% for incident in report.incidents %}
+            <tr>
+              <td>{{ incident.started_at|date:"d M Y H:i" }}</td>
+              <td>{% if incident.ended_at %}{{ incident.ended_at|date:"d M Y H:i" }}{% else %}<span class="status status-down">{% icon 'x' 12 %} {% translate "Ongoing" %}</span>{% endif %}</td>
+              <td>{{ incident.duration|duration }}</td>
+              <td class="mono">{{ incident.error|default:"—" }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p class="muted small box-body">{% translate "No incidents in this period." %}</p>
+    {% endif %}
+  </section>
+
+  <section class="box">
+    <div class="box-header"><strong>{% translate "Latest checks" %}</strong></div>
+    {% if recent %}
+      <table class="list small">
+        <thead><tr><th>{% translate "Time" %}</th><th>{% translate "Result" %}</th><th>HTTP</th><th>ms</th><th>{% translate "Error" %}</th></tr></thead>
+        <tbody>
+          {% for check in recent %}
+            <tr>
+              <td>{{ check.created_at|date:"d M H:i:s" }}</td>
+              <td>{% if check.ok %}<span class="status status-up">{% icon 'check' 12 %} {% translate "Up" %}</span>{% else %}<span class="status status-down">{% icon 'x' 12 %} {% translate "Down" %}</span>{% endif %}</td>
+              <td class="num">{{ check.status_code|default:"—" }}</td>
+              <td class="num">{{ check.response_ms|default_if_none:"—" }}</td>
+              <td class="mono">{{ check.error|default:"" }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p class="muted small box-body">{% translate "Waiting for the first check." %}</p>
+    {% endif %}
+  </section>
+
+  {% if project.role != "viewer" %}
+    <form method="post" class="box" id="settings">
+      <div class="box-header">{% icon 'gear' %} <strong>{% translate "Settings" %}</strong></div>
+      <div class="box-body">
+        {% include "uptime/_form.html" with action="update" %}
+        <button class="btn btn-primary" type="submit">{% translate "Save" %}</button>
+      </div>
+    </form>
+    <form method="post" data-confirm="{% translate 'Delete this monitor and its history?' %}">{% csrf_token %}
+      <input type="hidden" name="action" value="delete">
+      <button class="btn btn-danger" type="submit">{% icon 'trash' 14 %} {% translate "Delete monitor" %}</button>
+    </form>
+  {% endif %}
+</div>
+{{ report.series|json_script:"analytics-series" }}
+<script src="{% static 'js/analytics.js' %}" defer></script>
+{% endblock %}

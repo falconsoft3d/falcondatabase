@@ -1,0 +1,8 @@
+{% load i18n %}{# Expects: days #}
+  <div class="uptime-bars-axis small muted">
+    <span>{% blocktranslate count counter=days %}{{ counter }} day ago{% plural %}{{ counter }} days ago{% endblocktranslate %}</span>
+    <span class="uptime-legend">
+      <span><i class="up"></i>100%</span><span><i class="degraded"></i>≥ 95%</span><span><i class="down"></i>&lt; 95%</span><span><i></i>{% translate "No data" %}</span>
+    </span>
+    <span>{% translate "Today" %}</span>
+  </div>

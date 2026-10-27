@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     "analytics",
     "portal",
     "storage",
+    "uptime",
 ]
 
 MIDDLEWARE = [
@@ -159,3 +160,24 @@ FALCONDB_MAX_PAGE_SIZE = int(os.environ.get("FALCONDB_MAX_PAGE_SIZE", 1000))
 # Contact shown in the site footer.
 FALCONDB_CONTACT_NAME = os.environ.get("FALCONDB_CONTACT_NAME", "Marlon Falcon Hernández")
 FALCONDB_CONTACT_EMAIL = os.environ.get("FALCONDB_CONTACT_EMAIL", "mfalconsoft@gmail.com")
+
+# Uptime monitoring: the worker (`manage.py uptime_worker`) requests each monitor's URL.
+FALCONDB_UPTIME_DEFAULT_INTERVAL = int(os.environ.get("FALCONDB_UPTIME_DEFAULT_INTERVAL", 5))  # minutes
+FALCONDB_UPTIME_TIMEOUT = int(os.environ.get("FALCONDB_UPTIME_TIMEOUT", 10))  # seconds per request
+FALCONDB_UPTIME_RETENTION_DAYS = int(os.environ.get("FALCONDB_UPTIME_RETENTION_DAYS", 90))
+FALCONDB_UPTIME_MAX_MONITORS = int(os.environ.get("FALCONDB_UPTIME_MAX_MONITORS", 20))  # per project
+# Allow monitoring private and local addresses (10.x, 192.168.x, localhost…). Off by default so
+# accounts can't probe the server's internal network.
+FALCONDB_UPTIME_ALLOW_PRIVATE = env_bool("FALCONDB_UPTIME_ALLOW_PRIVATE", False)
+
+# Email (uptime alerts). Without EMAIL_HOST, emails are only written to the log.
+EMAIL_HOST = os.environ.get("EMAIL_HOST", "")
+EMAIL_BACKEND = ("django.core.mail.backends.smtp.EmailBackend" if EMAIL_HOST
+                 else "django.core.mail.backends.console.EmailBackend")
+EMAIL_PORT = int(os.environ.get("EMAIL_PORT", 587))
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER", "")
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD", "")
+EMAIL_USE_TLS = env_bool("EMAIL_USE_TLS", EMAIL_PORT == 587)
+EMAIL_USE_SSL = env_bool("EMAIL_USE_SSL", EMAIL_PORT == 465)
+EMAIL_TIMEOUT = 15
+DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL", EMAIL_HOST_USER or "falcondatabase@localhost")

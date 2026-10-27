@@ -699,3 +699,36 @@ a.tag:hover { text-decoration: underline; }
   -webkit-mask-image: radial-gradient(ellipse 46% 52% at 50% 42%, rgba(0, 0, 0, .25), #000 78%);
   mask-image: radial-gradient(ellipse 46% 52% at 50% 42%, rgba(0, 0, 0, .25), #000 78%);
 }
+
+/* --- uptime (status colors validated for both themes; always shown with an icon or a label) --- */
+:root { --uptime-up: #2fa9a3; --uptime-degraded: #bb8c12; --uptime-down: #d83a42; --uptime-none: #30363d; }
+:root[data-theme="light"] { --uptime-up: #00907f; --uptime-degraded: #bf8700; --uptime-down: #cf222e; --uptime-none: #dde5d4; }
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) { --uptime-up: #00907f; --uptime-degraded: #bf8700; --uptime-down: #cf222e; --uptime-none: #dde5d4; }
+}
+.status { display: inline-flex; align-items: center; gap: 4px; font-weight: 600; font-size: 12px; white-space: nowrap; }
+.status .icon { flex: none; }
+.status-up { color: var(--uptime-up); }
+.status-down { color: var(--uptime-down); }
+.status-unknown, .status-paused { color: var(--fg-muted); }
+.dot-down { width: 8px; height: 8px; border-radius: 50%; background: var(--uptime-down); display: inline-block; }
+.uptime-bars { display: flex; gap: 2px; height: 28px; align-items: stretch; }
+.uptime-bars span { flex: 1 1 0; min-width: 2px; border-radius: 2px; background: var(--uptime-none); }
+.uptime-bars span.up { background: var(--uptime-up); }
+.uptime-bars span.degraded { background: var(--uptime-degraded); }
+.uptime-bars span.down { background: var(--uptime-down); }
+.uptime-bars span:hover { outline: 1px solid var(--fg-muted); outline-offset: 1px; }
+.uptime-bars-axis { display: flex; justify-content: space-between; margin-top: 4px; }
+.uptime-legend { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+.uptime-legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 4px; vertical-align: -1px; background: var(--uptime-none); }
+.uptime-legend i.up { background: var(--uptime-up); }
+.uptime-legend i.degraded { background: var(--uptime-degraded); }
+.uptime-legend i.down { background: var(--uptime-down); }
+.monitor-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px 24px; padding: 14px 16px; border-top: 1px solid var(--border-muted); }
+.monitor-row:first-child { border-top: 0; }
+.monitor-title { display: flex; gap: 10px; align-items: baseline; min-width: 0; flex-wrap: wrap; }
+.monitor-title a { font-weight: 600; overflow-wrap: anywhere; }
+.monitor-numbers { display: flex; gap: 20px; font-variant-numeric: tabular-nums; text-align: right; }
+.monitor-numbers strong { display: block; font-size: 15px; }
+.monitor-row .uptime-bars { grid-column: 1 / -1; height: 22px; }
+@media (max-width: 700px) { .monitor-row { grid-template-columns: 1fr; } .monitor-numbers { text-align: left; } }

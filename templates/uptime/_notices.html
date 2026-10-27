@@ -1,0 +1,7 @@
+{% load i18n falcon %}{# Expects: worker_stale, email_configured #}
+{% if worker_stale %}
+  <div class="flash flash-warning">{% icon 'zap' %} <span>{% blocktranslate %}Checks are overdue: the uptime worker does not seem to be running. Start it with <code class="inline">python manage.py uptime_worker</code> (with Docker it is the <code class="inline">uptime</code> service).{% endblocktranslate %}</span></div>
+{% endif %}
+{% if not email_configured and not hide_email_notice %}
+  <div class="flash flash-info">{% icon 'zap' %} <span>{% blocktranslate %}Email alerts are written to the server log until SMTP is configured (<code class="inline">EMAIL_HOST</code> in <code class="inline">.env</code>). Webhooks work already.{% endblocktranslate %}</span></div>
+{% endif %}

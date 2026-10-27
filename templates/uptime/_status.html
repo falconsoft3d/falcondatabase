@@ -1,0 +1,5 @@
+{% load i18n falcon %}{# Expects: m (monitor) #}
+{% if not m.enabled %}<span class="status status-paused">{% icon 'x' 12 %} {% translate "Paused" %}</span>
+{% elif m.status == "up" %}<span class="status status-up">{% icon 'check' 12 %} {% translate "Up" %}</span>
+{% elif m.status == "down" %}<span class="status status-down">{% icon 'x' 12 %} {% translate "Down" %}</span>
+{% else %}<span class="status status-unknown">{% icon 'refresh' 12 %} {% translate "Pending" %}</span>{% endif %}

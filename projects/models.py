@@ -91,6 +91,10 @@ class Project(models.Model):
     def portal_url(self):
         return reverse("portal:home", args=[self.owner.username, self.portal_slug]) if self.portal_slug else ""
 
+    def monitors_down(self):
+        """Number of enabled uptime monitors that are down."""
+        return self.monitors.filter(enabled=True, status="down").count()
+
     def analytics_hosts(self):
         return [d.strip().lower() for d in self.analytics_domains.split(",") if d.strip()]
 
