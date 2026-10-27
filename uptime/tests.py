@@ -208,6 +208,24 @@ class ViewTests(TestCase):
         self.assertEqual(self.client.get(monitor.get_absolute_url()).status_code, 404)
         self.assertNotContains(self.client.get(reverse("uptime")), "shop.example")
 
+    def test_check_all_now(self):
+        Monitor.objects.create(project=self.project, url="https://shop.example/")
+        Monitor.objects.create(project=self.project, url="https://blog.example/")
+        Monitor.objects.create(project=self.project, url="https://old.example/", enabled=False)
+        results = {"https://shop.example/": Result(ok=True, status_code=200, response_ms=50),
+                   "https://blog.example/": Result(ok=False, error="HTTP 500")}
+        self.client.force_login(self.owner)
+        with mock.patch("uptime.checker.MAX_PARALLEL", 1), mock.patch("uptime.checker.probe", side_effect=results.get):
+            response = self.client.post(reverse("uptime"), {"action": "check_all"}, follow=True)
+        self.assertContains(response, "2 monitors checked: 1 up, 1 down.")
+        self.assertEqual(Check.objects.count(), 2)
+        self.assertGreater(Monitor.objects.get(url="https://shop.example/").next_check_at, timezone.now())
+
+        self.client.force_login(self.viewer)  # viewers can't trigger checks
+        self.assertNotContains(self.client.get(reverse("uptime")), "check_all")
+        self.client.post(reverse("uptime"), {"action": "check_all"})
+        self.assertEqual(Check.objects.count(), 2)
+
     def test_check_now(self):
         monitor = Monitor.objects.create(project=self.project, url="https://shop.example/")
         self.client.force_login(self.owner)

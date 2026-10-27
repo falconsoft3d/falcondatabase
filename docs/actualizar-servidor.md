@@ -29,6 +29,18 @@ Comprueba con `curl -s http://127.0.0.1:8000/healthz` que la versión es la nuev
 
 **Extensión de Chrome:** si la versión trae cambios en la extensión, vuelve a descargarla desde la página **Extensión** de la web (`/extension/`), descomprímela encima de la carpeta anterior y pulsa **Recargar** (↻) en `chrome://extensions`. No hace falta volver a iniciar sesión.
 
+**Monitor de uptime (desde la 0.9.0):** `./install.sh` arranca solo el nuevo contenedor `uptime`, que comprueba los sitios. Míralo con `docker compose ps` y sus registros con `docker compose logs -f uptime`. Para que los avisos lleguen por email, añade al `.env` los datos SMTP y vuelve a ejecutar `./install.sh`:
+
+```bash
+EMAIL_HOST=smtp.gmail.com
+EMAIL_PORT=587
+EMAIL_HOST_USER=tu-cuenta@gmail.com
+EMAIL_HOST_PASSWORD=contraseña-de-aplicación
+DEFAULT_FROM_EMAIL="falcondatabase <tu-cuenta@gmail.com>"
+```
+
+Sin `EMAIL_HOST` los emails solo se escriben en el log (los webhooks funcionan igual).
+
 Para la rutina completa (sistema operativo, Docker, copias y qué hacer si algo falla) sigue los pasos de abajo.
 
 ---

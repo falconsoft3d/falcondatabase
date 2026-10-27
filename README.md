@@ -36,6 +36,7 @@ Create projects, add real PostgreSQL tables and user login to them, and query ev
 - **Web analytics** per project with one cookie-free `<script>` tag: sessions, users, pageviews, countries, mediums, sources, pages, devices and browsers. `/analytics/` combines all your projects or a selection.
 - **Dashboard KPIs**: ten headline numbers (projects, tables, rows, storage, app users, new and active users, visitors, pageviews, bounce rate).
 - **Contribution graph** of the last year, GitHub style, for all your projects or one, plus a recent activity list per project.
+- **Uptime monitoring**: every website of a project is requested every 1–60 minutes; 90 days of history with uptime per day, response time charts and incidents, and an email or webhook (Slack, Discord…) when a site goes down and when it comes back. `/uptime/` shows every monitor.
 - **Chrome extension** with your analytics and today's visits on its icon: download it from `/extension/` and follow the installation guide in the blog.
 
 **Teams and accounts**
@@ -197,6 +198,20 @@ The script (~1 KB) sends one page view per page load and per client-side navigat
 Behind a reverse proxy, set `FALCONDB_TRUST_PROXY=true` so the visitor IP is read from `X-Forwarded-For`. It defaults to the value of `USE_HTTPS`.
 
 **Site analytics.** The admin can also measure visits to falcondatabase's own public pages (home, blog, docs, versions, sign in and sign up): **Users** → **Site analytics** → **Measure visits to this site**. This creates a project called "falcondatabase site" owned by the admin, whose charts appear in `/analytics/`. Dashboards and portals are never measured.
+
+## Uptime monitoring
+
+1. Open a project → **Uptime**, enter the website address and the interval (every 1, 5, 10, 15, 30 or 60 minutes) → **Add monitor**. If the project has analytics domains, **Monitor them** adds them all in one click (also from `/uptime/`).
+2. The **uptime worker** requests each URL on schedule. Any answer below 400 counts as up; a failed request is retried once before it counts as down. With Docker it is the `uptime` service; in development run it in a second terminal:
+
+   ```bash
+   .venv/bin/python manage.py uptime_worker          # forever, looks for due monitors every 30 s
+   .venv/bin/python manage.py uptime_worker --once   # one round (for cron)
+   ```
+
+3. When a site goes down an incident opens and, if **Email me** is checked, the project owner gets an email; another one arrives when it comes back. A **webhook** URL receives a JSON POST (`event`, `url`, `error`, `text`…) that Slack and Discord show as a message.
+
+Emails need SMTP settings in `.env` (`EMAIL_HOST`, `EMAIL_PORT`, `EMAIL_HOST_USER`, `EMAIL_HOST_PASSWORD`, `DEFAULT_FROM_EMAIL`); without them they are written to the log. Private addresses (localhost, 10.x, 192.168.x…) are refused unless `FALCONDB_UPTIME_ALLOW_PRIVATE=true`. Checks older than 90 days are deleted (`FALCONDB_UPTIME_RETENTION_DAYS`).
 
 ## Portal
 

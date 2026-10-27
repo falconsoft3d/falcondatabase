@@ -33,6 +33,18 @@ document.addEventListener("submit", (event) => {
   if (message && !window.confirm(message)) event.preventDefault();
 });
 
+// Slow forms: <form data-busy="Working…"> disables its button and shows the text until the page reloads.
+document.addEventListener("submit", (event) => {
+  const form = event.target;
+  if (event.defaultPrevented || !form.dataset.busy) return;
+  const button = form.querySelector("button[type=submit]");
+  if (!button) return;
+  setTimeout(() => {
+    button.disabled = true;
+    button.textContent = form.dataset.busy;
+  });
+});
+
 // New table: dynamic column rows.
 const columnList = document.querySelector("[data-columns]");
 if (columnList) {

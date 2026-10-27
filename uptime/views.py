@@ -54,6 +54,18 @@ def overview(request):
         messages.success(request, _("%(count)s monitors added. The first check runs within a minute.") % {"count": created})
         return redirect("uptime")
 
+    if request.method == "POST" and request.POST.get("action") == "check_all":
+        now = timezone.now()
+        due = list(Monitor.objects.filter(project__in=editable, enabled=True).select_related("project__owner"))
+        results = checker.check_many(due)
+        for monitor in due:
+            monitor.schedule_next(now)  # the worker doesn't repeat it right away
+        Monitor.objects.bulk_update(due, ["next_check_at"])
+        down = sum(1 for result in results if not (result and result.ok))
+        messages.success(request, _("%(count)s monitors checked: %(up)s up, %(down)s down.")
+                         % {"count": len(due), "up": len(due) - down, "down": down})
+        return redirect("uptime")
+
     monitors = stats.annotate(list(Monitor.objects.filter(project__in=projects)
                                    .select_related("project__owner").order_by("project__name", "url")))
     suggestions = [(p, hosts) for p in editable if (hosts := unmonitored_hosts(p))]
@@ -64,6 +76,7 @@ def overview(request):
         "down": sum(m.enabled and m.status == Monitor.DOWN for m in monitors),
         "paused": sum(not m.enabled for m in monitors),
         "worker_stale": worker_stale(monitors),
+        "can_check": any(m.enabled and m.project in editable for m in monitors),
     })
 
 

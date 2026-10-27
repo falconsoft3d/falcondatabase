@@ -4429,3 +4429,15 @@ msgid "%(counter)s paused"
 msgid_plural "%(counter)s paused"
 msgstr[0] "%(counter)s pausado"
 msgstr[1] "%(counter)s pausados"
+
+msgid "Check all now"
+msgstr "Comprobar todos ahora"
+
+msgid "Checking…"
+msgstr "Comprobando…"
+
+msgid "Request every enabled website now, without waiting for its turn"
+msgstr "Consulta ahora todos los sitios activos, sin esperar a su turno"
+
+msgid "%(count)s monitors checked: %(up)s up, %(down)s down."
+msgstr "%(count)s monitores comprobados: %(up)s activos, %(down)s caídos."

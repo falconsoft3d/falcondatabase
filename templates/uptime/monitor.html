@@ -52,7 +52,7 @@
     </div>
   </section>
 
-  <figure class="box chart-card" data-area-chart="response_ms">
+  <figure class="box chart-card"{% if report.series %} data-area-chart="response_ms"{% endif %}>
     <figcaption class="box-header">
       <strong class="grow">{% translate "Response time (ms)" %}</strong>
       <span class="muted small">{% if report.days == 1 %}{% translate "Last 24 hours, hourly average (UTC)" %}{% else %}{% blocktranslate with days=report.days %}Last {{ days }} days, daily average{% endblocktranslate %}{% endif %}</span>

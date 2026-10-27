@@ -126,19 +126,21 @@ def _check_in_thread(monitor):
         connection.close()  # each thread has its own database connection
 
 
+def check_many(monitors, parallel=None):
+    """Check the monitors, ``parallel`` at a time. Returns their results (None if a check crashed)."""
+    workers = min(parallel or MAX_PARALLEL, len(monitors))
+    if workers <= 1:
+        return [check(monitor) for monitor in monitors]
+    with ThreadPoolExecutor(max_workers=workers) as pool:
+        return list(pool.map(_check_in_thread, monitors))
+
+
 def run_due(now=None, parallel=None):
-    """Check every due monitor, ``parallel`` at a time. Returns how many were checked."""
+    """Check every due monitor. Returns how many were checked."""
     due = claim_due(now)
     if not due:
         return 0
-    due = list(Monitor.objects.filter(pk__in=[m.pk for m in due]).select_related("project__owner"))
-    workers = min(parallel or MAX_PARALLEL, len(due))
-    if workers == 1:
-        for monitor in due:
-            check(monitor)
-    else:
-        with ThreadPoolExecutor(max_workers=workers) as pool:
-            list(pool.map(_check_in_thread, due))
+    check_many(list(Monitor.objects.filter(pk__in=[m.pk for m in due]).select_related("project__owner")), parallel)
     return len(due)
 
 

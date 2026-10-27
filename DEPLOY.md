@@ -32,6 +32,7 @@ This guide installs falcondatabase on a server with Docker, step by step, and co
 |---|---|---|
 | `db` | `postgres:16-alpine` | Database. Data lives in the `pgdata` volume. Not exposed outside Docker. |
 | `web` | built from `Dockerfile` | The app: Gunicorn + Django. Static files are served by WhiteNoise. Runs database migrations on every start. Uploaded files live in the `storage` volume. |
+| `uptime` | same image as `web` | Uptime worker (`manage.py uptime_worker`): requests the monitored websites on schedule and sends the alerts. |
 | `caddy` | `caddy:2` | Only with HTTPS. Gets and renews a Let's Encrypt certificate and proxies to `web`. |
 
 Files involved:
@@ -40,7 +41,7 @@ Files involved:
 |---|---|
 | `install.sh` | Interactive installer and updater |
 | `Dockerfile` | Production image (Python 3.13, translations compiled, static files collected) |
-| `docker-compose.yml` | `db` + `web` |
+| `docker-compose.yml` | `db` + `web` + `uptime` |
 | `docker-compose.https.yml` | `caddy`. The installer copies it to `docker-compose.override.yml` when HTTPS is enabled. |
 | `docker/Caddyfile` | Caddy configuration |
 | `docker/entrypoint.sh` | Runs `migrate`, then Gunicorn |
@@ -390,6 +391,7 @@ For HTTPS with Caddy: `cp docker-compose.https.yml docker-compose.override.yml`,
 docker compose ps                      # status and health
 docker compose logs -f web             # application logs (Ctrl+C to exit)
 docker compose logs -f caddy           # HTTPS proxy logs
+docker compose logs -f uptime          # uptime checks and alerts
 docker compose restart web             # restart the app
 docker compose down                    # stop everything (data is kept)
 docker compose up -d                   # start again
@@ -559,6 +561,15 @@ All settings live in `.env`. After editing it, apply the changes with `docker co
 | `FALCONDB_STORAGE_MAX_FILE_MB` | – (50) | Maximum size of one uploaded file |
 | `FALCONDB_STORAGE_QUOTA_MB` | – (1024) | Maximum storage per project |
 | `LOG_LEVEL` | – (`INFO`) | Application log level |
+| `FALCONDB_UPTIME_DEFAULT_INTERVAL` | – (5) | Check interval of new uptime monitors, in minutes (1, 5, 10, 15, 30 or 60) |
+| `FALCONDB_UPTIME_TIMEOUT` | – (10) | Seconds before an uptime request counts as failed |
+| `FALCONDB_UPTIME_RETENTION_DAYS` | – (90) | Days of uptime check history kept |
+| `FALCONDB_UPTIME_MAX_MONITORS` | – (20) | Maximum uptime monitors per project |
+| `FALCONDB_UPTIME_ALLOW_PRIVATE` | – (`false`) | Allow monitoring private addresses (localhost, 10.x, 192.168.x…). Leave it off if other people have accounts. |
+| `EMAIL_HOST` / `EMAIL_PORT` | – / – (587) | SMTP server for the uptime alerts. Without `EMAIL_HOST`, emails are only written to the log. |
+| `EMAIL_HOST_USER` / `EMAIL_HOST_PASSWORD` | – | SMTP credentials (with Gmail, an app password) |
+| `EMAIL_USE_TLS` / `EMAIL_USE_SSL` | – (by port) | STARTTLS (port 587) or SSL (port 465) |
+| `DEFAULT_FROM_EMAIL` | – | Sender of the alerts, e.g. `falcondatabase <alerts@example.com>` |
 
 ## Security checklist
 

@@ -6,6 +6,25 @@ Change kinds: "added", "improved", "fixed".
 
 RELEASES = [
     {
+        "version": "0.9.0",
+        "date": "2026-10-27",
+        "title": {"en": "Uptime monitoring", "es": "Monitor de uptime"},
+        "changes": [
+            ("added", "\"Uptime\" tab in every project: add the address of a website and it is requested every 1, 5, 10, 15, 30 or 60 minutes (5 by default). A failed request is retried once before it counts as down.",
+                      "Pestaña \"Uptime\" en cada proyecto: añade la dirección de un sitio web y se consulta cada 1, 5, 10, 15, 30 o 60 minutos (5 por defecto). Una petición fallida se reintenta una vez antes de contar como caída."),
+            ("added", "History and charts for each monitor: uptime per day for the last 90 days, response time, uptime percentage, incidents with their duration and the latest checks, for 24 hours, 7, 30 or 90 days.",
+                      "Historial y gráficas de cada monitor: disponibilidad por día de los últimos 90 días, tiempo de respuesta, porcentaje de uptime, caídas con su duración y las últimas comprobaciones, para 24 horas, 7, 30 o 90 días."),
+            ("added", "Alerts when a site goes down and when it comes back: an email to the project owner (if enabled on the monitor) and an optional webhook for Slack, Discord or any service.",
+                      "Avisos cuando un sitio se cae y cuando vuelve: un email al dueño del proyecto (si está activado en el monitor) y un webhook opcional para Slack, Discord o cualquier servicio."),
+            ("added", "/uptime/ page with every monitor of your projects, and one click to monitor the domains of your analytics.",
+                      "Página /uptime/ con todos los monitores de tus proyectos y un clic para monitorizar los dominios de tu analítica."),
+            ("added", "\"Check all now\" button in /uptime/ to request every website at once, without waiting for its turn.",
+                      "Botón \"Comprobar todos ahora\" en /uptime/ para consultar todos los sitios a la vez, sin esperar a su turno."),
+            ("added", "New \"uptime\" service in Docker (manage.py uptime_worker) and SMTP settings in .env for the emails.",
+                      "Nuevo servicio \"uptime\" en Docker (manage.py uptime_worker) y ajustes SMTP en el .env para los emails."),
+        ],
+    },
+    {
         "version": "0.8.0",
         "date": "2026-10-27",
         "title": {"en": "Manage it with AI", "es": "Gestiónalo con IA"},
