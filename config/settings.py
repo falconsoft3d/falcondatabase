@@ -36,8 +36,14 @@ CSRF_FAILURE_VIEW = "core.views.csrf_failure"
 
 # Behind an HTTPS reverse proxy (Caddy, nginx...) that sets X-Forwarded-Proto.
 USE_HTTPS = env_bool("USE_HTTPS", False)
-if USE_HTTPS:
+# Trust the X-Forwarded-* headers of the reverse proxy: X-Forwarded-For gives the visitor IP
+# for analytics and X-Forwarded-Proto tells Django the request came over HTTPS, so the URLs it
+# builds (OAuth metadata for Claude's connectors, among others) use https://. Set it to true
+# behind your own nginx or Apache (USE_HTTPS=true would also start the bundled Caddy).
+FALCONDB_TRUST_PROXY = env_bool("FALCONDB_TRUST_PROXY", USE_HTTPS)
+if FALCONDB_TRUST_PROXY:
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+if USE_HTTPS:
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
     SECURE_HSTS_SECONDS = int(os.environ.get("SECURE_HSTS_SECONDS", 0))
@@ -153,8 +159,6 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 FALCONDB_CORS_ORIGINS = env_list("FALCONDB_CORS_ORIGINS", "*")
 # Lifetime of the tokens issued to the end users of each project (seconds).
 FALCONDB_TOKEN_MAX_AGE = int(os.environ.get("FALCONDB_TOKEN_MAX_AGE", 60 * 60 * 24 * 7))
-# Trust X-Forwarded-For (set by the reverse proxy) to get the visitor IP for analytics.
-FALCONDB_TRUST_PROXY = env_bool("FALCONDB_TRUST_PROXY", USE_HTTPS)
 # Maximum number of rows returned by a single API request.
 FALCONDB_MAX_PAGE_SIZE = int(os.environ.get("FALCONDB_MAX_PAGE_SIZE", 1000))
 # Contact shown in the site footer.
