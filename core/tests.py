@@ -460,7 +460,7 @@ class OAuthTests(TestCase):
 
         with override_settings(SECURE_PROXY_SSL_HEADER=("HTTP_X_FORWARDED_PROTO", "https")):
             server = self.client.get("/.well-known/oauth-authorization-server",
-                                     headers={"X-Forwarded-Proto": "https"}).json()
+                                     headers={"Host": "testserver", "X-Forwarded-Proto": "https"}).json()
         self.assertEqual(server["registration_endpoint"], "https://testserver/oauth/register")
 
     def test_register_validates_redirect_uris(self):
