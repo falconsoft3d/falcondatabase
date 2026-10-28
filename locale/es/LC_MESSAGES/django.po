@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-27 12:41+0000\n"
+"POT-Creation-Date: 2026-10-28 09:12+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -69,13 +69,14 @@ msgstr "Analítica activada."
 msgid "Analytics disabled."
 msgstr "Analítica desactivada."
 
-#: api/ai.py:37
+#: api/ai.py:38
 msgid ""
 "Invalid or missing AI token. Send it in “Authorization: Bearer fdb_ai_…”."
-msgstr "Token de IA inválido o ausente. Envíalo en «Authorization: Bearer fdb_ai_…»."
+msgstr ""
+"Token de IA inválido o ausente. Envíalo en «Authorization: Bearer fdb_ai_…»."
 
-#: api/ai.py:51 api/ai.py:62 api/ai.py:121 api/views.py:61
-#: core/account_api.py:67
+#: api/ai.py:54 api/ai.py:65 api/ai.py:124 api/views.py:61
+#: core/account_api.py:67 core/oauth.py:106 core/oauth.py:213 core/oauth.py:237
 #, python-format
 msgid "Method %(method)s not allowed."
 msgstr "Método %(method)s no permitido."
@@ -191,7 +192,7 @@ msgstr "Esta tabla es privada: solo se accede con la service key."
 msgid "Project not found."
 msgstr "Proyecto no encontrado."
 
-#: api/views.py:91
+#: api/views.py:91 core/oauth.py:112
 msgid "The request body is not valid JSON."
 msgstr "El cuerpo de la petición no es JSON válido."
 
@@ -285,18 +286,47 @@ msgstr "Ese nombre de usuario ya está en uso."
 msgid "An account with that email already exists."
 msgstr "Ya existe una cuenta con ese email."
 
-#: core/models.py:14
+#: core/models.py:16
 msgid "allow sign up"
 msgstr "permitir registro"
 
-#: core/models.py:103 projects/models.py:31 storage/models.py:19
+#: core/models.py:110 projects/models.py:31 storage/models.py:19
 msgid "name"
 msgstr "nombre"
 
-#: core/models.py:107 templates/core/ai_tokens.html:23
+#: core/models.py:114 templates/core/ai_tokens.html:23
 #: templates/projects/ai.html:66
 msgid "read only"
 msgstr "solo lectura"
+
+#: core/oauth.py:115
+#, python-format
+msgid "Send between 1 and %(n)s redirect_uris."
+msgstr "Envía entre 1 y %(n)s redirect_uris."
+
+#: core/oauth.py:118
+msgid "Redirect URIs must use HTTPS (or HTTP to localhost)."
+msgstr "Las URI de redirección deben usar HTTPS (o HTTP a localhost)."
+
+#: core/oauth.py:119 core/views.py:115 projects/views.py:409
+msgid "AI assistant"
+msgstr "Asistente de IA"
+
+#: core/oauth.py:154
+msgid "This connection link is not valid. Start again from your assistant."
+msgstr "Este enlace de conexión no es válido. Empieza de nuevo desde tu asistente."
+
+#: core/oauth.py:222
+msgid "The authorization code is invalid or expired."
+msgstr "El código de autorización no es válido o ha caducado."
+
+#: core/oauth.py:228
+msgid "The refresh token is invalid or expired."
+msgstr "El token de renovación no es válido o ha caducado."
+
+#: core/oauth.py:231
+msgid "Use authorization_code or refresh_token."
+msgstr "Usa authorization_code o refresh_token."
 
 #: core/views.py:91
 msgid "fdb_ai_YOUR_TOKEN"
@@ -304,11 +334,8 @@ msgstr "fdb_ai_TU_TOKEN"
 
 #: core/views.py:110 projects/views.py:407
 msgid "Token revoked. Assistants using it lose access immediately."
-msgstr "Token revocado. Los asistentes que lo usaban pierden el acceso al instante."
-
-#: core/views.py:115 projects/views.py:409
-msgid "AI assistant"
-msgstr "Asistente de IA"
+msgstr ""
+"Token revocado. Los asistentes que lo usaban pierden el acceso al instante."
 
 #: core/views.py:141
 msgid "Sign up is disabled. Ask the administrator for an account."
@@ -498,7 +525,7 @@ msgstr "Único"
 msgid "Password"
 msgstr "Contraseña"
 
-#: projects/models.py:33 projects/models.py:127
+#: projects/models.py:33 projects/models.py:131
 msgid "description"
 msgstr "descripción"
 
@@ -535,161 +562,161 @@ msgstr "portal público"
 msgid "storage enabled"
 msgstr "almacenamiento activado"
 
-#: projects/models.py:111
+#: projects/models.py:115
 msgid "Public — anyone with the anon key can read and write"
 msgstr "Pública — cualquiera con la anon key puede leer y escribir"
 
-#: projects/models.py:112
+#: projects/models.py:116
 msgid "Public read — anyone reads, only signed-in users write"
 msgstr "Lectura pública — leer libre, escribir solo usuarios con login"
 
-#: projects/models.py:113
+#: projects/models.py:117
 msgid "Signed-in users — only authenticated users read and write"
 msgstr "Usuarios con login — solo usuarios autenticados leen y escriben"
 
-#: projects/models.py:114
+#: projects/models.py:118
 msgid "Owner — each user only sees and edits their own rows"
 msgstr "Dueño — cada usuario solo ve y edita sus propias filas"
 
-#: projects/models.py:115
+#: projects/models.py:119
 msgid "Private — service key only"
 msgstr "Privada — solo con la service key"
 
-#: projects/models.py:118 storage/models.py:20 templates/projects/_keys.html:10
+#: projects/models.py:122 storage/models.py:20 templates/projects/_keys.html:10
 #: templates/storage/bucket.html:11 templates/storage/dashboard.html:34
 msgid "public"
 msgstr "pública"
 
-#: projects/models.py:119
+#: projects/models.py:123
 msgid "public read"
 msgstr "lectura pública"
 
-#: projects/models.py:120
+#: projects/models.py:124
 msgid "signed-in"
 msgstr "con login"
 
-#: projects/models.py:121
+#: projects/models.py:125
 msgid "by owner"
 msgstr "por dueño"
 
-#: projects/models.py:122 templates/storage/bucket.html:11
+#: projects/models.py:126 templates/storage/bucket.html:11
 #: templates/storage/dashboard.html:34
 msgid "private"
 msgstr "privada"
 
-#: projects/models.py:128
+#: projects/models.py:132
 msgid "access"
 msgstr "acceso"
 
-#: projects/models.py:133
+#: projects/models.py:137
 msgid "Hidden"
 msgstr "Oculta"
 
-#: projects/models.py:133 templates/portal/home.html:10
+#: projects/models.py:137 templates/portal/home.html:10
 msgid "View only"
 msgstr "Solo ver"
 
-#: projects/models.py:133 templates/portal/home.html:10
+#: projects/models.py:137 templates/portal/home.html:10
 msgid "View and edit"
 msgstr "Ver y editar"
 
-#: projects/models.py:134
+#: projects/models.py:138
 msgid "in the portal"
 msgstr "en el portal"
 
-#: projects/models.py:162
+#: projects/models.py:166
 msgid "data"
 msgstr "datos"
 
-#: projects/models.py:163 templates/projects/auth.html:21
+#: projects/models.py:167 templates/projects/auth.html:21
 msgid "active"
 msgstr "activo"
 
-#: projects/models.py:195 templates/projects/base_project.html:13
+#: projects/models.py:199 templates/projects/base_project.html:13
 msgid "Editor"
 msgstr "Editor"
 
-#: projects/models.py:195 templates/projects/base_project.html:13
+#: projects/models.py:199 templates/projects/base_project.html:13
 msgid "Viewer"
 msgstr "Lector"
 
-#: projects/models.py:199
+#: projects/models.py:203
 msgid "role"
 msgstr "rol"
 
-#: projects/models.py:215
+#: projects/models.py:219
 msgid "created the project"
 msgstr "creó el proyecto"
 
-#: projects/models.py:216
+#: projects/models.py:220
 msgid "imported the project"
 msgstr "importó el proyecto"
 
-#: projects/models.py:217
+#: projects/models.py:221
 msgid "created table"
 msgstr "creó la tabla"
 
-#: projects/models.py:218
+#: projects/models.py:222
 msgid "deleted table"
 msgstr "eliminó la tabla"
 
-#: projects/models.py:219
+#: projects/models.py:223
 msgid "added a column to"
 msgstr "agregó una columna a"
 
-#: projects/models.py:220
+#: projects/models.py:224
 msgid "removed a column from"
 msgstr "quitó una columna de"
 
-#: projects/models.py:221
+#: projects/models.py:225
 msgid "renamed a column in"
 msgstr "renombró una columna de"
 
-#: projects/models.py:222
+#: projects/models.py:226
 msgid "renamed table"
 msgstr "renombró la tabla"
 
-#: projects/models.py:223
+#: projects/models.py:227
 msgid "inserted rows in"
 msgstr "insertó filas en"
 
-#: projects/models.py:224
+#: projects/models.py:228
 msgid "updated a row in"
 msgstr "actualizó una fila en"
 
-#: projects/models.py:225
+#: projects/models.py:229
 msgid "deleted a row from"
 msgstr "eliminó una fila de"
 
-#: projects/models.py:226
+#: projects/models.py:230
 msgid "created bucket"
 msgstr "creó el bucket"
 
-#: projects/models.py:227
+#: projects/models.py:231
 msgid "uploaded files to"
 msgstr "subió archivos a"
 
-#: projects/models.py:228
+#: projects/models.py:232
 msgid "deleted a file from"
 msgstr "eliminó un archivo de"
 
-#: projects/models.py:229
+#: projects/models.py:233
 msgid "shared the project with"
 msgstr "compartió el proyecto con"
 
-#: projects/models.py:230
+#: projects/models.py:234
 msgid "added app user"
 msgstr "agregó al usuario de la app"
 
-#: projects/models.py:231
+#: projects/models.py:235
 msgid "signed up"
 msgstr "se registró"
 
-#: projects/models.py:232
+#: projects/models.py:236
 msgid "updated app user"
 msgstr "actualizó al usuario de la app"
 
-#: projects/models.py:233
+#: projects/models.py:237
 msgid "deleted app user"
 msgstr "eliminó al usuario de la app"
 
@@ -1092,7 +1119,7 @@ msgstr ""
 msgid "Go back"
 msgstr "Volver"
 
-#: templates/403.html:9 templates/base.html:27 templates/base.html:47
+#: templates/403.html:9 templates/base.html:27 templates/base.html:48
 #: templates/projects/dashboard.html:3
 msgid "Dashboard"
 msgstr "Dashboard"
@@ -1145,7 +1172,7 @@ msgstr ""
 msgid "Unknown"
 msgstr "Desconocido"
 
-#: templates/analytics/_bars.html:25
+#: templates/analytics/_bars.html:25 templates/uptime/monitor.html:70
 msgid "No data for this period."
 msgstr "Sin datos en este periodo."
 
@@ -1173,8 +1200,8 @@ msgstr "Páginas / sesión"
 msgid "Bounce rate"
 msgstr "Tasa de rebote"
 
-#: templates/analytics/_dashboard.html:21 templates/base.html:32
-#: templates/base.html:54 templates/core/_ai_tools.html:19
+#: templates/analytics/_dashboard.html:21 templates/base.html:33
+#: templates/base.html:56 templates/core/_ai_tools.html:19
 #: templates/core/ai.html:25 templates/core/users.html:3
 #: templates/core/users.html:16 templates/projects/overview.html:10
 msgid "Users"
@@ -1193,15 +1220,15 @@ msgstr "Últimos %(days)s días, por día"
 msgid "Daily chart"
 msgstr "Gráfico diario"
 
-#: templates/analytics/_dashboard.html:26
+#: templates/analytics/_dashboard.html:26 templates/uptime/monitor.html:63
 msgid "Show as table"
 msgstr "Ver como tabla"
 
-#: templates/analytics/_dashboard.html:28
+#: templates/analytics/_dashboard.html:28 templates/uptime/monitor.html:65
 msgid "Hour"
 msgstr "Hora"
 
-#: templates/analytics/_dashboard.html:28
+#: templates/analytics/_dashboard.html:28 templates/uptime/monitor.html:65
 msgid "Day"
 msgstr "Día"
 
@@ -1259,23 +1286,26 @@ msgid "vs previous %(days)s days"
 msgstr "vs. %(days)s días anteriores"
 
 #: templates/analytics/_periods.html:2 templates/analytics/overview.html:13
+#: templates/uptime/monitor.html:26
 msgid "Period"
 msgstr "Periodo"
 
 #: templates/analytics/_periods.html:4 templates/analytics/overview.html:15
+#: templates/uptime/_legend.html:7
 msgid "Today"
 msgstr "Hoy"
 
 #: templates/analytics/_periods.html:4 templates/analytics/overview.html:15
+#: templates/uptime/monitor.html:28
 #, python-format
 msgid "%(days)s days"
 msgstr "%(days)s días"
 
-#: templates/analytics/_setup.html:5 templates/base.html:52
+#: templates/analytics/_setup.html:5 templates/base.html:54
 #: templates/core/account.html:3 templates/core/account.html:6
-#: templates/projects/auth.html:83 templates/projects/base_project.html:24
+#: templates/projects/auth.html:83 templates/projects/base_project.html:25
 #: templates/projects/dashboard.html:11 templates/projects/portal.html:20
-#: templates/storage/bucket.html:62
+#: templates/storage/bucket.html:62 templates/uptime/monitor.html:119
 msgid "Settings"
 msgstr "Configuración"
 
@@ -1309,7 +1339,7 @@ msgstr ""
 #: templates/projects/auth.html:93 templates/projects/portal.html:60
 #: templates/projects/settings.html:19
 #: templates/projects/table_structure.html:82 templates/storage/bucket.html:66
-#: templates/storage/dashboard.html:17
+#: templates/storage/dashboard.html:17 templates/uptime/monitor.html:122
 msgid "Save"
 msgstr "Guardar"
 
@@ -1322,9 +1352,10 @@ msgid ""
 "Paste it in the <code>&lt;head&gt;</code> of every page of your website:"
 msgstr "Pégalo en el <code>&lt;head&gt;</code> de todas las páginas de tu web:"
 
-#: templates/analytics/_setup.html:27 templates/core/_ai_connect.html:7
-#: templates/core/_ai_connect.html:21 templates/core/_ai_connect.html:36
-#: templates/core/_ai_connect.html:49
+#: templates/analytics/_setup.html:27 templates/core/_ai_connect.html:6
+#: templates/core/_ai_connect.html:17 templates/core/_ai_connect.html:22
+#: templates/core/_ai_connect.html:36 templates/core/_ai_connect.html:51
+#: templates/core/_ai_connect.html:64
 msgid "Copy"
 msgstr "Copiar"
 
@@ -1338,15 +1369,15 @@ msgstr ""
 "página (React, Vue…)."
 
 #: templates/analytics/overview.html:3 templates/analytics/overview.html:7
-#: templates/base.html:28 templates/base.html:48
+#: templates/base.html:28 templates/base.html:49
 #: templates/projects/base_project.html:19
 msgid "Analytics"
 msgstr "Analítica"
 
 #: templates/analytics/overview.html:19 templates/core/_ai_tools.html:5
 #: templates/core/ai_tokens.html:17 templates/core/ai_tokens.html:56
-#: templates/core/users.html:21 templates/projects/dashboard.html:46
-#: templates/projects/dashboard.html:63
+#: templates/core/oauth_authorize.html:16 templates/core/users.html:21
+#: templates/projects/dashboard.html:46 templates/projects/dashboard.html:63
 msgid "Projects"
 msgstr "Proyectos"
 
@@ -1362,8 +1393,8 @@ msgstr "Mostrando todos los proyectos"
 msgid "You don't have any projects yet."
 msgstr "Todavía no tienes proyectos."
 
-#: templates/analytics/overview.html:30 templates/base.html:40
-#: templates/base.html:49 templates/projects/dashboard.html:64
+#: templates/analytics/overview.html:30 templates/base.html:41
+#: templates/base.html:51 templates/projects/dashboard.html:64
 #: templates/projects/dashboard.html:95 templates/projects/new.html:3
 msgid "New project"
 msgstr "Nuevo proyecto"
@@ -1412,48 +1443,55 @@ msgstr "Ocultar"
 msgid "Search projects…"
 msgstr "Buscar proyectos…"
 
-#: templates/base.html:26 templates/base.html:46
+#: templates/base.html:26 templates/base.html:47
 msgid "Home"
 msgstr "Inicio"
 
-#: templates/base.html:29
+#: templates/base.html:29 templates/base.html:50
+#: templates/projects/base_project.html:20 templates/uptime/monitor.html:7
+#: templates/uptime/monitor.html:33 templates/uptime/overview.html:3
+#: templates/uptime/overview.html:7 templates/uptime/project.html:6
+msgid "Uptime"
+msgstr "Uptime"
+
+#: templates/base.html:30
 msgid "Docs"
 msgstr "Docs"
 
-#: templates/base.html:30 templates/base.html:89 templates/blog/detail.html:7
+#: templates/base.html:31 templates/base.html:91 templates/blog/detail.html:7
 #: templates/blog/index.html:3 templates/blog/index.html:7
 msgid "Blog"
 msgstr "Blog"
 
-#: templates/base.html:31 templates/base.html:87
+#: templates/base.html:32 templates/base.html:89
 #: templates/core/changelog.html:3 templates/core/changelog.html:6
 msgid "Versions"
 msgstr "Versiones"
 
-#: templates/base.html:35 templates/portal/base.html:11
+#: templates/base.html:36 templates/portal/base.html:11
 msgid "Toggle light/dark mode"
 msgstr "Cambiar modo claro/oscuro"
 
-#: templates/base.html:44
+#: templates/base.html:45
 #, python-format
 msgid "Signed in as <strong>%(username)s</strong>"
 msgstr "Conectado como <strong>%(username)s</strong>"
 
-#: templates/base.html:50 templates/base.html:88 templates/core/docs.html:3
+#: templates/base.html:52 templates/base.html:90 templates/core/docs.html:3
 #: templates/core/docs.html:6
 msgid "Documentation"
 msgstr "Documentación"
 
-#: templates/base.html:53 templates/core/account.html:58
+#: templates/base.html:55 templates/core/account.html:58
 #: templates/core/ai_tokens.html:3 templates/core/ai_tokens.html:8
 msgid "AI access"
 msgstr "Acceso IA"
 
-#: templates/base.html:57 templates/portal/base.html:18
+#: templates/base.html:59 templates/portal/base.html:18
 msgid "Sign out"
 msgstr "Cerrar sesión"
 
-#: templates/base.html:62 templates/core/extension.html:37
+#: templates/base.html:64 templates/core/extension.html:37
 #: templates/core/home.html:14 templates/portal/base.html:20
 #: templates/portal/home.html:11 templates/portal/login.html:19
 #: templates/portal/login.html:23 templates/registration/login.html:3
@@ -1461,23 +1499,23 @@ msgstr "Cerrar sesión"
 msgid "Sign in"
 msgstr "Iniciar sesión"
 
-#: templates/base.html:63 templates/registration/signup.html:3
+#: templates/base.html:65 templates/registration/signup.html:3
 msgid "Sign up"
 msgstr "Crear cuenta"
 
-#: templates/base.html:90 templates/base.html:97 templates/core/cookies.html:3
+#: templates/base.html:92 templates/base.html:99 templates/core/cookies.html:3
 msgid "Cookie policy"
 msgstr "Política de cookies"
 
-#: templates/base.html:92
+#: templates/base.html:94
 msgid "Contact"
 msgstr "Contacto"
 
-#: templates/base.html:95
+#: templates/base.html:97
 msgid "Cookie consent"
 msgstr "Consentimiento de cookies"
 
-#: templates/base.html:96
+#: templates/base.html:98
 msgid ""
 "We use cookies that are essential for signing in and keeping the site "
 "secure, plus one to remember your language. We don't use advertising or "
@@ -1487,11 +1525,11 @@ msgstr ""
 "una para recordar tu idioma. No usamos cookies de publicidad ni de "
 "seguimiento."
 
-#: templates/base.html:99
+#: templates/base.html:101
 msgid "Accept"
 msgstr "Aceptar"
 
-#: templates/base.html:100
+#: templates/base.html:102
 msgid "Only essential"
 msgstr "Solo esenciales"
 
@@ -1594,42 +1632,84 @@ msgstr "Ver todos los artículos"
 msgid "Topics"
 msgstr "Temas"
 
+#: templates/core/_ai_connect.html:3
+msgid "no token"
+msgstr "sin token"
+
 #: templates/core/_ai_connect.html:4
 msgid ""
-"Run this once in your terminal; Claude can then use falcondatabase in every "
-"session."
-msgstr "Ejecútalo una vez en tu terminal; a partir de ahí Claude podrá usar falcondatabase en cada sesión."
+"In claude.ai, Claude Desktop or the mobile app: <strong>Settings → "
+"Connectors → Add custom connector</strong>, paste this URL and press "
+"<strong>Connect</strong>. Claude opens falcondatabase so you sign in and "
+"choose which projects it may reach."
+msgstr "En claude.ai, Claude Desktop o la app del móvil: <strong>Ajustes → Conectores → Añadir conector personalizado</strong>, pega esta URL y pulsa <strong>Conectar</strong>. Claude abre falcondatabase para que inicies sesión y elijas a qué proyectos puede acceder."
+
+#: templates/core/_ai_connect.html:7
+msgid "Connect with Claude"
+msgstr "Conectar con Claude"
 
 #: templates/core/_ai_connect.html:10
+msgid ""
+"Claude's connectors reach your server from the internet, so it needs a "
+"public HTTPS address. Locally, use Claude Code."
+msgstr "Los conectores de Claude llegan a tu servidor desde internet, así que necesita una dirección HTTPS pública. En local, usa Claude Code."
+
+#: templates/core/_ai_connect.html:14
+msgid ""
+"Run this once in your terminal, then type <code class=\"inline\">/mcp</code> "
+"in Claude Code and choose <strong>Authenticate</strong> to sign in. Claude "
+"can then use falcondatabase in every session."
+msgstr "Ejecuta esto una vez en tu terminal, escribe <code class=\"inline\">/mcp</code> en Claude Code y elige <strong>Authenticate</strong> para iniciar sesión. Después Claude podrá usar falcondatabase en todas las sesiones."
+
+#: templates/core/_ai_connect.html:19
+msgid "Or with a token, without signing in:"
+msgstr "O con un token, sin iniciar sesión:"
+
+#: templates/core/_ai_connect.html:25
 msgid "other MCP clients"
 msgstr "otros clientes MCP"
 
-#: templates/core/_ai_connect.html:11
+#: templates/core/_ai_connect.html:26
 msgid ""
 "Add the server to the client's MCP configuration (in Cursor, <code "
 "class=\"inline\">.cursor/mcp.json</code>). In VS Code use the key <code "
 "class=\"inline\">\"servers\"</code> and add <code class=\"inline\">\"type\": "
 "\"http\"</code>."
-msgstr "Añade el servidor a la configuración MCP del cliente (en Cursor, <code class=\"inline\">.cursor/mcp.json</code>). En VS Code usa la clave <code class=\"inline\">\"servers\"</code> y añade <code class=\"inline\">\"type\": \"http\"</code>."
+msgstr ""
+"Añade el servidor a la configuración MCP del cliente (en Cursor, <code "
+"class=\"inline\">.cursor/mcp.json</code>). En VS Code usa la clave <code "
+"class=\"inline\">\"servers\"</code> y añade <code class=\"inline\">\"type\": "
+"\"http\"</code>."
 
-#: templates/core/_ai_connect.html:25
+#: templates/core/_ai_connect.html:39
+msgid "with a token"
+msgstr "con un token"
+
+#: templates/core/_ai_connect.html:40
 msgid ""
 "In <strong>Settings → Developer → Edit config</strong> (<code "
 "class=\"inline\">claude_desktop_config.json</code>). It needs Node.js "
 "installed."
-msgstr "En <strong>Settings → Developer → Edit config</strong> (<code class=\"inline\">claude_desktop_config.json</code>). Necesita Node.js instalado."
+msgstr ""
+"En <strong>Settings → Developer → Edit config</strong> (<code "
+"class=\"inline\">claude_desktop_config.json</code>). Necesita Node.js "
+"instalado."
 
-#: templates/core/_ai_connect.html:39
+#: templates/core/_ai_connect.html:54
 msgid "Any other AI, agent or script (HTTP)"
 msgstr "Cualquier otra IA, agente o script (HTTP)"
 
-#: templates/core/_ai_connect.html:40
+#: templates/core/_ai_connect.html:55
 msgid ""
 "Each tool is also a plain endpoint: <code class=\"inline\">POST /api/ai/"
 "tools/&lt;tool&gt;</code> with the arguments as JSON. <code "
 "class=\"inline\">GET /api/ai/tools</code> returns the list with its JSON "
 "schemas, ready to declare as functions in any model."
-msgstr "Cada herramienta es también un endpoint normal: <code class=\"inline\">POST /api/ai/tools/&lt;herramienta&gt;</code> con los argumentos en JSON. <code class=\"inline\">GET /api/ai/tools</code> devuelve la lista con sus esquemas JSON, lista para declararla como funciones en cualquier modelo."
+msgstr ""
+"Cada herramienta es también un endpoint normal: <code class=\"inline\">POST /"
+"api/ai/tools/&lt;herramienta&gt;</code> con los argumentos en JSON. <code "
+"class=\"inline\">GET /api/ai/tools</code> devuelve la lista con sus esquemas "
+"JSON, lista para declararla como funciones en cualquier modelo."
 
 #: templates/core/_ai_new_token.html:3
 msgid "Your new AI token. Copy it now: it will not be shown again."
@@ -1987,7 +2067,7 @@ msgstr ""
 "<code>utm_campaign</code> a tus enlaces."
 
 #: templates/core/_api_reference.html:69
-#: templates/projects/base_project.html:21 templates/projects/portal.html:6
+#: templates/projects/base_project.html:22 templates/projects/portal.html:6
 msgid "Portal"
 msgstr "Portal"
 
@@ -2105,7 +2185,9 @@ msgstr "Se guarda en este navegador."
 msgid ""
 "Tokens let an AI assistant (Claude, Cursor…) create and edit your tables, "
 "data and users. Each one acts as your account."
-msgstr "Los tokens permiten que un asistente de IA (Claude, Cursor…) cree y edite tus tablas, datos y usuarios. Cada uno actúa como tu cuenta."
+msgstr ""
+"Los tokens permiten que un asistente de IA (Claude, Cursor…) cree y edite "
+"tus tablas, datos y usuarios. Cada uno actúa como tu cuenta."
 
 #: templates/core/account.html:61
 msgid "Manage AI tokens"
@@ -2119,6 +2201,7 @@ msgstr "Autenticación en dos pasos"
 #: templates/projects/base_project.html:19
 #: templates/projects/base_project.html:20
 #: templates/projects/base_project.html:21
+#: templates/projects/base_project.html:22 uptime/models.py:36
 msgid "enabled"
 msgstr "activada"
 
@@ -2193,7 +2276,12 @@ msgid ""
 "unique email and phone”</em>, <em>“load 20 sample products”</em>, "
 "<em>“create the user ana@example.com”</em>. The AI creates and edits tables, "
 "data and users for you."
-msgstr "Crea un token en tu panel, dáselo a Claude, Cursor o cualquier asistente y pide con tus palabras: <em>«crea una tabla clientes con nombre, email único y teléfono»</em>, <em>«carga 20 productos de ejemplo»</em>, <em>«crea el usuario ana@example.com»</em>. La IA crea y edita tablas, datos y usuarios por ti."
+msgstr ""
+"Crea un token en tu panel, dáselo a Claude, Cursor o cualquier asistente y "
+"pide con tus palabras: <em>«crea una tabla clientes con nombre, email único "
+"y teléfono»</em>, <em>«carga 20 productos de ejemplo»</em>, <em>«crea el "
+"usuario ana@example.com»</em>. La IA crea y edita tablas, datos y usuarios "
+"por ti."
 
 #: templates/core/ai.html:12
 msgid "Create an AI token"
@@ -2211,7 +2299,9 @@ msgstr "Cómo conectarla"
 msgid ""
 "Create, rename and delete tables; add, rename and remove columns; change "
 "access rules."
-msgstr "Crea, renombra y elimina tablas; añade, renombra y quita columnas; cambia las reglas de acceso."
+msgstr ""
+"Crea, renombra y elimina tablas; añade, renombra y quita columnas; cambia "
+"las reglas de acceso."
 
 #: templates/core/ai.html:24
 msgid "Query with filters, insert in bulk, edit and delete rows."
@@ -2221,7 +2311,9 @@ msgstr "Consulta con filtros, inserta en bloque, edita y elimina filas."
 msgid ""
 "Create the users of your app, change their password or data, deactivate them "
 "and turn login on."
-msgstr "Crea los usuarios de tu app, cambia su contraseña o sus datos, desactívalos y activa el login."
+msgstr ""
+"Crea los usuarios de tu app, cambia su contraseña o sus datos, desactívalos "
+"y activa el login."
 
 #: templates/core/ai.html:27
 msgid "Under your control"
@@ -2231,7 +2323,9 @@ msgstr "Bajo tu control"
 msgid ""
 "Limit a token to one project or make it read-only, revoke it anytime, and "
 "see every change in the project activity."
-msgstr "Limita un token a un proyecto o hazlo de solo lectura, revócalo cuando quieras y ve cada cambio en la actividad del proyecto."
+msgstr ""
+"Limita un token a un proyecto o hazlo de solo lectura, revócalo cuando "
+"quieras y ve cada cambio en la actividad del proyecto."
 
 #: templates/core/ai.html:32
 msgid "How it works"
@@ -2246,7 +2340,10 @@ msgid ""
 "In <strong>Settings → AI access</strong> (all your projects) or in the "
 "<strong>AI</strong> tab of a project (only that one). It starts with <code "
 "class=\"inline\">fdb_ai_</code> and is shown only once."
-msgstr "En <strong>Ajustes → Acceso IA</strong> (todos tus proyectos) o en la pestaña <strong>IA</strong> de un proyecto (solo ese). Empieza por <code class=\"inline\">fdb_ai_</code> y se muestra una sola vez."
+msgstr ""
+"En <strong>Ajustes → Acceso IA</strong> (todos tus proyectos) o en la "
+"pestaña <strong>IA</strong> de un proyecto (solo ese). Empieza por <code "
+"class=\"inline\">fdb_ai_</code> y se muestra una sola vez."
 
 #: templates/core/ai.html:36 templates/core/ai.html:43
 #: templates/core/ai_tokens.html:41
@@ -2258,7 +2355,9 @@ msgid ""
 "Paste the command or configuration below into your assistant. The project's "
 "AI tab gives you everything already filled in with your server, project and "
 "token."
-msgstr "Pega en tu asistente el comando o la configuración de abajo. La pestaña IA del proyecto te lo da todo ya rellenado con tu servidor, proyecto y token."
+msgstr ""
+"Pega en tu asistente el comando o la configuración de abajo. La pestaña IA "
+"del proyecto te lo da todo ya rellenado con tu servidor, proyecto y token."
 
 #: templates/core/ai.html:37
 msgid "Ask in your own words"
@@ -2268,7 +2367,9 @@ msgstr "Pide con tus palabras"
 msgid ""
 "The assistant sees the tools falcondatabase offers, looks at your tables "
 "first and makes the changes. Before deleting anything it should ask you."
-msgstr "El asistente ve las herramientas que ofrece falcondatabase, mira primero tus tablas y hace los cambios. Antes de borrar algo debería preguntarte."
+msgstr ""
+"El asistente ve las herramientas que ofrece falcondatabase, mira primero tus "
+"tablas y hace los cambios. Antes de borrar algo debería preguntarte."
 
 #: templates/core/ai.html:45
 #, python-format
@@ -2276,7 +2377,10 @@ msgid ""
 "falcondatabase is an MCP server (Model Context Protocol) at <code "
 "class=\"inline\">%(mcp_url)s</code>. Replace <code "
 "class=\"inline\">%(ai_token)s</code> with your token."
-msgstr "falcondatabase es un servidor MCP (Model Context Protocol) en <code class=\"inline\">%(mcp_url)s</code>. Sustituye <code class=\"inline\">%(ai_token)s</code> por tu token."
+msgstr ""
+"falcondatabase es un servidor MCP (Model Context Protocol) en <code "
+"class=\"inline\">%(mcp_url)s</code>. Sustituye <code "
+"class=\"inline\">%(ai_token)s</code> por tu token."
 
 #: templates/core/ai.html:51 templates/projects/ai.html:38
 msgid "What the AI can do"
@@ -2290,24 +2394,31 @@ msgstr "Seguridad"
 msgid ""
 "A token acts as your account: it reaches the projects you own or that were "
 "shared with you, with your role (viewers can only read)."
-msgstr "Un token actúa como tu cuenta: llega a los proyectos que son tuyos o que te compartieron, con tu rol (los lectores solo pueden leer)."
+msgstr ""
+"Un token actúa como tu cuenta: llega a los proyectos que son tuyos o que te "
+"compartieron, con tu rol (los lectores solo pueden leer)."
 
 #: templates/core/ai.html:60
 msgid ""
 "Only a fingerprint of the token is stored; if you lose it, create a new one "
 "and revoke the old one."
-msgstr "Solo se guarda una huella del token; si lo pierdes, crea uno nuevo y revoca el anterior."
+msgstr ""
+"Solo se guarda una huella del token; si lo pierdes, crea uno nuevo y revoca "
+"el anterior."
 
 #: templates/core/ai.html:61
 msgid ""
 "Treat it like a password: never put it in a frontend or a public repository."
-msgstr "Trátalo como una contraseña: nunca lo pongas en un frontend ni en un repositorio público."
+msgstr ""
+"Trátalo como una contraseña: nunca lo pongas en un frontend ni en un "
+"repositorio público."
 
 #: templates/core/ai.html:62
 msgid ""
 "Changing your password does not revoke tokens: revoke them in Settings → AI "
 "access."
-msgstr "Cambiar tu contraseña no revoca los tokens: revócalos en Ajustes → Acceso IA."
+msgstr ""
+"Cambiar tu contraseña no revoca los tokens: revócalos en Ajustes → Acceso IA."
 
 #: templates/core/ai_tokens.html:17 templates/projects/tables.html:12
 msgid "Access"
@@ -2321,6 +2432,10 @@ msgstr "Creado"
 msgid "Last used"
 msgstr "Último uso"
 
+#: templates/core/ai_tokens.html:21
+msgid "connector"
+msgstr "conector"
+
 #: templates/core/ai_tokens.html:23 templates/projects/ai.html:66
 msgid "read and write"
 msgstr "lectura y escritura"
@@ -2328,7 +2443,8 @@ msgstr "lectura y escritura"
 #: templates/core/ai_tokens.html:27 templates/projects/ai.html:68
 #, python-format
 msgid "Revoke the token “%(name)s”? Assistants using it lose access."
-msgstr "¿Revocar el token «%(name)s»? Los asistentes que lo usan pierden el acceso."
+msgstr ""
+"¿Revocar el token «%(name)s»? Los asistentes que lo usan pierden el acceso."
 
 #: templates/core/ai_tokens.html:29 templates/projects/ai.html:70
 msgid "Revoke"
@@ -2346,15 +2462,16 @@ msgstr "Nuevo token"
 msgid "e.g. Claude on my laptop"
 msgstr "p. ej. Claude en mi portátil"
 
-#: templates/core/ai_tokens.html:58
+#: templates/core/ai_tokens.html:58 templates/core/oauth_authorize.html:18
 msgid "All my projects (can also create new ones)"
 msgstr "Todos mis proyectos (también puede crear nuevos)"
 
-#: templates/core/ai_tokens.html:63
+#: templates/core/ai_tokens.html:63 templates/core/oauth_authorize.html:23
 msgid "Read and write"
 msgstr "Lectura y escritura"
 
-#: templates/core/ai_tokens.html:64 templates/projects/ai.html:54
+#: templates/core/ai_tokens.html:64 templates/core/oauth_authorize.html:24
+#: templates/projects/ai.html:54
 msgid "Read only"
 msgstr "Solo lectura"
 
@@ -2646,7 +2763,9 @@ msgstr ""
 msgid ""
 "Give Claude, Cursor or any assistant a token and ask in plain words: it "
 "creates tables, loads data and creates users for you."
-msgstr "Dale un token a Claude, Cursor o cualquier asistente y pide con tus palabras: crea tablas, carga datos y crea usuarios por ti."
+msgstr ""
+"Dale un token a Claude, Cursor o cualquier asistente y pide con tus "
+"palabras: crea tablas, carga datos y crea usuarios por ti."
 
 #: templates/core/home.html:73
 msgid "See how it works"
@@ -2727,6 +2846,39 @@ msgstr ""
 #: templates/core/home.html:110
 msgid "See the documentation →"
 msgstr "Ver documentación →"
+
+#: templates/core/oauth_authorize.html:3 templates/core/oauth_authorize.html:8
+msgid "Connect an assistant"
+msgstr "Conectar un asistente"
+
+#: templates/core/oauth_authorize.html:11
+#, python-format
+msgid "Connect %(name)s to falcondatabase"
+msgstr "Conectar %(name)s con falcondatabase"
+
+#: templates/core/oauth_authorize.html:14
+#, python-format
+msgid ""
+"<strong>%(name)s</strong> will act as <strong>%(username)s</strong>: it can "
+"create and edit tables, data and the users of your apps."
+msgstr "<strong>%(name)s</strong> actuará como <strong>%(username)s</strong>: podrá crear y editar tablas, datos y los usuarios de tus apps."
+
+#: templates/core/oauth_authorize.html:26
+#, python-format
+msgid ""
+"You will return to <strong>%(host)s</strong>. You can revoke this access "
+"anytime in Settings → AI access."
+msgstr "Volverás a <strong>%(host)s</strong>. Puedes revocar este acceso cuando quieras en Ajustes → Acceso IA."
+
+#: templates/core/oauth_authorize.html:28 templates/portal/form.html:17
+#: templates/projects/new.html:25 templates/projects/row_edit.html:32
+#: templates/projects/table_new.html:61
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: templates/core/oauth_authorize.html:29
+msgid "Authorize"
+msgstr "Autorizar"
 
 #: templates/core/recovery_codes.html:3
 msgid "Recovery codes"
@@ -2904,11 +3056,6 @@ msgstr "Nuevo registro"
 msgid "This table has no editable columns."
 msgstr "Esta tabla no tiene columnas editables."
 
-#: templates/portal/form.html:17 templates/projects/new.html:25
-#: templates/projects/row_edit.html:32 templates/projects/table_new.html:61
-msgid "Cancel"
-msgstr "Cancelar"
-
 #: templates/portal/form.html:22
 msgid "Delete this record?"
 msgstr "¿Eliminar este registro?"
@@ -2998,7 +3145,7 @@ msgstr[1] "%(counter)s contribuciones en el último año"
 msgid "Project"
 msgstr "Proyecto"
 
-#: templates/projects/_contributions.html:8
+#: templates/projects/_contributions.html:8 templates/uptime/project.html:7
 msgid "All projects"
 msgstr "Todos los proyectos"
 
@@ -3081,7 +3228,10 @@ msgid ""
 "Connect Claude, Cursor or any assistant and ask it to create tables, load "
 "data or create users in <strong>%(name)s</strong>. The examples below are "
 "already filled in for this project."
-msgstr "Conecta Claude, Cursor o cualquier asistente y pídele que cree tablas, cargue datos o cree usuarios en <strong>%(name)s</strong>. Los ejemplos de abajo ya están rellenados para este proyecto."
+msgstr ""
+"Conecta Claude, Cursor o cualquier asistente y pídele que cree tablas, "
+"cargue datos o cree usuarios en <strong>%(name)s</strong>. Los ejemplos de "
+"abajo ya están rellenados para este proyecto."
 
 #: templates/projects/ai.html:15
 #, python-format
@@ -3089,7 +3239,10 @@ msgid ""
 "Create a token for this project (on the right) and the examples will include "
 "it, ready to copy. Until then they show <code class=\"inline\">%(ai_token)s</"
 "code>."
-msgstr "Crea un token para este proyecto (a la derecha) y los ejemplos lo incluirán, listos para copiar. Mientras tanto muestran <code class=\"inline\">%(ai_token)s</code>."
+msgstr ""
+"Crea un token para este proyecto (a la derecha) y los ejemplos lo incluirán, "
+"listos para copiar. Mientras tanto muestran <code "
+"class=\"inline\">%(ai_token)s</code>."
 
 #: templates/projects/ai.html:20
 msgid "1. Connect your AI"
@@ -3108,26 +3261,34 @@ msgstr "Ejemplos que puedes copiar en tu asistente:"
 msgid ""
 "In falcondatabase project %(ref)s, create a “customers” table with name "
 "(required), unique email, phone and signup date (default now())."
-msgstr "En el proyecto %(ref)s de falcondatabase, crea una tabla «clientes» con nombre (obligatorio), email único, teléfono y fecha de alta (por defecto now())."
+msgstr ""
+"En el proyecto %(ref)s de falcondatabase, crea una tabla «clientes» con "
+"nombre (obligatorio), email único, teléfono y fecha de alta (por defecto "
+"now())."
 
 #: templates/projects/ai.html:30
 #, python-format
 msgid "Insert 10 realistic sample rows in each table of project %(ref)s."
-msgstr "Inserta 10 filas de ejemplo realistas en cada tabla del proyecto %(ref)s."
+msgstr ""
+"Inserta 10 filas de ejemplo realistas en cada tabla del proyecto %(ref)s."
 
 #: templates/projects/ai.html:31
 #, python-format
 msgid ""
 "Enable login in project %(ref)s and create the user ana@example.com with a "
 "secure password."
-msgstr "Activa el login en el proyecto %(ref)s y crea el usuario ana@example.com con una contraseña segura."
+msgstr ""
+"Activa el login en el proyecto %(ref)s y crea el usuario ana@example.com con "
+"una contraseña segura."
 
 #: templates/projects/ai.html:32
 #, python-format
 msgid ""
 "Show me the columns of “%(name)s” in project %(ref)s and add the ones you "
 "think are missing."
-msgstr "Muéstrame las columnas de «%(name)s» en el proyecto %(ref)s y añade las que creas que faltan."
+msgstr ""
+"Muéstrame las columnas de «%(name)s» en el proyecto %(ref)s y añade las que "
+"creas que faltan."
 
 #: templates/projects/ai.html:47
 msgid "Token for this project"
@@ -3158,7 +3319,9 @@ msgstr "Ninguno todavía."
 msgid ""
 "For a token that reaches all your projects, go to <a "
 "href=\"%(tokens_url)s\">Settings → AI access</a>."
-msgstr "Para un token que llegue a todos tus proyectos, ve a <a href=\"%(tokens_url)s\">Ajustes → Acceso IA</a>."
+msgstr ""
+"Para un token que llegue a todos tus proyectos, ve a <a "
+"href=\"%(tokens_url)s\">Ajustes → Acceso IA</a>."
 
 #: templates/projects/api.html:10 templates/projects/overview.html:104
 msgid "Connection"
@@ -3254,16 +3417,20 @@ msgstr "Resumen"
 msgid "Authentication"
 msgstr "Autenticación"
 
-#: templates/projects/base_project.html:20 templates/projects/dashboard.html:46
+#: templates/projects/base_project.html:20
+msgid "down"
+msgstr "caído"
+
+#: templates/projects/base_project.html:21 templates/projects/dashboard.html:46
 #: templates/storage/dashboard.html:6
 msgid "Storage"
 msgstr "Almacenamiento"
 
-#: templates/projects/base_project.html:23
+#: templates/projects/base_project.html:24
 msgid "AI"
 msgstr "IA"
 
-#: templates/projects/base_project.html:29
+#: templates/projects/base_project.html:30
 #, python-format
 msgid "You have read-only access to this project, shared by %(owner)s."
 msgstr ""
@@ -3399,7 +3566,7 @@ msgstr "Importar proyecto"
 msgid "Login"
 msgstr "Login"
 
-#: templates/projects/overview.html:12
+#: templates/projects/overview.html:12 templates/uptime/_form.html:27
 msgid "Enabled"
 msgstr "Activo"
 
@@ -4141,303 +4308,460 @@ msgstr ""
 "los buckets privados, cada usuario solo ve, comparte y elimina los archivos "
 "que subió."
 
-# --- uptime ---
-msgid "No data"
-msgstr "Sin datos"
-
-msgid "Webhook (optional)"
-msgstr "Webhook (opcional)"
-
-msgid "Paused"
-msgstr "Pausado"
-
-msgid "Down"
-msgstr "Caído"
-
-msgid "not checked yet"
-msgstr "aún sin comprobar"
-
-msgid "Last %(days)s days, daily average"
-msgstr "Últimos %(days)s días, media diaria"
-
-msgid "Duration"
-msgstr "Duración"
-
-msgid "No incidents in this period."
-msgstr "Sin caídas en este periodo."
-
-msgid "Latest checks"
-msgstr "Últimas comprobaciones"
-
-msgid "Result"
-msgstr "Resultado"
-
-msgid "Delete this monitor and its history?"
-msgstr "¿Eliminar este monitor y su historial?"
-
-msgid "Delete monitor"
-msgstr "Eliminar monitor"
-
-msgid "No monitors yet"
-msgstr "Aún no hay monitores"
-
-msgid "New monitor"
-msgstr "Nuevo monitor"
-
-msgid "This URL is already monitored in this project."
-msgstr "Esta URL ya se monitoriza en este proyecto."
-
-msgid "%(n)s min"
-msgstr "%(n)s min"
-
-msgid "%(d)s days"
-msgstr "%(d)s días"
-
-msgid "Error: %(error)s"
-msgstr "Error: %(error)s"
-
-msgid "Project: %(project)s"
-msgstr "Proyecto: %(project)s"
-
-msgid "Down: %(error)s"
-msgstr "Caído: %(error)s"
-
-msgid "Monitor deleted."
-msgstr "Monitor eliminado."
-
-msgid "Uptime"
-msgstr "Uptime"
-
-msgid "down"
-msgstr "caído"
-
+#: templates/uptime/_bars.html:2
 msgid "Uptime per day"
 msgstr "Disponibilidad por día"
 
-msgid "Website URL"
-msgstr "URL del sitio web"
+# --- uptime ---
+#: templates/uptime/_bars.html:3 templates/uptime/_legend.html:5
+msgid "No data"
+msgstr "Sin datos"
 
-msgid "It is requested like a browser would: any answer below 400 counts as up. A failed request is retried once before it counts as down."
-msgstr "Se solicita como lo haría un navegador: cualquier respuesta por debajo de 400 cuenta como activo. Una petición fallida se reintenta una vez antes de contar como caída."
-
-msgid "Check"
-msgstr "Comprobar"
-
-msgid "Email me when it goes down and when it comes back"
-msgstr "Avisarme por email cuando se caiga y cuando vuelva"
-
-msgid "Alerts go to the project owner (%(email)s)."
-msgstr "Los avisos van al dueño del proyecto (%(email)s)."
-
-msgid "Receives a JSON POST on every incident. Slack and Discord webhooks show it as a message."
-msgstr "Recibe un POST JSON en cada caída y recuperación. Los webhooks de Slack y Discord lo muestran como mensaje."
-
-msgid "checked %(when)s ago"
-msgstr "comprobado hace %(when)s"
-
-msgid "alerts on"
-msgstr "avisos activos"
-
-msgid "24 hours"
-msgstr "24 horas"
-
-msgid "30 days"
-msgstr "30 días"
-
-msgid "response"
-msgstr "respuesta"
-
-msgid "Checks are overdue: the uptime worker does not seem to be running. Start it with <code class=\"inline\">python manage.py uptime_worker</code> (with Docker it is the <code class=\"inline\">uptime</code> service)."
-msgstr "Hay comprobaciones atrasadas: parece que el worker de uptime no está en marcha. Arráncalo con <code class=\"inline\">python manage.py uptime_worker</code> (con Docker es el servicio <code class=\"inline\">uptime</code>)."
-
-msgid "Email alerts are written to the server log until SMTP is configured (<code class=\"inline\">EMAIL_HOST</code> in <code class=\"inline\">.env</code>). Webhooks work already."
-msgstr "Los avisos por email se escriben en el log del servidor hasta que configures SMTP (<code class=\"inline\">EMAIL_HOST</code> en <code class=\"inline\">.env</code>). Los webhooks ya funcionan."
-
-msgid "Up"
-msgstr "Activo"
-
-msgid "Pending"
-msgstr "Pendiente"
-
-msgid "for %(when)s"
-msgstr "desde hace %(when)s"
-
-msgid "Open website"
-msgstr "Abrir sitio"
-
-msgid "Check now"
-msgstr "Comprobar ahora"
-
-msgid "Down for %(when)s: %(error)s"
-msgstr "Caído desde hace %(when)s: %(error)s"
-
-msgid "Avg. response"
-msgstr "Respuesta media"
-
-msgid "last: %(ms)s ms"
-msgstr "última: %(ms)s ms"
-
-msgid "Incidents"
-msgstr "Caídas"
-
-msgid "Downtime"
-msgstr "Tiempo caído"
-
-msgid "Last 90 days"
-msgstr "Últimos 90 días"
-
-msgid "uptime per day (UTC)"
-msgstr "disponibilidad por día (UTC)"
-
-msgid "Response time (ms)"
-msgstr "Tiempo de respuesta (ms)"
-
-msgid "Last 24 hours, hourly average (UTC)"
-msgstr "Últimas 24 horas, media por hora (UTC)"
-
-msgid "Started"
-msgstr "Inicio"
-
-msgid "Resolved"
-msgstr "Resuelta"
-
-msgid "Error"
-msgstr "Error"
-
-msgid "Ongoing"
-msgstr "En curso"
-
-msgid "Time"
-msgstr "Hora"
-
-msgid "Waiting for the first check."
-msgstr "Esperando la primera comprobación."
-
-msgid "Websites of your analytics without a monitor:"
-msgstr "Sitios de tu analítica sin monitor:"
-
-msgid "Monitor them"
-msgstr "Monitorizarlos"
-
-msgid "Open a project and go to the Uptime tab to add the address of a website. falcondatabase will request it every few minutes, keep the history and email you when it goes down."
-msgstr "Abre un proyecto y ve a la pestaña Uptime para añadir la dirección de un sitio web. falcondatabase la consultará cada pocos minutos, guardará el historial y te avisará por email cuando se caiga."
-
-msgid "Domains of this project's analytics without a monitor:"
-msgstr "Dominios de la analítica de este proyecto sin monitor:"
-
-msgid "Add the address of a website and falcondatabase will request it every few minutes, keep the history and email you when it goes down."
-msgstr "Añade la dirección de un sitio web y falcondatabase la consultará cada pocos minutos, guardará el historial y te avisará por email cuando se caiga."
-
-msgid "Add monitor"
-msgstr "Añadir monitor"
-
-msgid "URL"
-msgstr "URL"
-
-msgid "Use an http:// or https:// address."
-msgstr "Usa una dirección http:// o https://."
-
-msgid "A project can have up to %(limit)s monitors."
-msgstr "Un proyecto puede tener hasta %(limit)s monitores."
-
-msgid "Every minute"
-msgstr "Cada minuto"
-
-msgid "Every 5 minutes"
-msgstr "Cada 5 minutos"
-
-msgid "Every 10 minutes"
-msgstr "Cada 10 minutos"
-
-msgid "Every 15 minutes"
-msgstr "Cada 15 minutos"
-
-msgid "Every 30 minutes"
-msgstr "Cada 30 minutos"
-
-msgid "Every hour"
-msgstr "Cada hora"
-
-msgid "check"
-msgstr "comprobación"
-
-msgid "email me when it goes down or comes back"
-msgstr "avisarme por email cuando se caiga o vuelva"
-
-msgid "webhook"
-msgstr "webhook"
-
-msgid "%(h)s h %(m)s min"
-msgstr "%(h)s h %(m)s min"
-
-msgid "🔴 Down: %(site)s"
-msgstr "🔴 Caído: %(site)s"
-
-msgid "%(url)s is not responding."
-msgstr "%(url)s no responde."
-
-msgid "🟢 Back up: %(site)s"
-msgstr "🟢 De nuevo activo: %(site)s"
-
-msgid "%(url)s is responding again."
-msgstr "%(url)s vuelve a responder."
-
-msgid "It was down for %(duration)s."
-msgstr "Estuvo caído %(duration)s."
-
-msgid "Time: %(time)s UTC"
-msgstr "Hora: %(time)s UTC"
-
-msgid "%(count)s monitors added. The first check runs within a minute."
-msgstr "%(count)s monitores añadidos. La primera comprobación se hace en menos de un minuto."
-
-msgid "Monitor added. The first check runs within a minute."
-msgstr "Monitor añadido. La primera comprobación se hace en menos de un minuto."
-
-msgid "Up: HTTP %(code)s in %(ms)s ms."
-msgstr "Activo: HTTP %(code)s en %(ms)s ms."
-
-msgid "Monitor saved."
-msgstr "Monitor guardado."
-
+#: templates/uptime/_bars.html:3 templates/uptime/monitor.html:41
+#, python-format
 msgid "%(counter)s failed check"
 msgid_plural "%(counter)s failed checks"
 msgstr[0] "%(counter)s comprobación fallida"
 msgstr[1] "%(counter)s comprobaciones fallidas"
 
+#: templates/uptime/_form.html:5
+msgid "Website URL"
+msgstr "URL del sitio web"
+
+#: templates/uptime/_form.html:8
+msgid ""
+"It is requested like a browser would: any answer below 400 counts as up. A "
+"failed request is retried once before it counts as down."
+msgstr ""
+"Se solicita como lo haría un navegador: cualquier respuesta por debajo de "
+"400 cuenta como activo. Una petición fallida se reintenta una vez antes de "
+"contar como caída."
+
+#: templates/uptime/_form.html:11
+msgid "Check"
+msgstr "Comprobar"
+
+#: templates/uptime/_form.html:17
+msgid "Email me when it goes down and when it comes back"
+msgstr "Avisarme por email cuando se caiga y cuando vuelva"
+
+#: templates/uptime/_form.html:18
+#, python-format
+msgid "Alerts go to the project owner (%(email)s)."
+msgstr "Los avisos van al dueño del proyecto (%(email)s)."
+
+#: templates/uptime/_form.html:21
+msgid "Webhook (optional)"
+msgstr "Webhook (opcional)"
+
+#: templates/uptime/_form.html:24
+msgid ""
+"Receives a JSON POST on every incident. Slack and Discord webhooks show it "
+"as a message."
+msgstr ""
+"Recibe un POST JSON en cada caída y recuperación. Los webhooks de Slack y "
+"Discord lo muestran como mensaje."
+
+#: templates/uptime/_legend.html:3
+#, python-format
 msgid "%(counter)s day ago"
 msgid_plural "%(counter)s days ago"
 msgstr[0] "hace %(counter)s día"
 msgstr[1] "hace %(counter)s días"
 
+#: templates/uptime/_list.html:13 templates/uptime/monitor.html:44
+#, python-format
+msgid "checked %(when)s ago"
+msgstr "comprobado hace %(when)s"
+
+#: templates/uptime/_list.html:15
+msgid "alerts on"
+msgstr "avisos activos"
+
+#: templates/uptime/_list.html:19 templates/uptime/monitor.html:28
+msgid "24 hours"
+msgstr "24 horas"
+
+#: templates/uptime/_list.html:20
+msgid "30 days"
+msgstr "30 días"
+
+#: templates/uptime/_list.html:21
+msgid "response"
+msgstr "respuesta"
+
+#: templates/uptime/_notices.html:3
+msgid ""
+"Checks are overdue: the uptime worker does not seem to be running. Start it "
+"with <code class=\"inline\">python manage.py uptime_worker</code> (with "
+"Docker it is the <code class=\"inline\">uptime</code> service)."
+msgstr ""
+"Hay comprobaciones atrasadas: parece que el worker de uptime no está en "
+"marcha. Arráncalo con <code class=\"inline\">python manage.py uptime_worker</"
+"code> (con Docker es el servicio <code class=\"inline\">uptime</code>)."
+
+#: templates/uptime/_notices.html:6
+msgid ""
+"Email alerts are written to the server log until SMTP is configured (<code "
+"class=\"inline\">EMAIL_HOST</code> in <code class=\"inline\">.env</code>). "
+"Webhooks work already."
+msgstr ""
+"Los avisos por email se escriben en el log del servidor hasta que configures "
+"SMTP (<code class=\"inline\">EMAIL_HOST</code> en <code "
+"class=\"inline\">.env</code>). Los webhooks ya funcionan."
+
+#: templates/uptime/_status.html:2
+msgid "Paused"
+msgstr "Pausado"
+
+#: templates/uptime/_status.html:3 templates/uptime/monitor.html:104
+msgid "Up"
+msgstr "Activo"
+
+#: templates/uptime/_status.html:4 templates/uptime/monitor.html:104
+msgid "Down"
+msgstr "Caído"
+
+#: templates/uptime/_status.html:5
+msgid "Pending"
+msgstr "Pendiente"
+
+#: templates/uptime/monitor.html:11
+#, python-format
+msgid "for %(when)s"
+msgstr "desde hace %(when)s"
+
+#: templates/uptime/monitor.html:13
+msgid "Open website"
+msgstr "Abrir sitio"
+
+#: templates/uptime/monitor.html:18
+msgid "Check now"
+msgstr "Comprobar ahora"
+
+#: templates/uptime/monitor.html:23
+#, python-format
+msgid "Down for %(when)s: %(error)s"
+msgstr "Caído desde hace %(when)s: %(error)s"
+
+#: templates/uptime/monitor.html:35
+#, python-format
 msgid "%(counter)s check"
 msgid_plural "%(counter)s checks"
 msgstr[0] "%(counter)s comprobación"
 msgstr[1] "%(counter)s comprobaciones"
 
+#: templates/uptime/monitor.html:36
+msgid "Avg. response"
+msgstr "Respuesta media"
+
+#: templates/uptime/monitor.html:38
+#, python-format
+msgid "last: %(ms)s ms"
+msgstr "última: %(ms)s ms"
+
+#: templates/uptime/monitor.html:39 templates/uptime/monitor.html:75
+msgid "Incidents"
+msgstr "Caídas"
+
+#: templates/uptime/monitor.html:42
+msgid "Downtime"
+msgstr "Tiempo caído"
+
+#: templates/uptime/monitor.html:44
+msgid "not checked yet"
+msgstr "aún sin comprobar"
+
+#: templates/uptime/monitor.html:48
+msgid "Last 90 days"
+msgstr "Últimos 90 días"
+
+#: templates/uptime/monitor.html:48
+msgid "uptime per day (UTC)"
+msgstr "disponibilidad por día (UTC)"
+
+#: templates/uptime/monitor.html:57 templates/uptime/monitor.html:61
+msgid "Response time (ms)"
+msgstr "Tiempo de respuesta (ms)"
+
+#: templates/uptime/monitor.html:58
+msgid "Last 24 hours, hourly average (UTC)"
+msgstr "Últimas 24 horas, media por hora (UTC)"
+
+#: templates/uptime/monitor.html:58
+#, python-format
+msgid "Last %(days)s days, daily average"
+msgstr "Últimos %(days)s días, media diaria"
+
+#: templates/uptime/monitor.html:78
+msgid "Started"
+msgstr "Inicio"
+
+#: templates/uptime/monitor.html:78
+msgid "Resolved"
+msgstr "Resuelta"
+
+#: templates/uptime/monitor.html:78
+msgid "Duration"
+msgstr "Duración"
+
+#: templates/uptime/monitor.html:78 templates/uptime/monitor.html:99
+msgid "Error"
+msgstr "Error"
+
+#: templates/uptime/monitor.html:83
+msgid "Ongoing"
+msgstr "En curso"
+
+#: templates/uptime/monitor.html:91
+msgid "No incidents in this period."
+msgstr "Sin caídas en este periodo."
+
+#: templates/uptime/monitor.html:96
+msgid "Latest checks"
+msgstr "Últimas comprobaciones"
+
+#: templates/uptime/monitor.html:99
+msgid "Time"
+msgstr "Hora"
+
+#: templates/uptime/monitor.html:99
+msgid "Result"
+msgstr "Resultado"
+
+#: templates/uptime/monitor.html:113
+msgid "Waiting for the first check."
+msgstr "Esperando la primera comprobación."
+
+#: templates/uptime/monitor.html:125
+msgid "Delete this monitor and its history?"
+msgstr "¿Eliminar este monitor y su historial?"
+
+#: templates/uptime/monitor.html:127
+msgid "Delete monitor"
+msgstr "Eliminar monitor"
+
+#: templates/uptime/overview.html:9
+#, python-format
 msgid "%(counter)s up"
 msgid_plural "%(counter)s up"
 msgstr[0] "%(counter)s activo"
 msgstr[1] "%(counter)s activos"
 
+#: templates/uptime/overview.html:10
+#, python-format
 msgid "%(counter)s down"
 msgid_plural "%(counter)s down"
 msgstr[0] "%(counter)s caído"
 msgstr[1] "%(counter)s caídos"
 
+#: templates/uptime/overview.html:11
+#, python-format
 msgid "%(counter)s paused"
 msgid_plural "%(counter)s paused"
 msgstr[0] "%(counter)s pausado"
 msgstr[1] "%(counter)s pausados"
 
-msgid "Check all now"
-msgstr "Comprobar todos ahora"
-
+#: templates/uptime/overview.html:13
 msgid "Checking…"
 msgstr "Comprobando…"
 
+#: templates/uptime/overview.html:14
 msgid "Request every enabled website now, without waiting for its turn"
 msgstr "Consulta ahora todos los sitios activos, sin esperar a su turno"
 
+#: templates/uptime/overview.html:14
+msgid "Check all now"
+msgstr "Comprobar todos ahora"
+
+#: templates/uptime/overview.html:24
+msgid "Websites of your analytics without a monitor:"
+msgstr "Sitios de tu analítica sin monitor:"
+
+#: templates/uptime/overview.html:26 templates/uptime/project.html:15
+msgid "Monitor them"
+msgstr "Monitorizarlos"
+
+#: templates/uptime/overview.html:35 templates/uptime/project.html:24
+msgid "No monitors yet"
+msgstr "Aún no hay monitores"
+
+#: templates/uptime/overview.html:36
+msgid ""
+"Open a project and go to the Uptime tab to add the address of a website. "
+"falcondatabase will request it every few minutes, keep the history and email "
+"you when it goes down."
+msgstr ""
+"Abre un proyecto y ve a la pestaña Uptime para añadir la dirección de un "
+"sitio web. falcondatabase la consultará cada pocos minutos, guardará el "
+"historial y te avisará por email cuando se caiga."
+
+#: templates/uptime/project.html:14
+msgid "Domains of this project's analytics without a monitor:"
+msgstr "Dominios de la analítica de este proyecto sin monitor:"
+
+#: templates/uptime/project.html:25
+msgid ""
+"Add the address of a website and falcondatabase will request it every few "
+"minutes, keep the history and email you when it goes down."
+msgstr ""
+"Añade la dirección de un sitio web y falcondatabase la consultará cada pocos "
+"minutos, guardará el historial y te avisará por email cuando se caiga."
+
+#: templates/uptime/project.html:31
+msgid "New monitor"
+msgstr "Nuevo monitor"
+
+#: templates/uptime/project.html:34
+msgid "Add monitor"
+msgstr "Añadir monitor"
+
+#: uptime/forms.py:19 uptime/models.py:33
+msgid "URL"
+msgstr "URL"
+
+#: uptime/forms.py:35
+msgid "Use an http:// or https:// address."
+msgstr "Usa una dirección http:// o https://."
+
+#: uptime/forms.py:38
+msgid "This URL is already monitored in this project."
+msgstr "Esta URL ya se monitoriza en este proyecto."
+
+#: uptime/forms.py:45
+#, python-format
+msgid "A project can have up to %(limit)s monitors."
+msgstr "Un proyecto puede tener hasta %(limit)s monitores."
+
+#: uptime/models.py:21
+msgid "Every minute"
+msgstr "Cada minuto"
+
+#: uptime/models.py:22
+msgid "Every 5 minutes"
+msgstr "Cada 5 minutos"
+
+#: uptime/models.py:23
+msgid "Every 10 minutes"
+msgstr "Cada 10 minutos"
+
+#: uptime/models.py:24
+msgid "Every 15 minutes"
+msgstr "Cada 15 minutos"
+
+#: uptime/models.py:25
+msgid "Every 30 minutes"
+msgstr "Cada 30 minutos"
+
+#: uptime/models.py:26
+msgid "Every hour"
+msgstr "Cada hora"
+
+#: uptime/models.py:34
+msgid "check"
+msgstr "comprobación"
+
+#: uptime/models.py:37
+msgid "email me when it goes down or comes back"
+msgstr "avisarme por email cuando se caiga o vuelva"
+
+#: uptime/models.py:39
+msgid "webhook"
+msgstr "webhook"
+
+#: uptime/notify.py:29
+#, python-format
+msgid "%(n)s min"
+msgstr "%(n)s min"
+
+#: uptime/notify.py:32
+#, python-format
+msgid "%(h)s h %(m)s min"
+msgstr "%(h)s h %(m)s min"
+
+#: uptime/notify.py:33
+#, python-format
+msgid "%(d)s days"
+msgstr "%(d)s días"
+
+#: uptime/notify.py:40
+#, python-format
+msgid "🔴 Down: %(site)s"
+msgstr "🔴 Caído: %(site)s"
+
+#: uptime/notify.py:42
+#, python-format
+msgid "%(url)s is not responding."
+msgstr "%(url)s no responde."
+
+#: uptime/notify.py:43
+#, python-format
+msgid "Error: %(error)s"
+msgstr "Error: %(error)s"
+
+#: uptime/notify.py:46
+#, python-format
+msgid "🟢 Back up: %(site)s"
+msgstr "🟢 De nuevo activo: %(site)s"
+
+#: uptime/notify.py:48
+#, python-format
+msgid "%(url)s is responding again."
+msgstr "%(url)s vuelve a responder."
+
+#: uptime/notify.py:49
+#, python-format
+msgid "It was down for %(duration)s."
+msgstr "Estuvo caído %(duration)s."
+
+#: uptime/notify.py:52
+#, python-format
+msgid "Project: %(project)s"
+msgstr "Proyecto: %(project)s"
+
+#: uptime/notify.py:53
+#, python-format
+msgid "Time: %(time)s UTC"
+msgstr "Hora: %(time)s UTC"
+
+#: uptime/views.py:54 uptime/views.py:90
+#, python-format
+msgid "%(count)s monitors added. The first check runs within a minute."
+msgstr ""
+"%(count)s monitores añadidos. La primera comprobación se hace en menos de un "
+"minuto."
+
+#: uptime/views.py:65
+#, python-format
 msgid "%(count)s monitors checked: %(up)s up, %(down)s down."
 msgstr "%(count)s monitores comprobados: %(up)s activos, %(down)s caídos."
+
+#: uptime/views.py:95
+msgid "Monitor added. The first check runs within a minute."
+msgstr ""
+"Monitor añadido. La primera comprobación se hace en menos de un minuto."
+
+#: uptime/views.py:119
+#, python-format
+msgid "Up: HTTP %(code)s in %(ms)s ms."
+msgstr "Activo: HTTP %(code)s en %(ms)s ms."
+
+#: uptime/views.py:121
+#, python-format
+msgid "Down: %(error)s"
+msgstr "Caído: %(error)s"
+
+#: uptime/views.py:125
+msgid "Monitor deleted."
+msgstr "Monitor eliminado."
+
+#: uptime/views.py:140
+msgid "Monitor saved."
+msgstr "Monitor guardado."
+
+#~ msgid ""
+#~ "Run this once in your terminal; Claude can then use falcondatabase in "
+#~ "every session."
+#~ msgstr ""
+#~ "Ejecútalo una vez en tu terminal; a partir de ahí Claude podrá usar "
+#~ "falcondatabase en cada sesión."

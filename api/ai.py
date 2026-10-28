@@ -5,7 +5,7 @@
     POST /api/ai/tools/<name>   call a tool; the body holds its arguments
 
 Requests send ``Authorization: Bearer fdb_ai_…``. Tokens are created in
-Settings → AI access.
+Settings → AI access, or by an MCP client through OAuth (``core.oauth``).
 """
 
 import json
@@ -16,6 +16,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from core.changelog import VERSION
 from core.models import AccessToken
+from core.oauth import resource_metadata_url
 
 from . import ai_tools
 from .auth import ApiError, get_bearer
@@ -39,9 +40,11 @@ def authenticate(request):
     return token
 
 
-def unauthorized(message):
+def unauthorized(request, message):
     response = respond({"error": message}, 401)
-    response["WWW-Authenticate"] = 'Bearer realm="falcondatabase"'
+    # Tells MCP clients where to start OAuth (RFC 9728).
+    response["WWW-Authenticate"] = (f'Bearer realm="falcondatabase", '
+                                    f'resource_metadata="{resource_metadata_url(request)}"')
     return response
 
 
@@ -52,7 +55,7 @@ def tools(request):
     try:
         token = authenticate(request)
     except ApiError as exc:
-        return unauthorized(exc.message)
+        return unauthorized(request, exc.message)
     return respond({"tools": [t.as_mcp() for t in ai_tools.available_tools(token)]})
 
 
@@ -63,7 +66,7 @@ def call_tool(request, name):
     try:
         token = authenticate(request)
     except ApiError as exc:
-        return unauthorized(exc.message)
+        return unauthorized(request, exc.message)
     try:
         return respond({"data": ai_tools.call(token, name, read_json(request))})
     except ApiError as exc:
@@ -124,7 +127,7 @@ def mcp(request):
     try:
         token = authenticate(request)
     except ApiError as exc:
-        return unauthorized(exc.message)
+        return unauthorized(request, exc.message)
     try:
         payload = json.loads(request.body or b"null")
     except (json.JSONDecodeError, UnicodeDecodeError):

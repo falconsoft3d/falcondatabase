@@ -41,6 +41,29 @@ DEFAULT_FROM_EMAIL="falcondatabase <tu-cuenta@gmail.com>"
 
 Sin `EMAIL_HOST` los emails solo se escriben en el log (los webhooks funcionan igual).
 
+### Automático en cada `git push`
+
+Con el workflow `.github/workflows/deploy.yml`, cada push a `main` pasa los tests y, si van bien, entra al servidor por SSH y ejecuta `./deploy.sh`. Ese script hace la copia de la base de datos en `backups/` (guarda las 14 más recientes), `git pull` y `./install.sh --yes`. Si falla un test o la app no arranca, no se despliega y lo ves en la pestaña **Actions** de GitHub.
+
+Se configura una sola vez:
+
+```bash
+# En el servidor: una clave para GitHub (tu usuario debe poder usar docker)
+ssh-keygen -t ed25519 -N "" -C github-deploy -f ~/.ssh/github_deploy
+cat ~/.ssh/github_deploy.pub >> ~/.ssh/authorized_keys
+
+# En tu ordenador, dentro del proyecto (con la CLI de GitHub, gh)
+gh secret set DEPLOY_HOST --body "falcondatabase.com"
+gh secret set DEPLOY_USER --body "tu-usuario"
+ssh tu-usuario@falcondatabase.com 'cat ~/.ssh/github_deploy' | gh secret set DEPLOY_SSH_KEY
+ssh-keyscan falcondatabase.com | gh secret set DEPLOY_KNOWN_HOSTS
+# Solo si no usas /opt/falcondatabase o el puerto 22:
+gh secret set DEPLOY_PATH --body "/ruta/de/falcondatabase"
+gh secret set DEPLOY_PORT --body "2222"
+```
+
+A partir de ahí basta con `git push`. También puedes lanzarlo a mano desde **Actions → Deploy → Run workflow**, o en el servidor con `./deploy.sh`.
+
 Para la rutina completa (sistema operativo, Docker, copias y qué hacer si algo falla) sigue los pasos de abajo.
 
 ---

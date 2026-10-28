@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load i18n falcon %}
+{% block title %}{% translate "Connect an assistant" %} · falcondatabase{% endblock %}
+{% block content %}
+<div class="auth-page">
+  <div class="brand-mark">{% icon 'database' 26 %}</div>
+  {% if error %}
+    <h1>{% translate "Connect an assistant" %}</h1>
+    <div class="flash flash-error">{% icon 'x' %} {{ error }}</div>
+  {% else %}
+    <h1>{% blocktranslate with name=client.name %}Connect {{ name }} to falcondatabase{% endblocktranslate %}</h1>
+    <form method="post" class="box box-body surface">
+      {% csrf_token %}
+      <p class="muted" style="margin-top:0">{% blocktranslate with name=client.name username=user.username %}<strong>{{ name }}</strong> will act as <strong>{{ username }}</strong>: it can create and edit tables, data and the users of your apps.{% endblocktranslate %}</p>
+      <div class="field">
+        <label for="id_oauth_project">{% translate "Projects" %}</label>
+        <select name="project" id="id_oauth_project">
+          <option value="">{% translate "All my projects (can also create new ones)" %}</option>
+          {% for p in projects %}<option value="{{ p.ref }}">{{ p.owner.username }}/{{ p.slug }}</option>{% endfor %}
+        </select>
+      </div>
+      <div class="field">
+        <label class="checkbox" style="margin-bottom:8px"><input type="radio" name="access" value="write" checked> <span>{% translate "Read and write" %}</span></label>
+        <label class="checkbox"><input type="radio" name="access" value="read"> <span>{% translate "Read only" %}</span></label>
+      </div>
+      <p class="help">{% blocktranslate with host=redirect_host %}You will return to <strong>{{ host }}</strong>. You can revoke this access anytime in Settings → AI access.{% endblocktranslate %}</p>
+      <div class="row" style="gap:8px">
+        <button class="btn grow" type="submit" name="decision" value="deny">{% translate "Cancel" %}</button>
+        <button class="btn btn-primary grow" type="submit" name="decision" value="allow">{% translate "Authorize" %}</button>
+      </div>
+    </form>
+  {% endif %}
+</div>
+{% endblock %}

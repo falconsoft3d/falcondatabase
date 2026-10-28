@@ -18,7 +18,7 @@
         <tbody>
           {% for t in tokens %}
             <tr>
-              <td><strong>{{ t.name }}</strong> <span class="muted small mono">…{{ t.hint }}</span></td>
+              <td><strong>{{ t.name }}</strong> {% if t.client_id %}<span class="label label-accent">{% translate "connector" %}</span>{% else %}<span class="muted small mono">…{{ t.hint }}</span>{% endif %}</td>
               <td>{% if t.project %}<a href="{{ t.project.get_absolute_url }}">{{ t.project.owner.username }}/{{ t.project.slug }}</a>{% else %}<span class="muted">{% translate "All" %}</span>{% endif %}</td>
               <td>{% if t.read_only %}<span class="label">{% translate "read only" %}</span>{% else %}<span class="label label-success">{% translate "read and write" %}</span>{% endif %}</td>
               <td class="muted small">{{ t.created_at|date:"d M Y" }}</td>

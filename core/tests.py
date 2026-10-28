@@ -395,3 +395,130 @@ class CsrfTests(TestCase):
             importlib.reload(project_settings)
         self.assertIn("https://db.example.com", trusted)
         self.assertNotIn("https://localhost", trusted)
+
+
+class OAuthTests(TestCase):
+    REDIRECT = "https://claude.ai/api/mcp/auth_callback"
+    VERIFIER = "v" * 64
+
+    def setUp(self):
+        from projects import services
+
+        self.user = make_user("ana")
+        self.project = services.create_project(self.user, "App")
+        self.client.force_login(self.user)
+
+    def challenge(self, verifier=VERIFIER):
+        import hashlib
+
+        return base64.urlsafe_b64encode(hashlib.sha256(verifier.encode()).digest()).rstrip(b"=").decode()
+
+    def register(self, **extra):
+        response = self.client.post("/oauth/register", {"client_name": "Claude", "redirect_uris": [self.REDIRECT],
+                                                         **extra}, content_type="application/json")
+        return response
+
+    def authorize_url(self, client_id, **extra):
+        from urllib.parse import urlencode
+
+        params = {"response_type": "code", "client_id": client_id, "redirect_uri": self.REDIRECT,
+                  "code_challenge": self.challenge(), "code_challenge_method": "S256", "state": "xyz", **extra}
+        return "/oauth/authorize?" + urlencode(params)
+
+    def get_code(self, client_id, **form):
+        from urllib.parse import parse_qs, urlsplit
+
+        response = self.client.post(self.authorize_url(client_id), {"decision": "allow", **form})
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(response["Location"].startswith(self.REDIRECT + "?"))
+        query = parse_qs(urlsplit(response["Location"]).query)
+        self.assertEqual(query["state"], ["xyz"])
+        return query["code"][0]
+
+    def exchange(self, client_id, code, verifier=VERIFIER):
+        return self.client.post("/oauth/token", {"grant_type": "authorization_code", "code": code,
+                                                 "client_id": client_id, "redirect_uri": self.REDIRECT,
+                                                 "code_verifier": verifier})
+
+    def mcp(self, token):
+        return self.client.post("/api/ai/mcp", {"jsonrpc": "2.0", "id": 1, "method": "tools/list"},
+                                content_type="application/json", headers={"Authorization": f"Bearer {token}"})
+
+    def test_mcp_points_to_metadata(self):
+        response = self.client.post("/api/ai/mcp", {}, content_type="application/json")
+        self.assertEqual(response.status_code, 401)
+        self.assertIn('resource_metadata="http://testserver/.well-known/oauth-protected-resource/api/ai/mcp"',
+                      response["WWW-Authenticate"])
+        resource = self.client.get("/.well-known/oauth-protected-resource/api/ai/mcp").json()
+        self.assertEqual(resource["resource"], "http://testserver/api/ai/mcp")
+        server = self.client.get("/.well-known/oauth-authorization-server").json()
+        self.assertEqual(server["issuer"], resource["authorization_servers"][0])
+        self.assertEqual(server["code_challenge_methods_supported"], ["S256"])
+
+    def test_register_validates_redirect_uris(self):
+        self.assertEqual(self.register(redirect_uris=["http://evil.example/cb"]).status_code, 400)
+        self.assertEqual(self.register(redirect_uris=["javascript:alert(1)"]).status_code, 400)
+        self.assertEqual(self.register(redirect_uris=[]).status_code, 400)
+        self.assertEqual(self.register(redirect_uris=["http://127.0.0.1:33418/callback"]).status_code, 201)
+        self.assertEqual(self.register().json()["token_endpoint_auth_method"], "none")
+
+    def test_full_flow(self):
+        client_id = self.register().json()["client_id"]
+        self.client.logout()
+        login = self.client.get(self.authorize_url(client_id))
+        self.assertEqual(login.status_code, 302)
+        self.assertIn("/login/", login["Location"])
+
+        self.client.force_login(self.user)
+        page = self.client.get(self.authorize_url(client_id))
+        self.assertContains(page, "claude.ai")
+        code = self.get_code(client_id, project=self.project.ref, access="read")
+
+        tokens = self.exchange(client_id, code).json()
+        self.assertEqual(tokens["token_type"], "Bearer")
+        self.assertEqual(self.mcp(tokens["access_token"]).status_code, 200)
+        names = {t["name"] for t in self.mcp(tokens["access_token"]).json()["result"]["tools"]}
+        self.assertIn("query_rows", names)
+        self.assertNotIn("insert_rows", names)  # approved as read only
+        self.assertEqual(self.user.access_tokens.get().project, self.project)
+
+        # The code works once.
+        self.assertEqual(self.exchange(client_id, code).status_code, 400)
+
+        renewed = self.client.post("/oauth/token", {"grant_type": "refresh_token", "client_id": client_id,
+                                                    "refresh_token": tokens["refresh_token"]}).json()
+        self.assertEqual(self.mcp(tokens["access_token"]).status_code, 401)
+        self.assertEqual(self.mcp(renewed["access_token"]).status_code, 200)
+        reused = self.client.post("/oauth/token", {"grant_type": "refresh_token", "client_id": client_id,
+                                                   "refresh_token": tokens["refresh_token"]})
+        self.assertEqual(reused.status_code, 400)
+
+        self.assertEqual(self.client.post("/oauth/revoke", {"token": renewed["refresh_token"]}).status_code, 200)
+        self.assertEqual(self.mcp(renewed["access_token"]).status_code, 401)
+        self.assertFalse(self.user.access_tokens.exists())
+
+    def test_pkce_and_redirect_uri_are_checked(self):
+        client_id = self.register().json()["client_id"]
+        self.assertEqual(self.exchange(client_id, self.get_code(client_id), verifier="w" * 64).status_code, 400)
+        bad_redirect = self.client.get(self.authorize_url(client_id, redirect_uri="https://evil.example/cb"))
+        self.assertEqual(bad_redirect.status_code, 400)
+        no_pkce = self.client.get(self.authorize_url(client_id, code_challenge_method="plain"))
+        self.assertIn("error=invalid_request", no_pkce["Location"])
+
+    def test_deny_and_expiry(self):
+        from datetime import timedelta
+
+        from django.utils import timezone
+
+        from .models import AccessToken
+
+        client_id = self.register().json()["client_id"]
+        denied = self.client.post(self.authorize_url(client_id), {"decision": "deny"})
+        self.assertIn("error=access_denied", denied["Location"])
+
+        tokens = self.exchange(client_id, self.get_code(client_id)).json()
+        AccessToken.objects.update(expires_at=timezone.now() - timedelta(seconds=1))
+        self.assertEqual(self.mcp(tokens["access_token"]).status_code, 401)
+        # Personal tokens never expire.
+        _token, raw = AccessToken.issue(self.user, "laptop")
+        self.assertEqual(self.mcp(raw).status_code, 200)

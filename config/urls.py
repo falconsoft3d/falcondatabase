@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.urls import include, path
 
-from core import account_api
+from core import account_api, oauth
 from core import views as core_views
 from projects import views as project_views
 from uptime import views as uptime_views
@@ -37,6 +37,13 @@ urlpatterns = [
     path("api/account/token", account_api.token, name="account_token"),
     path("api/account/me", account_api.me, name="account_me"),
     path("api/account/analytics", account_api.analytics, name="account_analytics"),
+    path(".well-known/oauth-protected-resource", oauth.protected_resource),
+    path(".well-known/oauth-protected-resource/api/ai/mcp", oauth.protected_resource, name="oauth_resource"),
+    path(".well-known/oauth-authorization-server", oauth.authorization_server, name="oauth_metadata"),
+    path("oauth/register", oauth.register, name="oauth_register"),
+    path("oauth/authorize", oauth.authorize, name="oauth_authorize"),
+    path("oauth/token", oauth.token, name="oauth_token"),
+    path("oauth/revoke", oauth.revoke, name="oauth_revoke"),
     path("extension/", core_views.extension_page, name="extension"),
     path("extension/falcondatabase-extension.zip", core_views.extension_zip, name="extension_zip"),
     path("api/", include("api.urls")),

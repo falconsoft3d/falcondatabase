@@ -6,6 +6,21 @@ Change kinds: "added", "improved", "fixed".
 
 RELEASES = [
     {
+        "version": "0.10.0",
+        "date": "2026-10-28",
+        "title": {"en": "Connect Claude with one click", "es": "Conecta Claude con un clic"},
+        "changes": [
+            ("added", "Add falcondatabase to Claude (claude.ai, Desktop or mobile) as a custom connector: paste the MCP URL, press Connect, sign in and choose which projects it may reach and whether it can write. No token to copy.",
+                      "Añade falcondatabase a Claude (claude.ai, Desktop o el móvil) como conector personalizado: pega la URL del MCP, pulsa Conectar, inicia sesión y elige a qué proyectos accede y si puede escribir. Sin copiar ningún token."),
+            ("added", "OAuth 2.1 for MCP clients: discovery, dynamic client registration, PKCE, renewable access and revocation. Claude Code connects the same way with /mcp → Authenticate.",
+                      "OAuth 2.1 para clientes MCP: descubrimiento, registro dinámico de clientes, PKCE, acceso renovable y revocación. Claude Code se conecta igual con /mcp → Authenticate."),
+            ("improved", "Connected assistants appear in Settings → AI access as \"connector\" and are revoked there like any token. The connection guide starts with the \"Connect with Claude\" button.",
+                         "Los asistentes conectados aparecen en Ajustes → Acceso IA como \"conector\" y se revocan allí como cualquier token. La guía de conexión empieza con el botón \"Conectar con Claude\"."),
+            ("added", "Automatic deploy: every push to main runs the tests and, if they pass, updates the server over SSH with the new deploy.sh (database backup, git pull and ./install.sh). Set it up in DEPLOY.md.",
+                      "Despliegue automático: cada push a main pasa los tests y, si van bien, actualiza el servidor por SSH con el nuevo deploy.sh (copia de la base de datos, git pull y ./install.sh). Se configura siguiendo DEPLOY.md."),
+        ],
+    },
+    {
         "version": "0.9.0",
         "date": "2026-10-27",
         "title": {"en": "Uptime monitoring", "es": "Monitor de uptime"},

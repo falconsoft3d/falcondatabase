@@ -1,7 +1,22 @@
 {% load i18n falcon %}{# Expects: mcp_url, tools_url, ai_token, ai_project (optional) #}
 <div class="markdown">
-  <h3 style="margin-top:0">Claude Code</h3>
-  <p class="muted">{% translate "Run this once in your terminal; Claude can then use falcondatabase in every session." %}</p>
+  <h3 style="margin-top:0">Claude <span class="label label-success">{% translate "no token" %}</span></h3>
+  <p class="muted">{% blocktranslate %}In claude.ai, Claude Desktop or the mobile app: <strong>Settings → Connectors → Add custom connector</strong>, paste this URL and press <strong>Connect</strong>. Claude opens falcondatabase so you sign in and choose which projects it may reach.{% endblocktranslate %}</p>
+  <div class="key-field" style="margin-bottom:8px"><input type="text" id="ai-connector-url" readonly value="{{ mcp_url }}">
+    <button type="button" class="btn" data-copy="#ai-connector-url" title="{% translate 'Copy' %}">{% icon 'copy' %}</button></div>
+  <a class="btn btn-primary" href="https://claude.ai/settings/connectors" target="_blank" rel="noopener">{% icon 'link' %} {% translate "Connect with Claude" %}</a>
+  {% if "://localhost" in mcp_url or "://127.0.0.1" in mcp_url or mcp_url|slice:":5" == "http:" %}
+    <div class="flash flash-info" style="margin-top:12px">{% icon 'globe' %}
+      <span>{% blocktranslate %}Claude's connectors reach your server from the internet, so it needs a public HTTPS address. Locally, use Claude Code.{% endblocktranslate %}</span></div>
+  {% endif %}
+
+  <h3>Claude Code</h3>
+  <p class="muted">{% blocktranslate %}Run this once in your terminal, then type <code class="inline">/mcp</code> in Claude Code and choose <strong>Authenticate</strong> to sign in. Claude can then use falcondatabase in every session.{% endblocktranslate %}</p>
+  <div class="row" style="align-items:flex-start;gap:8px">
+<pre class="code grow" id="ai-claude-code-oauth">claude mcp add --transport http falcondatabase {{ mcp_url }}</pre>
+    <button type="button" class="btn btn-sm" data-copy="#ai-claude-code-oauth" title="{% translate 'Copy' %}">{% icon 'copy' %}</button>
+  </div>
+  <p class="muted">{% translate "Or with a token, without signing in:" %}</p>
   <div class="row" style="align-items:flex-start;gap:8px">
 <pre class="code grow" id="ai-claude-code">claude mcp add --transport http falcondatabase {{ mcp_url }} --header "Authorization: Bearer {{ ai_token }}"</pre>
     <button type="button" class="btn btn-sm" data-copy="#ai-claude-code" title="{% translate 'Copy' %}">{% icon 'copy' %}</button>
@@ -21,7 +36,7 @@
     <button type="button" class="btn btn-sm" data-copy="#ai-mcp-json" title="{% translate 'Copy' %}">{% icon 'copy' %}</button>
   </div>
 
-  <h3>Claude Desktop</h3>
+  <h3>Claude Desktop ({% translate "with a token" %})</h3>
   <p class="muted">{% blocktranslate %}In <strong>Settings → Developer → Edit config</strong> (<code class="inline">claude_desktop_config.json</code>). It needs Node.js installed.{% endblocktranslate %}</p>
   <div class="row" style="align-items:flex-start;gap:8px">
 <pre class="code grow" id="ai-desktop-json">{

@@ -1,0 +1,78 @@
+# Every push to main: run the tests, then update the server with ./deploy.sh over SSH.
+#
+# Repository secrets (Settings → Secrets and variables → Actions):
+#   DEPLOY_HOST         server name or IP, e.g. falcondatabase.com
+#   DEPLOY_USER         SSH user that can run docker
+#   DEPLOY_SSH_KEY      private key whose public half is in the user's ~/.ssh/authorized_keys
+#   DEPLOY_PATH         optional, folder of the install [/opt/falcondatabase]
+#   DEPLOY_PORT         optional, SSH port [22]
+#   DEPLOY_KNOWN_HOSTS  optional, output of `ssh-keyscan <host>`; without it the key is
+#                       fetched on every run (trust on first use)
+
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: falcon
+          POSTGRES_PASSWORD: falcon
+          POSTGRES_DB: falcondatabase
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U falcon" --health-interval 5s --health-timeout 5s --health-retries 20
+    env:
+      POSTGRES_USER: falcon
+      POSTGRES_PASSWORD: falcon
+      POSTGRES_HOST: localhost
+      POSTGRES_PORT: "5432"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq gettext
+      - run: pip install -r requirements.txt
+      - run: python manage.py compilemessages -l es
+      - run: python manage.py test
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up SSH
+        env:
+          SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+          HOST: ${{ secrets.DEPLOY_HOST }}
+          PORT: ${{ secrets.DEPLOY_PORT || '22' }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/deploy_key && chmod 600 ~/.ssh/deploy_key
+          if [ -n "$KNOWN_HOSTS" ]; then
+            printf '%s\n' "$KNOWN_HOSTS" > ~/.ssh/known_hosts
+          else
+            ssh-keyscan -p "$PORT" "$HOST" > ~/.ssh/known_hosts
+          fi
+      - name: Run deploy.sh on the server
+        env:
+          HOST: ${{ secrets.DEPLOY_HOST }}
+          USER: ${{ secrets.DEPLOY_USER }}
+          PORT: ${{ secrets.DEPLOY_PORT || '22' }}
+          APP_PATH: ${{ secrets.DEPLOY_PATH || '/opt/falcondatabase' }}
+        run: |
+          ssh -i ~/.ssh/deploy_key -p "$PORT" -o BatchMode=yes "$USER@$HOST" \
+            "cd '$APP_PATH' && git pull --ff-only --quiet && ./deploy.sh"

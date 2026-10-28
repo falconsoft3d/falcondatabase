@@ -1,8 +1,10 @@
 import hashlib
 import secrets
+from datetime import timedelta
 
 from django.conf import settings
 from django.db import models
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from . import totp
@@ -95,9 +97,14 @@ class AccessToken(models.Model):
     """Personal token an AI assistant (or any script) uses to manage the owner's projects.
 
     Only the SHA-256 of the token is stored; the clear text is shown once when it is created.
+    Tokens issued through OAuth (a connector added in Claude) belong to a ``client``,
+    expire after ``OAUTH_LIFETIME`` and are renewed with their refresh token.
     """
 
     PREFIX = "fdb_ai_"
+    REFRESH_PREFIX = "fdb_rt_"
+    OAUTH_LIFETIME = timedelta(hours=1)
+    REFRESH_LIFETIME = timedelta(days=90)
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="access_tokens")
     name = models.CharField(_("name"), max_length=100)
@@ -109,6 +116,10 @@ class AccessToken(models.Model):
     hint = models.CharField(max_length=8)  # last characters, to recognize it in the list
     created_at = models.DateTimeField(auto_now_add=True)
     last_used_at = models.DateTimeField(null=True, blank=True)
+    client = models.ForeignKey("OAuthClient", on_delete=models.CASCADE, null=True, blank=True, related_name="tokens")
+    expires_at = models.DateTimeField(null=True, blank=True)
+    refresh_digest = models.CharField(max_length=64, unique=True, null=True, blank=True)
+    refresh_expires_at = models.DateTimeField(null=True, blank=True)
 
     class Meta:
         ordering = ["-created_at"]
@@ -125,8 +136,79 @@ class AccessToken(models.Model):
         return token, raw
 
     @classmethod
+    def issue_oauth(cls, client, user, project=None, read_only=False):
+        """Token for an OAuth client; returns ``(token, access_token, refresh_token)``."""
+        token = cls(user=user, name=client.name, project=project, read_only=read_only, client=client)
+        return (token, *token.renew())
+
+    def renew(self):
+        """Replace both secrets (refresh tokens are single use) and return them."""
+        access = self.PREFIX + secrets.token_hex(24)
+        refresh = self.REFRESH_PREFIX + secrets.token_hex(24)
+        now = timezone.now()
+        self.digest, self.hint = hash_access_token(access), access[-4:]
+        self.refresh_digest = hash_access_token(refresh)
+        self.expires_at, self.refresh_expires_at = now + self.OAUTH_LIFETIME, now + self.REFRESH_LIFETIME
+        self.save()
+        return access, refresh
+
+    @classmethod
     def lookup(cls, raw):
         if not raw or not raw.startswith(cls.PREFIX):
             return None
         return (cls.objects.select_related("user", "project")
-                .filter(digest=hash_access_token(raw), user__is_active=True).first())
+                .filter(digest=hash_access_token(raw), user__is_active=True)
+                .filter(models.Q(expires_at__isnull=True) | models.Q(expires_at__gt=timezone.now())).first())
+
+    @classmethod
+    def lookup_refresh(cls, raw):
+        if not raw or not raw.startswith(cls.REFRESH_PREFIX):
+            return None
+        return (cls.objects.select_related("user", "client")
+                .filter(refresh_digest=hash_access_token(raw), user__is_active=True,
+                        refresh_expires_at__gt=timezone.now()).first())
+
+
+class OAuthClient(models.Model):
+    """An app registered itself to connect (RFC 7591), e.g. Claude when a connector is added."""
+
+    client_id = models.CharField(max_length=64, unique=True)
+    name = models.CharField(max_length=100)
+    redirect_uris = models.JSONField(default=list)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
+
+
+class OAuthCode(models.Model):
+    """Single-use authorization code, exchanged for a token with its PKCE verifier."""
+
+    LIFETIME = timedelta(minutes=10)
+
+    digest = models.CharField(max_length=64, unique=True)
+    client = models.ForeignKey(OAuthClient, on_delete=models.CASCADE, related_name="+")
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="+")
+    project = models.ForeignKey("projects.Project", on_delete=models.CASCADE, null=True, blank=True,
+                                related_name="+")
+    read_only = models.BooleanField(default=False)
+    redirect_uri = models.TextField()
+    code_challenge = models.CharField(max_length=128)
+    expires_at = models.DateTimeField()
+
+    @classmethod
+    def issue(cls, **fields):
+        """Create a code and return its clear text."""
+        raw = secrets.token_urlsafe(32)
+        cls.objects.filter(expires_at__lt=timezone.now()).delete()
+        cls.objects.create(digest=hash_access_token(raw), expires_at=timezone.now() + cls.LIFETIME, **fields)
+        return raw
+
+    @classmethod
+    def consume(cls, raw):
+        """Return the code (deleted, so it cannot be used twice) or ``None``."""
+        code = cls.objects.select_related("client", "user").filter(digest=hash_access_token(raw or "")).first()
+        # Only the request that actually deletes it may use it.
+        if code is None or not cls.objects.filter(pk=code.pk).delete()[0]:
+            return None
+        return code if code.expires_at > timezone.now() and code.user.is_active else None

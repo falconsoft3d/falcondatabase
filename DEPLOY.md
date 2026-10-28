@@ -489,6 +489,35 @@ Patch releases (16.x) are applied by step 3. A **major** version changes the dat
 
 Only do this when a falcondatabase release recommends it.
 
+### Automatic deploy on every push
+
+`.github/workflows/deploy.yml` runs the tests on every push to `main` and, if they pass, connects to the server over SSH and runs `./deploy.sh`: a database backup in `backups/` (the newest 14 are kept), `git pull --ff-only` and `./install.sh --yes`, which rebuilds, restarts and waits for `/healthz`. A failing test or health check stops the deploy, and you see it in the **Actions** tab.
+
+One-time setup:
+
+1. On the server, create a key for GitHub and allow it (the user must be able to run `docker`):
+
+   ```bash
+   ssh-keygen -t ed25519 -N "" -C github-deploy -f ~/.ssh/github_deploy
+   cat ~/.ssh/github_deploy.pub >> ~/.ssh/authorized_keys
+   ```
+
+2. Add the repository secrets (**Settings → Secrets and variables → Actions**), or from your computer with the GitHub CLI:
+
+   ```bash
+   gh secret set DEPLOY_HOST --body "falcondatabase.com"
+   gh secret set DEPLOY_USER --body "your-user"
+   ssh your-user@falcondatabase.com 'cat ~/.ssh/github_deploy' | gh secret set DEPLOY_SSH_KEY
+   ssh-keyscan falcondatabase.com | gh secret set DEPLOY_KNOWN_HOSTS
+   # Only if they differ from the defaults:
+   gh secret set DEPLOY_PATH --body "/opt/falcondatabase"
+   gh secret set DEPLOY_PORT --body "22"
+   ```
+
+3. Push to `main`, or run the workflow by hand from **Actions → Deploy → Run workflow**.
+
+`./deploy.sh` also works by hand on the server. Operating system updates and major PostgreSQL upgrades are still done by hand, as described above.
+
 ## Backups and restore
 
 ### Back up

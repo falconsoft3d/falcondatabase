@@ -24,6 +24,7 @@ Create projects, add real PostgreSQL tables and user login to them, and query ev
 - **JavaScript SDK** with no dependencies, served at `/sdk/falcondb.js`: tables, login and storage.
 - **File storage**: public and private buckets per project, a file browser, uploads from your app and signed links that expire. A simple alternative to S3.
 - **Export / import** a project as JSON (structure, optionally with data), on the same or another server.
+- **Manage it with AI**: an MCP server at `/api/ai/mcp` lets Claude, Cursor or any assistant create and edit tables, columns, rows and app users. Connect it with a personal token, or in Claude as a custom connector with one click (OAuth).
 
 **Apps and users**
 
@@ -105,6 +106,8 @@ sudo apt update && sudo apt full-upgrade -y        # system and Docker
 cd falcondatabase && git pull && ./install.sh      # new version, latest PostgreSQL/Caddy images
 docker image prune -f                              # remove old images
 ```
+
+To deploy automatically on every push to `main`, set up the GitHub Actions workflow: [DEPLOY.md](DEPLOY.md#automatic-deploy-on-every-push).
 
 Your data and `.env` are kept. Step-by-step guide in Spanish: [docs/actualizar-servidor.md](docs/actualizar-servidor.md). [DEPLOY.md](DEPLOY.md#keeping-the-server-up-to-date) has the full routine, including major PostgreSQL upgrades, and also covers HTTPS, backups and troubleshooting.
 
@@ -283,6 +286,16 @@ Open **`/extension/`** (also linked from the home page) and download the zip. It
 The popup shows visitors, sessions, pageviews and bounce rate with their change, a daily chart, and the top pages, sources and countries, for all your projects or one. The icon badge shows today's pageviews and refreshes every 30 minutes. The source is in `extension/` (Manifest V3, English and Spanish).
 
 It uses the account API: `POST /api/account/token` (username, password, optional `code`) returns a 30-day token, revoked when the password changes; `GET /api/account/analytics?days=&p=<project ref>` returns the report.
+
+## Manage it with AI
+
+falcondatabase is an MCP server at `/api/ai/mcp` (the same tools also answer over plain HTTP at `/api/ai/tools/<tool>`). `/ai/` and the **AI** tab of each project have the connection guide already filled in.
+
+- **Claude (claude.ai, Desktop, mobile)**: **Settings → Connectors → Add custom connector** and paste `https://your-server/api/ai/mcp`. Claude opens falcondatabase, you sign in (with 2FA if enabled), choose one project or all and read-only or read and write, and press **Authorize**. Claude's servers call yours, so it needs a public HTTPS address.
+- **Claude Code**: `claude mcp add --transport http falcondatabase https://your-server/api/ai/mcp`, then `/mcp` → **Authenticate**. It also works against `http://localhost`.
+- **Any other client**: create a token in **Settings → AI access** and send `Authorization: Bearer fdb_ai_…`.
+
+The connector uses OAuth 2.1: discovery (`/.well-known/oauth-protected-resource`, `/.well-known/oauth-authorization-server`), dynamic client registration (`/oauth/register`), PKCE S256 (`/oauth/authorize`, `/oauth/token`) and revocation (`/oauth/revoke`). Each approval appears in **Settings → AI access** as a *connector* and is revoked there like any token. Access tokens last one hour and are renewed with a single-use refresh token valid for 90 days.
 
 ## Export and import
 
