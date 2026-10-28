@@ -6,6 +6,17 @@ Change kinds: "added", "improved", "fixed".
 
 RELEASES = [
     {
+        "version": "0.10.2",
+        "date": "2026-10-28",
+        "title": {"en": "Claude connector: always HTTPS", "es": "Conector de Claude: siempre HTTPS"},
+        "changes": [
+            ("fixed", "The OAuth and MCP addresses of a server with a domain name are always announced with https://, even if the proxy in front does not send X-Forwarded-Proto. Adding the connector in Claude no longer fails at the registration step. Local addresses and IPs are unchanged.",
+                      "Las direcciones OAuth y MCP de un servidor con dominio se anuncian siempre con https://, aunque el proxy de delante no envíe X-Forwarded-Proto. Añadir el conector en Claude ya no falla en el paso de registro. Las direcciones locales y las IP no cambian."),
+            ("fixed", "The connection guide shows the MCP URL with https:// on those servers, ready to paste into Claude.",
+                      "La guía de conexión muestra la URL del MCP con https:// en esos servidores, lista para pegar en Claude."),
+        ],
+    },
+    {
         "version": "0.10.1",
         "date": "2026-10-28",
         "title": {"en": "Claude connector behind nginx", "es": "Conector de Claude detrás de nginx"},

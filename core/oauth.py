@@ -15,6 +15,7 @@ the authorize page and exchanges the code. Each approval becomes an
 
 import base64
 import hashlib
+import ipaddress
 import json
 import secrets
 from datetime import timedelta
@@ -37,7 +38,27 @@ UNUSED_CLIENT_TTL = timedelta(days=1)
 
 
 def base_url(request):
-    return request.build_absolute_uri("/").rstrip("/")
+    """Public address of this server, as MCP clients must see it.
+
+    OAuth only works over HTTPS except on this machine, so a domain name without an
+    explicit port is announced as https:// even when the proxy in front (nginx…) does not
+    tell Django that it terminated TLS. Local addresses and IPs keep what the request says.
+    """
+    url = request.build_absolute_uri("/").rstrip("/")
+    parts = urlsplit(url)
+    if parts.scheme == "http" and parts.port is None and not is_local_or_ip(parts.hostname):
+        url = "https" + url[len("http"):]
+    return url
+
+
+def is_local_or_ip(hostname):
+    if not hostname or hostname in LOOPBACK_HOSTS or hostname.endswith((".localhost", ".local")):
+        return True
+    try:
+        ipaddress.ip_address(hostname)
+    except ValueError:
+        return False
+    return True
 
 
 def mcp_url(request):

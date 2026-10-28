@@ -447,10 +447,10 @@ class OAuthTests(TestCase):
     def test_mcp_points_to_metadata(self):
         response = self.client.post("/api/ai/mcp", {}, content_type="application/json")
         self.assertEqual(response.status_code, 401)
-        self.assertIn('resource_metadata="http://testserver/.well-known/oauth-protected-resource/api/ai/mcp"',
+        self.assertIn('resource_metadata="https://testserver/.well-known/oauth-protected-resource/api/ai/mcp"',
                       response["WWW-Authenticate"])
         resource = self.client.get("/.well-known/oauth-protected-resource/api/ai/mcp").json()
-        self.assertEqual(resource["resource"], "http://testserver/api/ai/mcp")
+        self.assertEqual(resource["resource"], "https://testserver/api/ai/mcp")
         server = self.client.get("/.well-known/oauth-authorization-server").json()
         self.assertEqual(server["issuer"], resource["authorization_servers"][0])
         self.assertEqual(server["code_challenge_methods_supported"], ["S256"])
@@ -462,6 +462,17 @@ class OAuthTests(TestCase):
             server = self.client.get("/.well-known/oauth-authorization-server",
                                      headers={"Host": "testserver", "X-Forwarded-Proto": "https"}).json()
         self.assertEqual(server["registration_endpoint"], "https://testserver/oauth/register")
+
+    def test_domains_are_announced_over_https(self):
+        # nginx in front without X-Forwarded-Proto: the request reaches Django as http.
+        def issuer(host):
+            return self.client.get("/.well-known/oauth-authorization-server", headers={"Host": host}).json()["issuer"]
+
+        with self.settings(ALLOWED_HOSTS=["*"]):
+            self.assertEqual(issuer("db.example.com"), "https://db.example.com")
+            self.assertEqual(issuer("db.example.com:8000"), "http://db.example.com:8000")
+            self.assertEqual(issuer("localhost:8000"), "http://localhost:8000")
+            self.assertEqual(issuer("203.0.113.5"), "http://203.0.113.5")
 
     def test_register_validates_redirect_uris(self):
         self.assertEqual(self.register(redirect_uris=["http://evil.example/cb"]).status_code, 400)

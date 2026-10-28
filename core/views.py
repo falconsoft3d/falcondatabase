@@ -85,7 +85,9 @@ def csrf_failure(request, reason=""):
 
 def ai_context(request, token=None, project=None):
     """URLs and token shown in the "connect your AI" snippets (a placeholder until a token is created)."""
-    base = request.build_absolute_uri("/").rstrip("/")
+    from .oauth import base_url
+
+    base = base_url(request)
     return {
         "mcp_url": f"{base}/api/ai/mcp", "tools_url": f"{base}/api/ai/tools",
         "ai_token": token or _("fdb_ai_YOUR_TOKEN"), "ai_project": project,
