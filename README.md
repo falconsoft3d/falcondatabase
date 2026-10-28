@@ -409,7 +409,7 @@ All settings are environment variables, read from `.env`.
 | `FALCONDB_CORS_ORIGINS` | `*` | Origins allowed to call the API from a browser. |
 | `FALCONDB_TOKEN_MAX_AGE` | `604800` | Lifetime of app user tokens (seconds). |
 | `FALCONDB_MAX_PAGE_SIZE` | `1000` | Maximum rows per request. |
-| `FALCONDB_TRUST_PROXY` | value of `USE_HTTPS` | Read the visitor IP for analytics from `X-Forwarded-For`. |
+| `FALCONDB_TRUST_PROXY` | value of `USE_HTTPS` | Trust `X-Forwarded-For` (visitor IP for analytics) and `X-Forwarded-Proto` (HTTPS behind your own nginx, needed by Claude's connectors). |
 | `FALCONDB_STORAGE_ROOT` | `media/storage` | Where uploaded files are written. |
 | `FALCONDB_STORAGE_MAX_FILE_MB` | `50` | Maximum size of one uploaded file. |
 | `FALCONDB_STORAGE_QUOTA_MB` | `1024` | Maximum storage per project. |

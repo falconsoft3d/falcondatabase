@@ -583,7 +583,7 @@ All settings live in `.env`. After editing it, apply the changes with `docker co
 | `FALCONDB_CORS_ORIGINS` | `*` | Origins allowed to call the API from a browser, comma separated |
 | `FALCONDB_TOKEN_MAX_AGE` | – (7 days) | Lifetime of app user tokens, in seconds |
 | `FALCONDB_MAX_PAGE_SIZE` | – (1000) | Maximum rows per API request |
-| `FALCONDB_TRUST_PROXY` | – (= `USE_HTTPS`) | Read the visitor IP for analytics from `X-Forwarded-For`. Keep it `true` behind Caddy/nginx. |
+| `FALCONDB_TRUST_PROXY` | – (= `USE_HTTPS`) | Trust the proxy's `X-Forwarded-For` (visitor IP for analytics) and `X-Forwarded-Proto` (HTTPS detection, needed by Claude's connectors). Keep it `true` behind Caddy/nginx. |
 | `FALCONDB_CONTACT_NAME` / `FALCONDB_CONTACT_EMAIL` | your answers | Footer and cookie policy contact |
 | `FALCONDB_ADMIN_USERNAME` | your answer | Used by the installer to keep the admin on updates |
 | `WEB_CONCURRENCY` | `3` | Gunicorn workers (about 2 × CPU cores + 1) |
@@ -625,6 +625,7 @@ All settings live in `.env`. After editing it, apply the changes with `docker co
 | `unexpected character … in variable name` when running Compose | Old Compose versions need values with spaces or accents in quotes: `FALCONDB_CONTACT_NAME="Marlon Falcon Hernández"`. The installer already writes them that way. |
 | `Set SECRET_KEY when DEBUG is false` | `.env` is missing `SECRET_KEY`. Generate one: `openssl rand -base64 48`. |
 | Changed `POSTGRES_PASSWORD` and now the app can't connect | The password is only applied when the volume is created. Change it inside PostgreSQL too: `docker compose exec db psql -U falcon -c "ALTER USER falcon PASSWORD 'new'"`. |
+| Claude says it could not register with the sign-in service when adding the connector | Django doesn't know the site is served over HTTPS, so `/.well-known/oauth-authorization-server` lists `http://` URLs. Behind your own nginx, set `FALCONDB_TRUST_PROXY=true` in `.env` and add `proxy_set_header X-Forwarded-Proto $scheme;` to the `location` block, then restart (`docker compose up -d web`, `sudo systemctl reload nginx`). |
 | All analytics visitors appear to come from the same place | The app is behind a proxy but doesn't trust `X-Forwarded-For`. Set `FALCONDB_TRUST_PROXY=true` (automatic with `USE_HTTPS=true`). |
 | Locked out of the admin account (lost phone and recovery codes) | `docker compose exec web python manage.py shell -c "from core.models import TwoFactor; TwoFactor.objects.filter(user__username='marlon').delete()"` |
 

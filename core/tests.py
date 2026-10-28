@@ -455,6 +455,14 @@ class OAuthTests(TestCase):
         self.assertEqual(server["issuer"], resource["authorization_servers"][0])
         self.assertEqual(server["code_challenge_methods_supported"], ["S256"])
 
+    def test_metadata_uses_https_behind_a_trusted_proxy(self):
+        from django.test import override_settings
+
+        with override_settings(SECURE_PROXY_SSL_HEADER=("HTTP_X_FORWARDED_PROTO", "https")):
+            server = self.client.get("/.well-known/oauth-authorization-server",
+                                     headers={"X-Forwarded-Proto": "https"}).json()
+        self.assertEqual(server["registration_endpoint"], "https://testserver/oauth/register")
+
     def test_register_validates_redirect_uris(self):
         self.assertEqual(self.register(redirect_uris=["http://evil.example/cb"]).status_code, 400)
         self.assertEqual(self.register(redirect_uris=["javascript:alert(1)"]).status_code, 400)

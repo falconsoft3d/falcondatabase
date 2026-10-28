@@ -6,6 +6,15 @@ Change kinds: "added", "improved", "fixed".
 
 RELEASES = [
     {
+        "version": "0.10.1",
+        "date": "2026-10-28",
+        "title": {"en": "Claude connector behind nginx", "es": "Conector de Claude detrás de nginx"},
+        "changes": [
+            ("fixed", "Adding the Claude connector failed (\"could not register with the sign-in service\") on servers behind their own nginx: the OAuth addresses were announced with http://. With FALCONDB_TRUST_PROXY=true the X-Forwarded-Proto header of the proxy is now trusted and they use https://.",
+                      "Añadir el conector de Claude fallaba (\"no se ha podido completar el registro en el servicio de inicio de sesión\") en servidores detrás de su propio nginx: las direcciones OAuth se anunciaban con http://. Con FALCONDB_TRUST_PROXY=true ahora se confía en la cabecera X-Forwarded-Proto del proxy y usan https://."),
+        ],
+    },
+    {
         "version": "0.10.0",
         "date": "2026-10-28",
         "title": {"en": "Connect Claude with one click", "es": "Conecta Claude con un clic"},
