@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-28 09:12+0000\n"
+"POT-Creation-Date: 2026-10-28 10:50+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -76,7 +76,7 @@ msgstr ""
 "Token de IA inválido o ausente. Envíalo en «Authorization: Bearer fdb_ai_…»."
 
 #: api/ai.py:54 api/ai.py:65 api/ai.py:124 api/views.py:61
-#: core/account_api.py:67 core/oauth.py:106 core/oauth.py:213 core/oauth.py:237
+#: core/account_api.py:67 core/oauth.py:127 core/oauth.py:234 core/oauth.py:258
 #, python-format
 msgid "Method %(method)s not allowed."
 msgstr "Método %(method)s no permitido."
@@ -192,7 +192,7 @@ msgstr "Esta tabla es privada: solo se accede con la service key."
 msgid "Project not found."
 msgstr "Proyecto no encontrado."
 
-#: api/views.py:91 core/oauth.py:112
+#: api/views.py:91 core/oauth.py:133
 msgid "The request body is not valid JSON."
 msgstr "El cuerpo de la petición no es JSON válido."
 
@@ -246,7 +246,7 @@ msgstr "Usuario o contraseña incorrectos."
 msgid "Enter the code from your authenticator app."
 msgstr "Escribe el código de tu app de autenticación."
 
-#: core/account_api.py:98 core/views.py:195
+#: core/account_api.py:98 core/views.py:197
 msgid "Invalid code. Try again."
 msgstr "Código incorrecto. Inténtalo de nuevo."
 
@@ -299,119 +299,120 @@ msgstr "nombre"
 msgid "read only"
 msgstr "solo lectura"
 
-#: core/oauth.py:115
+#: core/oauth.py:136
 #, python-format
 msgid "Send between 1 and %(n)s redirect_uris."
 msgstr "Envía entre 1 y %(n)s redirect_uris."
 
-#: core/oauth.py:118
+#: core/oauth.py:139
 msgid "Redirect URIs must use HTTPS (or HTTP to localhost)."
 msgstr "Las URI de redirección deben usar HTTPS (o HTTP a localhost)."
 
-#: core/oauth.py:119 core/views.py:115 projects/views.py:409
+#: core/oauth.py:140 core/views.py:117 projects/views.py:409
 msgid "AI assistant"
 msgstr "Asistente de IA"
 
-#: core/oauth.py:154
+#: core/oauth.py:175
 msgid "This connection link is not valid. Start again from your assistant."
-msgstr "Este enlace de conexión no es válido. Empieza de nuevo desde tu asistente."
+msgstr ""
+"Este enlace de conexión no es válido. Empieza de nuevo desde tu asistente."
 
-#: core/oauth.py:222
+#: core/oauth.py:243
 msgid "The authorization code is invalid or expired."
 msgstr "El código de autorización no es válido o ha caducado."
 
-#: core/oauth.py:228
+#: core/oauth.py:249
 msgid "The refresh token is invalid or expired."
 msgstr "El token de renovación no es válido o ha caducado."
 
-#: core/oauth.py:231
+#: core/oauth.py:252
 msgid "Use authorization_code or refresh_token."
 msgstr "Usa authorization_code o refresh_token."
 
-#: core/views.py:91
+#: core/views.py:93
 msgid "fdb_ai_YOUR_TOKEN"
 msgstr "fdb_ai_TU_TOKEN"
 
-#: core/views.py:110 projects/views.py:407
+#: core/views.py:112 projects/views.py:407
 msgid "Token revoked. Assistants using it lose access immediately."
 msgstr ""
 "Token revocado. Los asistentes que lo usaban pierden el acceso al instante."
 
-#: core/views.py:141
+#: core/views.py:143
 msgid "Sign up is disabled. Ask the administrator for an account."
 msgstr "El registro está desactivado. Pide una cuenta al administrador."
 
-#: core/views.py:174
+#: core/views.py:176
 msgid "The verification expired. Sign in again."
 msgstr "La verificación caducó. Inicia sesión de nuevo."
 
-#: core/views.py:187
+#: core/views.py:189
 msgid "You have few recovery codes left. Generate new ones in Settings."
 msgstr ""
 "Te quedan pocos códigos de recuperación. Genera nuevos en Configuración."
 
-#: core/views.py:192
+#: core/views.py:194
 msgid "Too many failed attempts. Sign in again."
 msgstr "Demasiados intentos fallidos. Inicia sesión de nuevo."
 
-#: core/views.py:206
+#: core/views.py:208
 msgid "Choose an image."
 msgstr "Elige una imagen."
 
-#: core/views.py:211
+#: core/views.py:213
 msgid "Profile picture updated."
 msgstr "Foto de perfil actualizada."
 
-#: core/views.py:215
+#: core/views.py:217
 msgid "Profile picture removed."
 msgstr "Foto de perfil eliminada."
 
-#: core/views.py:225
+#: core/views.py:227
 msgid "Your password was changed."
 msgstr "Tu contraseña se cambió correctamente."
 
-#: core/views.py:248
+#: core/views.py:250
 msgid "Invalid code. Check the time on your phone and try again."
 msgstr "Código incorrecto. Revisa la hora de tu teléfono e inténtalo de nuevo."
 
-#: core/views.py:254
+#: core/views.py:256
 msgid "Two-step authentication is enabled."
 msgstr "La autenticación en dos pasos está activada."
 
-#: core/views.py:269
+#: core/views.py:271
 msgid "Incorrect password."
 msgstr "Contraseña incorrecta."
 
-#: core/views.py:273
+#: core/views.py:275
 msgid "Two-step authentication is disabled."
 msgstr "La autenticación en dos pasos está desactivada."
 
-#: core/views.py:303
+#: core/views.py:305
 msgid "Sign up enabled."
 msgstr "Registro activado."
 
-#: core/views.py:303
+#: core/views.py:305
 msgid "Sign up disabled."
 msgstr "Registro desactivado."
 
-#: core/views.py:312
+#: core/views.py:314
 msgid "Visits to the public pages of this site"
 msgstr "Visitas a las páginas públicas de este sitio"
 
-#: core/views.py:319
+#: core/views.py:321
 msgid "Site analytics enabled."
 msgstr "Analítica del sitio activada."
 
-#: core/views.py:319
+#: core/views.py:321
 msgid "Site analytics disabled."
 msgstr "Analítica del sitio desactivada."
 
-#: core/views.py:324
+#: core/views.py:326
 #, python-format
 msgid "Two-step authentication removed for %(username)s."
 msgstr "Se quitó la autenticación en dos pasos de %(username)s."
 
-#: core/views.py:330
+#: core/views.py:332
 #, python-format
 msgid "User “%(username)s” created."
 msgstr "Usuario «%(username)s» creado."
@@ -1355,7 +1356,8 @@ msgstr "Pégalo en el <code>&lt;head&gt;</code> de todas las páginas de tu web:
 #: templates/analytics/_setup.html:27 templates/core/_ai_connect.html:6
 #: templates/core/_ai_connect.html:17 templates/core/_ai_connect.html:22
 #: templates/core/_ai_connect.html:36 templates/core/_ai_connect.html:51
-#: templates/core/_ai_connect.html:64
+#: templates/core/_ai_connect.html:64 templates/core/home.html:80
+#: templates/core/home.html:92
 msgid "Copy"
 msgstr "Copiar"
 
@@ -1642,9 +1644,13 @@ msgid ""
 "Connectors → Add custom connector</strong>, paste this URL and press "
 "<strong>Connect</strong>. Claude opens falcondatabase so you sign in and "
 "choose which projects it may reach."
-msgstr "En claude.ai, Claude Desktop o la app del móvil: <strong>Ajustes → Conectores → Añadir conector personalizado</strong>, pega esta URL y pulsa <strong>Conectar</strong>. Claude abre falcondatabase para que inicies sesión y elijas a qué proyectos puede acceder."
+msgstr ""
+"En claude.ai, Claude Desktop o la app del móvil: <strong>Ajustes → "
+"Conectores → Añadir conector personalizado</strong>, pega esta URL y pulsa "
+"<strong>Conectar</strong>. Claude abre falcondatabase para que inicies "
+"sesión y elijas a qué proyectos puede acceder."
 
-#: templates/core/_ai_connect.html:7
+#: templates/core/_ai_connect.html:7 templates/core/home.html:83
 msgid "Connect with Claude"
 msgstr "Conectar con Claude"
 
@@ -1652,14 +1658,19 @@ msgstr "Conectar con Claude"
 msgid ""
 "Claude's connectors reach your server from the internet, so it needs a "
 "public HTTPS address. Locally, use Claude Code."
-msgstr "Los conectores de Claude llegan a tu servidor desde internet, así que necesita una dirección HTTPS pública. En local, usa Claude Code."
+msgstr ""
+"Los conectores de Claude llegan a tu servidor desde internet, así que "
+"necesita una dirección HTTPS pública. En local, usa Claude Code."
 
 #: templates/core/_ai_connect.html:14
 msgid ""
 "Run this once in your terminal, then type <code class=\"inline\">/mcp</code> "
 "in Claude Code and choose <strong>Authenticate</strong> to sign in. Claude "
 "can then use falcondatabase in every session."
-msgstr "Ejecuta esto una vez en tu terminal, escribe <code class=\"inline\">/mcp</code> en Claude Code y elige <strong>Authenticate</strong> para iniciar sesión. Después Claude podrá usar falcondatabase en todas las sesiones."
+msgstr ""
+"Ejecuta esto una vez en tu terminal, escribe <code class=\"inline\">/mcp</"
+"code> en Claude Code y elige <strong>Authenticate</strong> para iniciar "
+"sesión. Después Claude podrá usar falcondatabase en todas las sesiones."
 
 #: templates/core/_ai_connect.html:19
 msgid "Or with a token, without signing in:"
@@ -2382,7 +2393,8 @@ msgstr ""
 "class=\"inline\">%(mcp_url)s</code>. Sustituye <code "
 "class=\"inline\">%(ai_token)s</code> por tu token."
 
-#: templates/core/ai.html:51 templates/projects/ai.html:38
+#: templates/core/ai.html:51 templates/core/home.html:104
+#: templates/projects/ai.html:38
 msgid "What the AI can do"
 msgstr "Qué puede hacer la IA"
 
@@ -2535,7 +2547,7 @@ msgstr ""
 msgid "Download the extension"
 msgstr "Descargar la extensión"
 
-#: templates/core/extension.html:13 templates/core/home.html:87
+#: templates/core/extension.html:13 templates/core/home.html:120
 msgid "Installation guide"
 msgstr "Guía de instalación"
 
@@ -2761,21 +2773,65 @@ msgstr ""
 
 #: templates/core/home.html:71
 msgid ""
-"Give Claude, Cursor or any assistant a token and ask in plain words: it "
-"creates tables, loads data and creates users for you."
-msgstr ""
-"Dale un token a Claude, Cursor o cualquier asistente y pide con tus "
-"palabras: crea tablas, carga datos y crea usuarios por ti."
+"falcondatabase is an MCP server: connect Claude, Cursor or any assistant and "
+"ask in plain words. It creates tables, loads and edits data and manages the "
+"users of your apps."
+msgstr "falcondatabase es un servidor MCP: conecta Claude, Cursor o cualquier asistente y pide con tus palabras. Crea tablas, carga y edita datos y gestiona los usuarios de tus apps."
 
 #: templates/core/home.html:73
-msgid "See how it works"
-msgstr "Mira cómo funciona"
+msgid "Full guide"
+msgstr "Guía completa"
 
-#: templates/core/home.html:83
+#: templates/core/home.html:78
+msgid "Copy the server URL"
+msgstr "Copia la URL del servidor"
+
+#: templates/core/home.html:81
+msgid "Add it to Claude"
+msgstr "Añádelo a Claude"
+
+#: templates/core/home.html:82
+msgid ""
+"In claude.ai, Claude Desktop or the mobile app: <strong>Settings → "
+"Connectors → Add custom connector</strong>, paste the URL and press "
+"<strong>Connect</strong>. Leave the OAuth client ID empty."
+msgstr "En claude.ai, Claude Desktop o la app del móvil: <strong>Ajustes → Conectores → Añadir conector personalizado</strong>, pega la URL y pulsa <strong>Conectar</strong>. Deja vacío el ID de cliente OAuth."
+
+#: templates/core/home.html:84
+msgid "Authorize and ask"
+msgstr "Autoriza y pide"
+
+#: templates/core/home.html:85
+msgid ""
+"Sign in to falcondatabase, choose which projects it may reach and whether it "
+"can write, and press <strong>Authorize</strong>. Then ask, for example: "
+"<em>“create a customers table with name, unique email and phone”</em>."
+msgstr "Inicia sesión en falcondatabase, elige a qué proyectos accede y si puede escribir, y pulsa <strong>Autorizar</strong>. Después pide, por ejemplo: <em>“crea una tabla clientes con nombre, email único y teléfono”</em>."
+
+#: templates/core/home.html:94
+msgid ""
+"Then type <code class=\"inline\">/mcp</code> and choose "
+"<strong>Authenticate</strong>."
+msgstr "Después escribe <code class=\"inline\">/mcp</code> y elige <strong>Authenticate</strong>."
+
+#: templates/core/home.html:97
+msgid "Cursor, VS Code and other clients"
+msgstr "Cursor, VS Code y otros clientes"
+
+#: templates/core/home.html:99
+#, python-format
+msgid ""
+"Create a token in <a href=\"%(tokens_url)s\">Settings → AI access</a> and "
+"send it as <code class=\"inline\">Authorization: Bearer fdb_ai_…</code>. The "
+"same tools also answer over plain HTTP at <code class=\"inline\">/api/ai/"
+"tools</code>."
+msgstr "Crea un token en <a href=\"%(tokens_url)s\">Ajustes → Acceso IA</a> y envíalo como <code class=\"inline\">Authorization: Bearer fdb_ai_…</code>. Las mismas herramientas responden también por HTTP en <code class=\"inline\">/api/ai/tools</code>."
+
+#: templates/core/home.html:116
 msgid "Your statistics in the browser"
 msgstr "Tus estadísticas en el navegador"
 
-#: templates/core/home.html:84
+#: templates/core/home.html:117
 msgid ""
 "Install the Chrome extension, sign in, and see the visits to your projects "
 "from the toolbar."
@@ -2783,27 +2839,27 @@ msgstr ""
 "Instala la extensión de Chrome, inicia sesión y ve las visitas de tus "
 "proyectos desde la barra del navegador."
 
-#: templates/core/home.html:88
+#: templates/core/home.html:121
 msgid "Get the Chrome extension"
 msgstr "Obtener la extensión de Chrome"
 
-#: templates/core/home.html:97
+#: templates/core/home.html:130
 msgid "Latest from the blog"
 msgstr "Lo último del blog"
 
-#: templates/core/home.html:98
+#: templates/core/home.html:131
 msgid "All articles →"
 msgstr "Todos los artículos →"
 
-#: templates/core/home.html:105
+#: templates/core/home.html:138
 msgid "That simple"
 msgstr "Así de simple"
 
-#: templates/core/home.html:107
+#: templates/core/home.html:140
 msgid "Create your account and a project"
 msgstr "Crea tu cuenta y un proyecto"
 
-#: templates/core/home.html:107
+#: templates/core/home.html:140
 msgid ""
 "You get an API URL and two keys: <code class=\"inline\">anon</code> for the "
 "browser and <code class=\"inline\">service</code> for your server."
@@ -2811,11 +2867,11 @@ msgstr ""
 "Obtienes una URL de API y dos claves: <code class=\"inline\">anon</code> "
 "para el navegador y <code class=\"inline\">service</code> para tu servidor."
 
-#: templates/core/home.html:108
+#: templates/core/home.html:141
 msgid "Add tables"
 msgstr "Agrega tablas"
 
-#: templates/core/home.html:108
+#: templates/core/home.html:141
 msgid ""
 "Define columns from the dashboard. They are created as real PostgreSQL "
 "tables."
@@ -2823,19 +2879,19 @@ msgstr ""
 "Define columnas desde el dashboard. Se crean como tablas reales en "
 "PostgreSQL."
 
-#: templates/core/home.html:109
+#: templates/core/home.html:142
 msgid "Enable login (optional)"
 msgstr "Activa el login (opcional)"
 
-#: templates/core/home.html:109
+#: templates/core/home.html:142
 msgid "Your users sign up and sign in from your frontend."
 msgstr "Tus usuarios se registran e inician sesión desde tu frontend."
 
-#: templates/core/home.html:110
+#: templates/core/home.html:143
 msgid "Query from your app"
 msgstr "Consulta desde tu app"
 
-#: templates/core/home.html:110
+#: templates/core/home.html:143
 msgid ""
 "Use <code class=\"inline\">fetch</code> or the <code "
 "class=\"inline\">falcondb.js</code> SDK."
@@ -2843,7 +2899,7 @@ msgstr ""
 "Usa <code class=\"inline\">fetch</code> o el SDK <code "
 "class=\"inline\">falcondb.js</code>."
 
-#: templates/core/home.html:110
+#: templates/core/home.html:143
 msgid "See the documentation →"
 msgstr "Ver documentación →"
 
@@ -2861,14 +2917,18 @@ msgstr "Conectar %(name)s con falcondatabase"
 msgid ""
 "<strong>%(name)s</strong> will act as <strong>%(username)s</strong>: it can "
 "create and edit tables, data and the users of your apps."
-msgstr "<strong>%(name)s</strong> actuará como <strong>%(username)s</strong>: podrá crear y editar tablas, datos y los usuarios de tus apps."
+msgstr ""
+"<strong>%(name)s</strong> actuará como <strong>%(username)s</strong>: podrá "
+"crear y editar tablas, datos y los usuarios de tus apps."
 
 #: templates/core/oauth_authorize.html:26
 #, python-format
 msgid ""
 "You will return to <strong>%(host)s</strong>. You can revoke this access "
 "anytime in Settings → AI access."
-msgstr "Volverás a <strong>%(host)s</strong>. Puedes revocar este acceso cuando quieras en Ajustes → Acceso IA."
+msgstr ""
+"Volverás a <strong>%(host)s</strong>. Puedes revocar este acceso cuando "
+"quieras en Ajustes → Acceso IA."
 
 #: templates/core/oauth_authorize.html:28 templates/portal/form.html:17
 #: templates/projects/new.html:25 templates/projects/row_edit.html:32
@@ -4758,6 +4818,9 @@ msgstr "Monitor eliminado."
 #: uptime/views.py:140
 msgid "Monitor saved."
 msgstr "Monitor guardado."
+
+#~ msgid "See how it works"
+#~ msgstr "Mira cómo funciona"
 
 #~ msgid ""
 #~ "Run this once in your terminal; Claude can then use falcondatabase in "

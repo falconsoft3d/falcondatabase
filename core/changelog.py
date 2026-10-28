@@ -6,6 +6,15 @@ Change kinds: "added", "improved", "fixed".
 
 RELEASES = [
     {
+        "version": "0.10.3",
+        "date": "2026-10-28",
+        "title": {"en": "MCP on the home page", "es": "MCP en la página de inicio"},
+        "changes": [
+            ("improved", "The home page explains the MCP server: the URL to copy, the steps to add it to Claude as a connector, the Claude Code command, how other clients connect and every tool the AI can use.",
+                         "La página de inicio explica el servidor MCP: la URL para copiar, los pasos para añadirlo a Claude como conector, el comando de Claude Code, cómo se conectan otros clientes y todas las herramientas que puede usar la IA."),
+        ],
+    },
+    {
         "version": "0.10.2",
         "date": "2026-10-28",
         "title": {"en": "Claude connector: always HTTPS", "es": "Conector de Claude: siempre HTTPS"},

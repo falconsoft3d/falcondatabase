@@ -34,7 +34,7 @@ VERIFY_MAX_TRIES = 5
 
 def home(request):
     latest_posts = blog_posts.posts_for(get_language())[:3]
-    return render(request, "core/home.html", {"latest_posts": latest_posts})
+    return render(request, "core/home.html", {"latest_posts": latest_posts, **ai_context(request)})
 
 
 EXTENSION_DIR = settings.BASE_DIR / "extension"

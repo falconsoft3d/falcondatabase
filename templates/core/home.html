@@ -62,15 +62,48 @@
   </div>
 </section>
 
-<section class="container" style="padding-top:48px">
+<section class="container" style="padding-top:48px" id="mcp">
   <div class="box ai-banner">
     <div class="box-body row" style="flex-wrap:wrap;gap:24px">
       <div class="stat-icon">{% icon 'zap' 28 %}</div>
       <div class="grow">
-        <h2 style="margin:0 0 4px">{% translate "Manage it with AI" %}</h2>
-        <p class="muted" style="margin:0">{% translate "Give Claude, Cursor or any assistant a token and ask in plain words: it creates tables, loads data and creates users for you." %}</p>
+        <h2 style="margin:0 0 4px">{% translate "Manage it with AI" %} <span class="label label-accent">MCP</span></h2>
+        <p class="muted" style="margin:0">{% translate "falcondatabase is an MCP server: connect Claude, Cursor or any assistant and ask in plain words. It creates tables, loads and edits data and manages the users of your apps." %}</p>
       </div>
-      <a class="btn btn-primary" href="{% url 'ai' %}">{% icon 'book' %} {% translate "See how it works" %}</a>
+      <a class="btn" href="{% url 'ai' %}">{% icon 'book' %} {% translate "Full guide" %}</a>
+    </div>
+    <div class="box-body" style="border-top:1px solid var(--border-muted)">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:24px;align-items:start">
+        <ol class="steps" style="min-width:0">
+          <li><h3>{% translate "Copy the server URL" %}</h3>
+            <div class="key-field"><input type="text" id="home-mcp-url" readonly value="{{ mcp_url }}">
+              <button type="button" class="btn" data-copy="#home-mcp-url" title="{% translate 'Copy' %}">{% icon 'copy' %}</button></div></li>
+          <li><h3>{% translate "Add it to Claude" %}</h3>
+            <p class="muted">{% blocktranslate %}In claude.ai, Claude Desktop or the mobile app: <strong>Settings → Connectors → Add custom connector</strong>, paste the URL and press <strong>Connect</strong>. Leave the OAuth client ID empty.{% endblocktranslate %}</p>
+            <a class="btn btn-primary" href="https://claude.ai/settings/connectors" target="_blank" rel="noopener">{% icon 'link' %} {% translate "Connect with Claude" %}</a></li>
+          <li><h3>{% translate "Authorize and ask" %}</h3>
+            <p class="muted">{% blocktranslate %}Sign in to falcondatabase, choose which projects it may reach and whether it can write, and press <strong>Authorize</strong>. Then ask, for example: <em>“create a customers table with name, unique email and phone”</em>.{% endblocktranslate %}</p></li>
+        </ol>
+        <div class="stack" style="min-width:0">
+          <div>
+            <h3 style="margin-top:0">Claude Code</h3>
+            <div class="row" style="align-items:flex-start;gap:8px">
+<pre class="code grow" id="home-claude-code" style="min-width:0">claude mcp add --transport http falcondatabase {{ mcp_url }}</pre>
+              <button type="button" class="btn btn-sm" data-copy="#home-claude-code" title="{% translate 'Copy' %}">{% icon 'copy' %}</button>
+            </div>
+            <p class="help">{% blocktranslate %}Then type <code class="inline">/mcp</code> and choose <strong>Authenticate</strong>.{% endblocktranslate %}</p>
+          </div>
+          <div>
+            <h3 style="margin-top:0">{% translate "Cursor, VS Code and other clients" %}</h3>
+            {% url 'ai_tokens' as tokens_url %}
+            <p class="muted" style="margin:0">{% blocktranslate %}Create a token in <a href="{{ tokens_url }}">Settings → AI access</a> and send it as <code class="inline">Authorization: Bearer fdb_ai_…</code>. The same tools also answer over plain HTTP at <code class="inline">/api/ai/tools</code>.{% endblocktranslate %}</p>
+          </div>
+        </div>
+      </div>
+      <details class="chart-table" style="margin-top:16px">
+        <summary>{% translate "What the AI can do" %}</summary>
+        {% include "core/_ai_tools.html" %}
+      </details>
     </div>
   </div>
 </section>
