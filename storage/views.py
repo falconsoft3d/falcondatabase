@@ -8,10 +8,13 @@
     POST   /api/v1/<ref>/storage/sign/<bucket>/<path>         signed URL {"expires_in": seconds}
 """
 
+import re
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.http import FileResponse, Http404
+from django.http import FileResponse, Http404, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.utils.http import content_disposition_header
 from django.utils.translation import gettext as _
 
 from api.auth import ApiError, resolve_client
@@ -28,14 +31,48 @@ ACTIVE_TYPES = ("text/html", "application/xhtml+xml", "image/svg+xml", "text/jav
                 "text/xml", "application/xml")
 
 
-def serve(stored, download=False):
+RANGE_HEADER = re.compile(r"^bytes=(\d*)-(\d*)$")
+MAX_RANGE_BYTES = 4 * 1024 * 1024  # players ask again for whatever they still need
+
+
+def requested_range(request, size):
+    """The (first, last) bytes of a Range header, None without one, False if it can't be served."""
+    match = RANGE_HEADER.match(request.headers.get("Range", "").strip())
+    if not match or not any(match.groups()):
+        return None
+    first, last = match.groups()
+    if first:
+        first, last = int(first), min(int(last) if last else size - 1, size - 1)
+    else:  # "bytes=-500": the last 500 bytes
+        first, last = max(size - int(last), 0), size - 1
+    if first >= size or first > last:
+        return False
+    return first, min(last, first + MAX_RANGE_BYTES - 1)
+
+
+def serve(stored, request, download=False):
     active = stored.content_type.split(";")[0].strip().lower() in ACTIVE_TYPES
     try:
         handle = stored.disk_path.open("rb")
+        size = stored.disk_path.stat().st_size
     except FileNotFoundError:
         raise Http404
-    response = FileResponse(handle, content_type=stored.content_type, as_attachment=download or active,
-                            filename=stored.name)
+    wanted = requested_range(request, size)
+    if wanted is False:
+        handle.close()
+        response = HttpResponse(status=416)
+        response["Content-Range"] = f"bytes */{size}"
+    elif wanted:
+        first, last = wanted
+        with handle:
+            handle.seek(first)
+            response = HttpResponse(handle.read(last - first + 1), status=206, content_type=stored.content_type)
+        response["Content-Range"] = f"bytes {first}-{last}/{size}"
+        response["Content-Disposition"] = content_disposition_header(download or active, stored.name)
+    else:
+        response = FileResponse(handle, content_type=stored.content_type, as_attachment=download or active,
+                                filename=stored.name)
+    response["Accept-Ranges"] = "bytes"
     response["X-Content-Type-Options"] = "nosniff"
     response["Content-Security-Policy"] = "sandbox; default-src 'none'; img-src 'self' data:; media-src 'self'"
     return response
@@ -82,7 +119,7 @@ def download(request, ref, bucket_name, path):
         allowed = client.is_service or is_owner(client, stored)
     if not allowed:
         return respond({"error": _("This file is private. Use a signed URL or the service key.")}, 403)
-    return serve(stored, download=request.GET.get("download") == "1")
+    return serve(stored, request, download=request.GET.get("download") == "1")
 
 
 # --- REST API --------------------------------------------------------------------
@@ -240,7 +277,7 @@ def bucket_browser(request, username, slug, bucket_name):
 def owner_download(request, username, slug, bucket_name, file_id):
     project = get_project(request, username, slug)
     stored = get_object_or_404(StoredFile, bucket__project=project, bucket__name=bucket_name, pk=file_id)
-    return serve(stored, download=request.GET.get("download") == "1")
+    return serve(stored, request, download=request.GET.get("download") == "1")
 
 
 @login_required

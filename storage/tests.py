@@ -114,6 +114,40 @@ class StorageApiTests(StorageTestCase):
             self.assertEqual(self.api_upload("images", "q.txt", key=key).status_code, 413)
         self.assertEqual(self.api_upload("nope", "a.txt", key=key).status_code, 404)
 
+    def test_range_requests_let_players_seek(self):
+        content = bytes(range(256)) * 4
+        self.api_upload("images", "a.mp3", key=self.project.service_key, name="a.mp3", content=content,
+                        content_type="audio/mpeg")
+        url = f"/storage/v1/{self.project.ref}/images/a.mp3"
+
+        whole = self.client.get(url)
+        self.assertEqual(whole.status_code, 200)
+        self.assertEqual(whole["Accept-Ranges"], "bytes")
+        self.assertEqual(b"".join(whole.streaming_content), content)
+
+        middle = self.client.get(url, headers={"Range": "bytes=10-19"})
+        self.assertEqual(middle.status_code, 206)
+        self.assertEqual(middle.content, content[10:20])
+        self.assertEqual(middle["Content-Range"], f"bytes 10-19/{len(content)}")
+        self.assertEqual(middle["Content-Type"], "audio/mpeg")
+        self.assertIn("sandbox", middle["Content-Security-Policy"])
+
+        self.assertEqual(self.client.get(url, headers={"Range": "bytes=1000-"}).content, content[1000:])
+        self.assertEqual(self.client.get(url, headers={"Range": "bytes=-24"}).content, content[-24:])
+        beyond = self.client.get(url, headers={"Range": "bytes=5000-"})
+        self.assertEqual(beyond.status_code, 416)
+        self.assertEqual(beyond["Content-Range"], f"bytes */{len(content)}")
+        self.assertEqual(self.client.get(url, headers={"Range": "items=0-1"}).status_code, 200)
+
+    def test_large_ranges_are_answered_in_chunks(self):
+        self.api_upload("images", "a.mp3", key=self.project.service_key, name="a.mp3", content=b"x" * 100,
+                        content_type="audio/mpeg")
+        url = f"/storage/v1/{self.project.ref}/images/a.mp3"
+        with mock.patch("storage.views.MAX_RANGE_BYTES", 10):
+            response = self.client.get(url, headers={"Range": "bytes=0-"})
+        self.assertEqual(response.status_code, 206)
+        self.assertEqual(response["Content-Range"], "bytes 0-9/100")
+
     def test_active_content_is_downloaded_not_rendered(self):
         self.api_upload("images", "x.html", key=self.project.service_key, name="x.html",
                         content=b"<script>alert(1)</script>", content_type="text/html")
