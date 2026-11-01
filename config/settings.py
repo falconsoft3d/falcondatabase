@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     "portal",
     "storage",
     "uptime",
+    "cron",
 ]
 
 MIDDLEWARE = [
@@ -173,6 +174,12 @@ FALCONDB_UPTIME_MAX_MONITORS = int(os.environ.get("FALCONDB_UPTIME_MAX_MONITORS"
 # Allow monitoring private and local addresses (10.x, 192.168.x, localhost…). Off by default so
 # accounts can't probe the server's internal network.
 FALCONDB_UPTIME_ALLOW_PRIVATE = env_bool("FALCONDB_UPTIME_ALLOW_PRIVATE", False)
+
+# Cron jobs: the worker (`manage.py cron_worker`) calls each job's URL on schedule. Private
+# addresses follow FALCONDB_UPTIME_ALLOW_PRIVATE.
+FALCONDB_CRON_TIMEOUT = int(os.environ.get("FALCONDB_CRON_TIMEOUT", 30))  # seconds per call
+FALCONDB_CRON_RETENTION_DAYS = int(os.environ.get("FALCONDB_CRON_RETENTION_DAYS", 30))
+FALCONDB_CRON_MAX_JOBS = int(os.environ.get("FALCONDB_CRON_MAX_JOBS", 20))  # per project
 
 # Email (uptime alerts). Without EMAIL_HOST, emails are only written to the log.
 EMAIL_HOST = os.environ.get("EMAIL_HOST", "")

@@ -4828,3 +4828,124 @@ msgstr "Monitor guardado."
 #~ msgstr ""
 #~ "Ejecútalo una vez en tu terminal; a partir de ahí Claude podrá usar "
 #~ "falcondatabase en cada sesión."
+
+msgid "Cron"
+msgstr "Cron"
+
+msgid "Working"
+msgstr "Funcionando"
+
+msgid "Failed"
+msgstr "Falló"
+
+msgid "Done"
+msgstr "Hecho"
+
+msgid "Run"
+msgstr "Ejecutar"
+
+msgid "Every day"
+msgstr "Cada día"
+
+msgid "Last call"
+msgstr "Última llamada"
+
+msgid "Latest calls"
+msgstr "Últimas llamadas"
+
+msgid "Run now"
+msgstr "Ejecutar ahora"
+
+msgid "Waiting for the first call."
+msgstr "Esperando la primera llamada."
+
+msgid "No cron jobs yet"
+msgstr "Aún no hay tareas programadas"
+
+msgid "Add an address of your app and falcondatabase will call it on schedule and keep the history, without any other service."
+msgstr "Añade una dirección de tu app y falcondatabase la llamará según el horario y guardará el historial, sin ningún otro servicio."
+
+msgid "New cron job"
+msgstr "Nueva tarea programada"
+
+msgid "Add cron job"
+msgstr "Añadir tarea"
+
+msgid "Write the daily books"
+msgstr "Escribir los libros del día"
+
+msgid "URL to call"
+msgstr "URL a la que llamar"
+
+msgid "Any answer below 400 counts as done. A failed call is not repeated until its next turn, and redirects are not followed: use the final address."
+msgstr "Cualquier respuesta inferior a 400 cuenta como hecha. Una llamada fallida no se repite hasta su siguiente turno y las redirecciones no se siguen: usa la dirección final."
+
+msgid "Header (optional)"
+msgstr "Cabecera (opcional)"
+
+msgid "Sent with every call, so your app can check that the call comes from here."
+msgstr "Se envía en cada llamada para que tu app compruebe que viene de aquí."
+
+msgid "Header value"
+msgstr "Valor de la cabecera"
+
+msgid "Saved. Leave it empty to keep it."
+msgstr "Guardado. Déjalo vacío para conservarlo."
+
+msgid "Remove the header"
+msgstr "Quitar la cabecera"
+
+msgid "Delete this cron job and its history?"
+msgstr "¿Eliminar esta tarea y su historial?"
+
+msgid "Delete cron job"
+msgstr "Eliminar tarea"
+
+msgid "method"
+msgstr "método"
+
+msgid "run"
+msgstr "ejecutar"
+
+msgid "header"
+msgstr "cabecera"
+
+msgid "Use only letters, numbers and hyphens."
+msgstr "Usa solo letras, números y guiones."
+
+msgid "The value can't contain line breaks."
+msgstr "El valor no puede contener saltos de línea."
+
+#, python-format
+msgid "A project can have up to %(limit)s cron jobs."
+msgstr "Un proyecto puede tener hasta %(limit)s tareas programadas."
+
+msgid "Enter the value of the header."
+msgstr "Escribe el valor de la cabecera."
+
+msgid "The address changed: enter the value of the header again."
+msgstr "La dirección ha cambiado: vuelve a escribir el valor de la cabecera."
+
+msgid "Cron job added. The first call runs within a minute."
+msgstr "Tarea añadida. La primera llamada se hará en menos de un minuto."
+
+#, python-format
+msgid "Done: HTTP %(code)s in %(ms)s ms."
+msgstr "Hecho: HTTP %(code)s en %(ms)s ms."
+
+#, python-format
+msgid "Failed: %(error)s"
+msgstr "Falló: %(error)s"
+
+msgid "Cron job deleted."
+msgstr "Tarea eliminada."
+
+msgid "Cron job saved."
+msgstr "Tarea guardada."
+
+#, python-format
+msgid "%(when)s ago"
+msgstr "hace %(when)s"
+
+msgid "Calls are overdue: the cron worker does not seem to be running. Start it with <code class=\"inline\">python manage.py cron_worker</code> (with Docker it is the <code class=\"inline\">cron</code> service)."
+msgstr "Hay llamadas atrasadas: el worker de cron no parece estar en marcha. Inícialo con <code class=\"inline\">python manage.py cron_worker</code> (con Docker es el servicio <code class=\"inline\">cron</code>)."

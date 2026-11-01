@@ -38,6 +38,7 @@ Create projects, add real PostgreSQL tables and user login to them, and query ev
 - **Dashboard KPIs**: ten headline numbers (projects, tables, rows, storage, app users, new and active users, visitors, pageviews, bounce rate).
 - **Contribution graph** of the last year, GitHub style, for all your projects or one, plus a recent activity list per project.
 - **Uptime monitoring**: every website of a project is requested every 1–60 minutes; 90 days of history with uptime per day, response time charts and incidents, and an email or webhook (Slack, Discord…) when a site goes down and when it comes back. `/uptime/` shows every monitor.
+- **Cron jobs**: a project can call any of its URLs on schedule, from every minute to once a day, with a secret header and the history of each call.
 - **Chrome extension** with your analytics and today's visits on its icon: download it from `/extension/` and follow the installation guide in the blog.
 
 **Teams and accounts**
@@ -215,6 +216,18 @@ Behind a reverse proxy, set `FALCONDB_TRUST_PROXY=true` so the visitor IP is rea
 3. When a site goes down an incident opens and, if **Email me** is checked, the project owner gets an email; another one arrives when it comes back. A **webhook** URL receives a JSON POST (`event`, `url`, `error`, `text`…) that Slack and Discord show as a message.
 
 Emails need SMTP settings in `.env` (`EMAIL_HOST`, `EMAIL_PORT`, `EMAIL_HOST_USER`, `EMAIL_HOST_PASSWORD`, `DEFAULT_FROM_EMAIL`); without them they are written to the log. Private addresses (localhost, 10.x, 192.168.x…) are refused unless `FALCONDB_UPTIME_ALLOW_PRIVATE=true`. Checks older than 90 days are deleted (`FALCONDB_UPTIME_RETENTION_DAYS`).
+
+## Cron jobs
+
+1. Open a project → **Cron**, enter the URL, how often to call it and, if your app needs it, a secret header such as `Authorization: Bearer …` → **Add cron job**.
+2. The **cron worker** calls each URL on schedule. Any answer below 400 counts as done. With Docker it is the `cron` service; in development run it in a second terminal:
+
+   ```bash
+   .venv/bin/python manage.py cron_worker          # forever, looks for due jobs every 30 s
+   .venv/bin/python manage.py cron_worker --once   # one round
+   ```
+
+A failed call waits for its next turn instead of being repeated, and redirects are not followed, so the secret header never reaches another address. The saved header value is never shown again. Calls time out after 30 seconds (`FALCONDB_CRON_TIMEOUT`), so a long task should answer at once and keep working in the background. Runs older than 30 days are deleted (`FALCONDB_CRON_RETENTION_DAYS`), and private addresses follow `FALCONDB_UPTIME_ALLOW_PRIVATE`.
 
 ## Portal
 

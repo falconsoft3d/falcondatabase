@@ -1,0 +1,4 @@
+{% load i18n falcon %}{# Expects: worker_stale #}
+{% if worker_stale %}
+  <div class="flash flash-warning">{% icon 'zap' %} <span>{% blocktranslate %}Calls are overdue: the cron worker does not seem to be running. Start it with <code class="inline">python manage.py cron_worker</code> (with Docker it is the <code class="inline">cron</code> service).{% endblocktranslate %}</span></div>
+{% endif %}

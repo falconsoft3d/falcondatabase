@@ -175,8 +175,8 @@ class DashboardTests(TestCase):
         self.assertContains(response, 'id="analytics-series"')
 
     def test_overview_all_or_selected(self):
-        everything = self.client.get(reverse("analytics")).context["report"]
-        only_blog = self.client.get(reverse("analytics") + f"?p={self.blog.ref}").context["report"]
+        everything = self.client.get(reverse("analytics") + "?days=30").context["report"]
+        only_blog = self.client.get(reverse("analytics") + f"?days=30&p={self.blog.ref}").context["report"]
         self.assertGreater(everything["totals"]["pageviews"], only_blog["totals"]["pageviews"])
         self.assertEqual({r["project__name"] for r in only_blog["projects"]}, {"Blog"})
 

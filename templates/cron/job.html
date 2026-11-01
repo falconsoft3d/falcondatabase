@@ -1,0 +1,57 @@
+{% extends "projects/base_project.html" %}
+{% load i18n falcon %}
+{% block content %}
+<div class="container stack">
+  <div class="row" style="flex-wrap:wrap">
+    <div class="grow" style="min-width:0">
+      <a class="small" href="{% url 'projects:cron' project.owner.username project.slug %}">{% icon 'arrow-left' 12 %} {% translate "Cron" %}</a>
+      <h2 style="margin:4px 0 0;overflow-wrap:anywhere">{{ job.name }}</h2>
+      <div class="small muted" style="margin-top:4px;overflow-wrap:anywhere">
+        {% include "cron/_status.html" %} · {{ job.get_interval_display }} · {{ job.method }} {{ job.url }}
+        {% if job.header_name %} · {{ job.header_name }}{% endif %}
+      </div>
+    </div>
+    {% if project.role != "viewer" %}
+      <form method="post">{% csrf_token %}<input type="hidden" name="action" value="run">
+        <button class="btn" type="submit">{% icon 'refresh' 14 %} {% translate "Run now" %}</button></form>
+    {% endif %}
+  </div>
+  {% include "cron/_notices.html" %}
+
+  <section class="box">
+    <div class="box-header"><strong>{% translate "Latest calls" %}</strong></div>
+    {% if runs %}
+      <table class="list small">
+        <thead><tr><th>{% translate "Time" %}</th><th>{% translate "Result" %}</th><th>HTTP</th><th>ms</th><th>{% translate "Error" %}</th></tr></thead>
+        <tbody>
+          {% for run in runs %}
+            <tr>
+              <td>{{ run.created_at|date:"d M H:i:s" }}</td>
+              <td>{% if run.ok %}<span class="status status-up">{% icon 'check' 12 %} {% translate "Done" %}</span>{% else %}<span class="status status-down">{% icon 'x' 12 %} {% translate "Failed" %}</span>{% endif %}</td>
+              <td class="num">{{ run.status_code|default:"—" }}</td>
+              <td class="num">{{ run.response_ms|default_if_none:"—" }}</td>
+              <td class="mono">{{ run.error|default:"" }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p class="muted small box-body">{% translate "Waiting for the first call." %}</p>
+    {% endif %}
+  </section>
+
+  {% if project.role != "viewer" %}
+    <form method="post" class="box" id="settings">
+      <div class="box-header">{% icon 'gear' %} <strong>{% translate "Settings" %}</strong></div>
+      <div class="box-body">
+        {% include "cron/_form.html" with action="update" has_secret=job.header_value %}
+        <button class="btn btn-primary" type="submit">{% translate "Save" %}</button>
+      </div>
+    </form>
+    <form method="post" data-confirm="{% translate 'Delete this cron job and its history?' %}">{% csrf_token %}
+      <input type="hidden" name="action" value="delete">
+      <button class="btn btn-danger" type="submit">{% icon 'trash' 14 %} {% translate "Delete cron job" %}</button>
+    </form>
+  {% endif %}
+</div>
+{% endblock %}

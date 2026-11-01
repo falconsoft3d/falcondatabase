@@ -1,6 +1,7 @@
 from django.urls import path
 
 from analytics import views as analytics_views
+from cron import views as cron_views
 from storage import views as storage_views
 from uptime import views as uptime_views
 
@@ -26,6 +27,8 @@ urlpatterns = [
     path(f"{P}/analytics/", analytics_views.project_analytics, name="analytics"),
     path(f"{P}/uptime/", uptime_views.project_uptime, name="uptime"),
     path(f"{P}/uptime/<int:monitor_id>/", uptime_views.monitor_detail, name="uptime_monitor"),
+    path(f"{P}/cron/", cron_views.project_cron, name="cron"),
+    path(f"{P}/cron/<int:job_id>/", cron_views.job_detail, name="cron_job"),
     path(f"{P}/portal/", views.portal_settings, name="portal"),
     path(f"{P}/storage/", storage_views.dashboard, name="storage"),
     path(f"{P}/storage/<slug:bucket_name>/", storage_views.bucket_browser, name="bucket"),

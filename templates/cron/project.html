@@ -1,0 +1,42 @@
+{% extends "projects/base_project.html" %}
+{% load i18n falcon %}
+{% block content %}
+<div class="container stack">
+  <h2 style="margin:0">{% translate "Cron" %}</h2>
+  {% include "cron/_notices.html" %}
+
+  {% if jobs %}
+    <section class="box">
+      <table class="list small">
+        <thead><tr><th>{% translate "Name" %}</th><th>{% translate "Status" %}</th><th>{% translate "Run" %}</th><th>{% translate "Last call" %}</th></tr></thead>
+        <tbody>
+          {% for job in jobs %}
+            <tr>
+              <td><a href="{% url 'projects:cron_job' project.owner.username project.slug job.pk %}">{{ job.name }}</a><div class="muted">{{ job.host }}</div></td>
+              <td>{% include "cron/_status.html" %}{% if job.enabled and job.last_ok is False %}<div class="mono">{{ job.last_error }}</div>{% endif %}</td>
+              <td>{{ job.get_interval_display }}</td>
+              <td>{% if job.last_run_at %}{% blocktranslate with when=job.last_run_at|timesince %}{{ when }} ago{% endblocktranslate %}{% else %}—{% endif %}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </section>
+  {% else %}
+    <div class="box blankslate">
+      {% icon 'refresh' 32 %}
+      <h3>{% translate "No cron jobs yet" %}</h3>
+      <p class="muted">{% translate "Add an address of your app and falcondatabase will call it on schedule and keep the history, without any other service." %}</p>
+    </div>
+  {% endif %}
+
+  {% if project.role != "viewer" %}
+    <form method="post" class="box" id="new-job">
+      <div class="box-header">{% icon 'plus' %} <strong>{% translate "New cron job" %}</strong></div>
+      <div class="box-body">
+        {% include "cron/_form.html" %}
+        <button class="btn btn-primary" type="submit">{% translate "Add cron job" %}</button>
+      </div>
+    </form>
+  {% endif %}
+</div>
+{% endblock %}

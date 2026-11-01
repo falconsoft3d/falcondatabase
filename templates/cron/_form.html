@@ -1,0 +1,41 @@
+{% load i18n %}{# Expects: form; optional action, has_secret #}
+{% csrf_token %}{% if action %}<input type="hidden" name="action" value="{{ action }}">{% endif %}
+{% for error in form.non_field_errors %}<p class="error">{{ error }}</p>{% endfor %}
+<div class="field">
+  <label for="id_name">{% translate "Name" %}</label>
+  <input type="text" name="name" id="id_name" maxlength="100" required placeholder="{% translate 'Write the daily books' %}" value="{{ form.name.value|default:'' }}">
+  {% for error in form.name.errors %}<p class="error">{{ error }}</p>{% endfor %}
+</div>
+<div class="field">
+  <label for="id_url">{% translate "URL to call" %}</label>
+  <input type="text" name="url" id="id_url" maxlength="500" required inputmode="url" placeholder="https://example.com/api/cron" value="{{ form.url.value|default:'' }}">
+  {% for error in form.url.errors %}<p class="error">{{ error }}</p>{% endfor %}
+  <span class="help">{% translate "Any answer below 400 counts as done. A failed call is not repeated until its next turn, and redirects are not followed: use the final address." %}</span>
+</div>
+<div class="field">
+  <label for="id_interval">{% translate "Run" %}</label>
+  <select name="interval" id="id_interval" style="max-width:240px">
+    {% for value, label in form.fields.interval.choices %}<option value="{{ value }}" {% if form.interval.value|stringformat:"s" == value|stringformat:"s" %}selected{% endif %}>{{ label }}</option>{% endfor %}
+  </select>
+</div>
+<div class="field">
+  <label for="id_method">{% translate "Method" %}</label>
+  <select name="method" id="id_method" style="max-width:240px">
+    {% for value, label in form.fields.method.choices %}<option value="{{ value }}" {% if form.method.value == value %}selected{% endif %}>{{ label }}</option>{% endfor %}
+  </select>
+</div>
+<div class="field">
+  <label for="id_header_name">{% translate "Header (optional)" %}</label>
+  <input type="text" name="header_name" id="id_header_name" maxlength="100" placeholder="Authorization" value="{{ form.header_name.value|default:'' }}">
+  {% for error in form.header_name.errors %}<p class="error">{{ error }}</p>{% endfor %}
+  <span class="help">{% translate "Sent with every call, so your app can check that the call comes from here." %}</span>
+</div>
+<div class="field">
+  <label for="id_header_value">{% translate "Header value" %}</label>
+  <input type="password" name="header_value" id="id_header_value" maxlength="1000" autocomplete="off" placeholder="{% if has_secret %}{% translate 'Saved. Leave it empty to keep it.' %}{% else %}Bearer …{% endif %}">
+  {% for error in form.header_value.errors %}<p class="error">{{ error }}</p>{% endfor %}
+  {% if has_secret %}<label class="checkbox" style="font-weight:400;margin-top:6px"><input type="checkbox" name="clear_header"> {% translate "Remove the header" %}</label>{% endif %}
+</div>
+<div class="field">
+  <label class="checkbox" style="font-weight:400"><input type="checkbox" name="enabled" {% if form.enabled.value %}checked{% endif %}> {% translate "Enabled" %}</label>
+</div>
