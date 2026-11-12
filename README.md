@@ -359,6 +359,7 @@ curl "https://your-server/api/v1/PROJECT_REF/tables/products?price=gte.10&order=
 | POST | `/api/v1/<ref>/auth/signup` | Sign up → `{user, token}` |
 | POST | `/api/v1/<ref>/auth/login` | Sign in → `{user, token}` |
 | GET / PATCH | `/api/v1/<ref>/auth/user` | Current user (requires the token) |
+| PATCH | `/api/v1/<ref>/auth/user` | `{"data": {...}}` saves profile data; `{"current_password", "password"}` changes the password → `{user, token}` (other sessions are signed out) |
 
 Headers: always `apikey: <anon or service key>`, plus `Authorization: Bearer <token>` to act as a signed-in user.
 Filters: `column=operator.value` with `eq`, `neq`, `gt`, `gte`, `lt`, `lte`, `like`, `ilike`, `is` (`null`/`true`/`false`) and `in` (`in.(a,b)`). Also `select`, `order`, `limit` and `offset`.

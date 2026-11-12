@@ -123,6 +123,9 @@ msgstr "Cada columna debe ser un objeto con «name» y «type»."
 msgid "The password must have at least %(n)s characters."
 msgstr "La contraseña debe tener al menos %(n)s caracteres."
 
+msgid "The current password is not correct."
+msgstr "La contraseña actual no es correcta."
+
 #: api/ai_tools.py:263
 msgid "“columns” must be a list."
 msgstr "«columns» debe ser una lista."
@@ -1963,6 +1966,13 @@ msgstr "Usuario actual (requiere token)"
 #: templates/core/_api_reference.html:35
 msgid "<code>{\"data\": {...}}</code> saves profile data"
 msgstr "<code>{\"data\": {...}}</code> guarda datos del perfil"
+
+msgid ""
+"<code>{\"current_password\", \"password\"}</code> changes the password → "
+"<code>{user, token}</code>; other sessions are signed out"
+msgstr ""
+"<code>{\"current_password\", \"password\"}</code> cambia la contraseña → "
+"<code>{user, token}</code>; las demás sesiones se cierran"
 
 #: templates/core/_api_reference.html:38
 msgid "Access rules per table"

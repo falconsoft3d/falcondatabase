@@ -157,6 +157,50 @@ class AuthApiTests(ApiTestCase):
         updated = self.call("patch", "/auth/user", {"data": {"name": "Eva"}}, token=token).json()["user"]
         self.assertEqual(updated["data"], {"name": "Eva"})
 
+    def test_change_password(self):
+        session = self.signup()
+        old_token = session["token"]
+        other_device = self.call("post", "/auth/login", {"email": "u@example.com", "password": "secreto1"}).json()["token"]
+
+        wrong = self.call("patch", "/auth/user", {"password": "nuevo-123", "current_password": "nope"}, token=old_token)
+        self.assertEqual(wrong.status_code, 403)
+        missing = self.call("patch", "/auth/user", {"password": "nuevo-123"}, token=old_token)
+        self.assertEqual(missing.status_code, 403)
+        short = self.call("patch", "/auth/user", {"password": "123", "current_password": "secreto1"}, token=old_token)
+        self.assertEqual(short.status_code, 400)
+        anon = self.call("patch", "/auth/user", {"password": "nuevo-123", "current_password": "secreto1"})
+        self.assertEqual(anon.status_code, 401)
+
+        ok = self.call("patch", "/auth/user", {"password": "nuevo-123", "current_password": "secreto1",
+                                               "data": {"name": "U"}}, token=old_token)
+        self.assertEqual(ok.status_code, 200, ok.content)
+        body = ok.json()
+        self.assertEqual(body["user"]["data"], {"name": "U"})
+        self.assertNotEqual(body["token"], old_token)
+        # The new token works; tokens of every other session stop working.
+        self.assertEqual(self.call("get", "/auth/user", token=body["token"]).status_code, 200)
+        self.assertEqual(self.call("get", "/auth/user", token=old_token).status_code, 401)
+        self.assertEqual(self.call("get", "/auth/user", token=other_device).status_code, 401)
+        self.assertEqual(self.call("post", "/auth/login", {"email": "u@example.com", "password": "secreto1"})
+                         .status_code, 401)
+        self.assertEqual(self.call("post", "/auth/login", {"email": "u@example.com", "password": "nuevo-123"})
+                         .status_code, 200)
+
+    def test_data_update_keeps_token_and_password(self):
+        session = self.signup()
+        r = self.call("patch", "/auth/user", {"data": {"name": "U"}}, token=session["token"])
+        self.assertEqual(r.status_code, 200)
+        self.assertNotIn("token", r.json())
+        self.assertEqual(self.call("get", "/auth/user", token=session["token"]).status_code, 200)
+        self.assertEqual(self.call("patch", "/auth/user", {}, token=session["token"]).status_code, 400)
+
+    def test_tokens_without_password_stamp_still_work(self):
+        from django.core import signing
+        from api.auth import TOKEN_SALT
+        user_id = self.signup()["user"]["id"]
+        legacy = signing.dumps({"p": self.project.ref, "u": user_id}, salt=TOKEN_SALT)
+        self.assertEqual(self.call("get", "/auth/user", token=legacy).status_code, 200)
+
     def test_validation(self):
         self.assertEqual(self.call("post", "/auth/signup", {"email": "no-es-email", "password": "secreto1"})
                          .status_code, 400)

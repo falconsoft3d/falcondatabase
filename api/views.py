@@ -8,7 +8,7 @@
     DELETE /api/v1/<ref>/tables/<table>/<id>   delete a row
     POST   /api/v1/<ref>/auth/signup           register an end user
     POST   /api/v1/<ref>/auth/login            get a token
-    GET    /api/v1/<ref>/auth/user             current user (PATCH updates ``data``)
+    GET    /api/v1/<ref>/auth/user             current user (PATCH updates ``data`` and/or the password)
 """
 
 import json
@@ -279,11 +279,32 @@ def auth_user(request, project, client):
     if client.role != "user":
         raise ApiError(_("Send the user token in “Authorization: Bearer <token>”."), 401)
     user = client.user
-    if request.method == "PATCH":
-        payload = read_json(request)
-        data = payload.get("data") if isinstance(payload, dict) else None
-        if not isinstance(data, dict):
-            raise ApiError(_("Send a “data” object with the fields to save."))
+    if request.method != "PATCH":
+        return respond({"user": user.as_dict()})
+    payload = read_json(request)
+    if not isinstance(payload, dict):
+        payload = {}
+    data = payload.get("data")
+    password = payload.get("password")
+    if data is None and password is None:
+        raise ApiError(_("Send a “data” object with the fields to save."))
+    if data is not None and not isinstance(data, dict):
+        raise ApiError(_("Send a “data” object with the fields to save."))
+    fields = []
+    if password is not None:
+        # The current password is required even with a valid token: a stolen token cannot take over the account.
+        if not user.check_password(str(payload.get("current_password") or "")):
+            raise ApiError(_("The current password is not correct."), 403)
+        if len(str(password)) < MIN_PASSWORD_LENGTH:
+            raise ApiError(_("The password must have at least %(n)s characters.") % {"n": MIN_PASSWORD_LENGTH})
+        user.set_password(str(password))
+        fields.append("password")
+    if data is not None:
         user.data = {**user.data, **data}
-        user.save(update_fields=["data"])
-    return respond({"user": user.as_dict()})
+        fields.append("data")
+    user.save(update_fields=fields)
+    if password is None:
+        return respond({"user": user.as_dict()})
+    activity.record(project, "app_user_updated", actor=user.email, target=user.email)
+    # Older tokens (other devices) stop working; this one is replaced by a new session.
+    return respond(session(user))

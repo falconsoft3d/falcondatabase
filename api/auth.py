@@ -5,6 +5,7 @@ from dataclasses import dataclass
 
 from django.conf import settings
 from django.core import signing
+from django.utils.crypto import salted_hmac
 from django.utils.translation import gettext as _
 
 from projects.models import ProjectTable, ProjectUser
@@ -30,8 +31,13 @@ class Client:
         return self.role == "service"
 
 
+def password_stamp(user):
+    """Short fingerprint of the password hash: changing the password invalidates older tokens."""
+    return salted_hmac(TOKEN_SALT + ".password", user.password).hexdigest()[:16]
+
+
 def issue_token(user):
-    return signing.dumps({"p": user.project.ref, "u": user.pk}, salt=TOKEN_SALT)
+    return signing.dumps({"p": user.project.ref, "u": user.pk, "h": password_stamp(user)}, salt=TOKEN_SALT)
 
 
 def user_from_token(project, token):
@@ -41,7 +47,11 @@ def user_from_token(project, token):
         return None
     if data.get("p") != project.ref:
         return None
-    return ProjectUser.objects.filter(pk=data.get("u"), project=project, is_active=True).first()
+    user = ProjectUser.objects.filter(pk=data.get("u"), project=project, is_active=True).first()
+    # Tokens issued before the stamp existed carry no "h" and stay valid until they expire.
+    if user is not None and "h" in data and not secrets.compare_digest(str(data["h"]), password_stamp(user)):
+        return None
+    return user
 
 
 def get_api_key(request):

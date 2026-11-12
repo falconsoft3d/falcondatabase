@@ -33,6 +33,7 @@ GET /api/v1/{{ ref }}/tables/products?category=in.(drinks,desserts)&amp;stock=is
     <tr><td><code>POST</code></td><td><code>/api/v1/{{ ref }}/auth/login</code></td><td><code>{"email", "password"}</code> → <code>{user, token}</code></td></tr>
     <tr><td><code>GET</code></td><td><code>/api/v1/{{ ref }}/auth/user</code></td><td>{% translate "Current user (requires token)" %}</td></tr>
     <tr><td><code>PATCH</code></td><td><code>/api/v1/{{ ref }}/auth/user</code></td><td>{% blocktranslate %}<code>{"data": {...}}</code> saves profile data{% endblocktranslate %}</td></tr>
+    <tr><td><code>PATCH</code></td><td><code>/api/v1/{{ ref }}/auth/user</code></td><td>{% blocktranslate %}<code>{"current_password", "password"}</code> changes the password → <code>{user, token}</code>; other sessions are signed out{% endblocktranslate %}</td></tr>
   </table>
 
   <h2>{% translate "Access rules per table" %}</h2>
